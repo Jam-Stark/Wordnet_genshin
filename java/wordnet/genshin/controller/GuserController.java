@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.ModelAndView;
 import wordnet.genshin.domain.Employee;
 import wordnet.genshin.utils.MessageAndData;
 import wordnet.genshin.domain.Guser;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Controller
 
-@RequestMapping(value = "/User")
+@RequestMapping(value = "/Home")
 public class GuserController {
     @Autowired
     private GuserService guserService;
@@ -35,5 +36,24 @@ public class GuserController {
         }else{
             return MessageAndData.error().setMessage("已存在同名用户");
         }
+    }
+    @RequestMapping("/Register")
+    public ModelAndView login(Guser guser, HttpSession httpSession){
+        //ModelAndView  对象是spring封装model和view的通用容器
+        ModelAndView modelAndView = new ModelAndView();
+
+        //调用service进行登录验证
+        boolean status  = guserService.loginCheck(guser);
+        if(status){
+            //登录验证成功
+            //http是一个无状态协议，为了保持通信双方的身份识别，一般采用  session（cookie）
+            httpSession.setAttribute("EMP_SESSION",guser);
+            modelAndView.setViewName("redirect:../wordimpact.html");//
+        }else{
+            //回到登录页面
+            modelAndView.setViewName("redirect:../index.html");//设置视图页   , 默认springmvc使用了视图解析器，会自动填充前缀和后缀
+        }
+
+        return modelAndView;
     }
 }

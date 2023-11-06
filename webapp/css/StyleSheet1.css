@@ -1,0 +1,21 @@
+﻿body
+{
+	background-color:darkslateblue;
+}
+
+p {
+	color: ghostwhite;
+}
+
+a:link{color:aquamarine}
+a:visited{color:mistyrose}
+a{
+
+	text-decoration:none;
+}
+
+nav{float:right; width:40px; padding-top: 10px}
+
+td{
+	color:ghostwhite;
+}

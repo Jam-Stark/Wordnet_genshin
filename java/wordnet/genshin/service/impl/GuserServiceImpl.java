@@ -54,4 +54,22 @@ public class GuserServiceImpl implements GuserService {
         }
 
     }
+
+    @Override
+    public boolean loginCheck(Guser user) {
+        boolean flag= false;
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(user.getUname()).andUpasswordEqualTo(user.getUpassword());
+
+        List<Guser> guserList=userMapper.selectByExample(userExample);
+        if(!guserList.isEmpty())
+            flag=true;
+        else
+            flag=false;
+
+        return flag;
+    }
+
+
 }

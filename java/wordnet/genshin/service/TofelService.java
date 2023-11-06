@@ -11,4 +11,5 @@ public interface TofelService {
     public Tofel selectOne(int id);
 
     public List<Tofel> selectMuti(int from, int to);
+
 }
