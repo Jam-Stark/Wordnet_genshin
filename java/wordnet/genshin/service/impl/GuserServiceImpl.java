@@ -41,6 +41,14 @@ public class GuserServiceImpl implements GuserService {
     }
 
     @Override
+    public Integer getUdaily(String name) {
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(name);
+        return userMapper.selectByExample(userExample).get(0).getUdaily();
+    }
+
+    @Override
     public String getWordnet(String uname) {
         GuserExample userExample=new GuserExample();
         GuserExample.Criteria criteria=userExample.createCriteria();
@@ -72,6 +80,16 @@ public class GuserServiceImpl implements GuserService {
     }
 
     @Override
+    public boolean resetPass(String name, String password) {
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(name);
+
+        userMapper.selectByExample(userExample).get(0).setUpassword(password);
+        return false;
+    }
+
+    @Override
     public boolean loginCheck(Guser user) {
         boolean flag= false;
         GuserExample userExample=new GuserExample();
@@ -99,7 +117,7 @@ public class GuserServiceImpl implements GuserService {
     }
 
     @Override
-    public boolean setWordbook(String book,String uname) {
+    public boolean setWordbook(String book,String uname,Integer daily) {
         boolean flag= false;
         GuserExample userExample=new GuserExample();
         GuserExample.Criteria criteria=userExample.createCriteria();
@@ -107,9 +125,11 @@ public class GuserServiceImpl implements GuserService {
 
         List<Guser> guserList=userMapper.selectByExample(userExample);
         guserList.get(0).setUwordnet(book);
-        if(!guserList.get(0).getUwordnet().isEmpty())
-           flag=true;
 
+        if(!guserList.get(0).getUwordnet().isEmpty()) {
+            guserList.get(0).setUdaily(daily);
+            flag = true;
+        }
         return flag;
     }
 

@@ -32,7 +32,7 @@ public class TofelServiceImpl implements TofelService {
     }
 
     @Override
-    public List<Tofel> selectMuti(int from, int to) {
+    public List<Tofel> selectMuti(Integer from, Integer to) {
         List<Tofel> tofelList=new ArrayList<Tofel>();
         for(;from<to;from++){
 tofelList.add(tofelMapper.selectByPrimaryKey(from));};

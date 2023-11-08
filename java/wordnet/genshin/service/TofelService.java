@@ -10,6 +10,6 @@ public interface TofelService {
 
     public Tofel selectOne(int id);
 
-    public List<Tofel> selectMuti(int from, int to);
+    public List<Tofel> selectMuti(Integer from, Integer to);
 
 }
