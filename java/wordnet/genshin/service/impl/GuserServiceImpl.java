@@ -25,11 +25,27 @@ public class GuserServiceImpl implements GuserService {
     }
 
     @Override
-    public String getUname(int id) {
+    public String getUname(Integer id) {
         GuserExample userExample=new GuserExample();
         GuserExample.Criteria criteria=userExample.createCriteria();
         criteria.andUidEqualTo(id);
         return userMapper.selectByExample(userExample).get(0).getUname();
+    }
+
+    @Override
+    public Long getUfinalword(String name) {
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(name);
+        return userMapper.selectByExample(userExample).get(0).getUfinalword();
+    }
+
+    @Override
+    public String getWordnet(String uname) {
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(uname);
+        return userMapper.selectByExample(userExample).get(0).getUwordnet();
     }
 
     @Override
@@ -65,11 +81,72 @@ public class GuserServiceImpl implements GuserService {
         List<Guser> guserList=userMapper.selectByExample(userExample);
         if(!guserList.isEmpty())
             flag=true;
-        else
-            flag=false;
 
         return flag;
     }
 
+    @Override
+    public boolean loginCheck_(String name, String password) {
+        boolean flag= false;
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(name).andUpasswordEqualTo(password);
+
+        List<Guser> guserList=userMapper.selectByExample(userExample);
+        if(!guserList.isEmpty())
+            flag=true;
+        return flag;
+    }
+
+    @Override
+    public boolean setWordbook(String book,String uname) {
+        boolean flag= false;
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(uname);
+
+        List<Guser> guserList=userMapper.selectByExample(userExample);
+        guserList.get(0).setUwordnet(book);
+        if(!guserList.get(0).getUwordnet().isEmpty())
+           flag=true;
+
+        return flag;
+    }
+
+    @Override
+    public boolean wordRecord(Long id,String uname) {
+        boolean flag= false;
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(uname);
+
+        List<Guser> guserList=userMapper.selectByExample(userExample);
+        guserList.get(0).setUfinalword(id);
+        if(!guserList.get(0).getUfinalword().toString().isEmpty())
+            flag=true;
+        return flag;
+    }
+
+    @Override
+    public boolean checkBook(String uname) {
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(uname);
+
+        if(userMapper.selectByExample(userExample).get(0).getUwordnet().isEmpty())
+            return false;
+        else
+            return true;
+    }
+
+//    @Override
+//    public String switchBook(String uname) {
+//        GuserExample userExample=new GuserExample();
+//        GuserExample.Criteria criteria=userExample.createCriteria();
+//        criteria.andUnameEqualTo(uname);
+//
+//        List<Guser> guserList=userMapper.selectByExample(userExample);
+//        return guserList.get(0).getUwordnet();
+//    }
 
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/TOEFL")
+@RequestMapping(value = "/toefl")
 public class TofelContoller {
     @Autowired
     private TofelService tofelService;
