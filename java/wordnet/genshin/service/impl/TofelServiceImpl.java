@@ -2,6 +2,7 @@ package wordnet.genshin.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import wordnet.genshin.dao.TofelMapper;
 import wordnet.genshin.domain.Tofel;
 import wordnet.genshin.domain.TofelExample;

@@ -102,7 +102,7 @@ public ModelAndView login(
     if (status) {
         // 登录验证成功
         // 将用户对象存储在session中
-        httpSession.setAttribute("EMP_SESSION", name);
+        httpSession.setAttribute("UserName", name);
 
         String targetUrl = (String) httpSession.getAttribute("targetUrl");
         System.out.println("controller: "+targetUrl);
@@ -196,6 +196,14 @@ public ModelAndView login(
         return modelAndView;
     }
 
+    @RequestMapping("/progress")
+    public MessageAndData progress(HttpSession httpSession){
+        String uname=(String) httpSession.getAttribute("UserName");
+
+
+        return MessageAndData.success().add("",1);
+    }
+
     @RequestMapping(value="browse")//未登记单词本用户浏览单词本
     @ResponseBody
     public MessageAndData browse(
@@ -203,7 +211,6 @@ public ModelAndView login(
             HttpSession httpSession
     ){
         String uname=(String) httpSession.getAttribute("UserName");
-
         from=guserService.getUfinalword(uname).intValue();
         httpSession.setAttribute("Current",from);
         Integer to=guserService.getUdaily(uname)+from;
@@ -219,14 +226,29 @@ public ModelAndView login(
             HttpSession httpSession
     ){
         String uname=(String) httpSession.getAttribute("UserName");
-        Integer from=guserService.getUfinalword(uname).intValue();  //取得最后记录的单词位置
-        httpSession.setAttribute("Current",from);        //current记录用户会话内阅读的单词id
-        Integer to=guserService.getUdaily(uname)+from;           //取得每日计划
+        Integer current=(Integer) httpSession.getAttribute("Current");
+        Integer from=0;
+        if(current!=null){
+            from=current;
+            System.out.println("翻页的current "+current);
+        }
+        else {
+            from = guserService.getUfinalword(uname).intValue();
+        }//取得最后记录的单词位置
+        Integer to=0;
+        if(guserService.getUdaily(uname).toString().isEmpty()){
+            to=30;
+    }
+        else {
+            to= guserService.getUdaily(uname)+from;
+        }//取得每日计划
+        httpSession.setAttribute("Current",to);        //current记录用户会话内阅读的单词id
+        System.out.println("当前页面current "+current);
         String book=guserService.getWordnet(uname);
         List<?> dataList = null; // 声明一个模板列表，初始为null
 
-        if (Objects.equals(book, "toefl")) {
-            dataList = tofelService.selectMuti(from, to);  //匹配单词本a
+        if (Objects.equals(book, "tofel")) {
+            dataList = tofelService.selectMuti(from, to);  //匹配单词本
 //        } else if (Objects.equals(book, "gre")) {
 //            dataList = greService.selectMuti(from, to);
 //        } else if (Objects.equals(book, "zk")) {
@@ -242,14 +264,15 @@ public ModelAndView login(
         }
 
         if (dataList != null) {
-            PageHelper.startPage(from, to);  //左闭右开 [from,to)
-            PageInfo pageInfo = new PageInfo(dataList, 0);
-            return MessageAndData.success().add("pageInfo",pageInfo);
+//            PageHelper.startPage(from, to);  //左闭右开 [from,to)
+//            PageInfo pageInfo = new PageInfo(dataList, 0);
+            return MessageAndData.success().add("datalist",dataList);
         }else
             return MessageAndData.error().setMessage("获取失败！");
     }
 
-    @RequestMapping(value="tablet/nextpage") //往后翻页
+    @ResponseBody
+    @RequestMapping(value="nextpage") //往后翻页
     public MessageAndData nextpage(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
@@ -258,11 +281,16 @@ public ModelAndView login(
         {
             current+=30;
         }
+        else {
+            current+=next;
+        };
+        System.out.println("往后翻的current： "+current);
         httpSession.setAttribute("Current",current);
         return MessageAndData.success().setMessage("下一页");
     }
 
-    @RequestMapping(value="tablet/prepage")  //往前翻页
+    @ResponseBody
+    @RequestMapping(value="prepage")  //往前翻页
     public MessageAndData prepage(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
@@ -271,11 +299,15 @@ public ModelAndView login(
         {
             current-=30;
         }
-        current-=next;
+        else{
+            current-=2*next;
+        }
+        System.out.println("前翻页的current"+current);
         httpSession.setAttribute("Current",current);
         return MessageAndData.success().setMessage("上一页");
     }
 
+    @ResponseBody
     @RequestMapping(value="browser/nextone") //往前一个
     public MessageAndData nextone(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
@@ -286,12 +318,14 @@ public ModelAndView login(
         return MessageAndData.success().setMessage("下一页");
     }
 
+    @ResponseBody
     @RequestMapping(value="browser/preone")  //往后一个
     public MessageAndData preone(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
         Integer next=guserService.getUdaily(uname);
         current--;
+        System.out.println(current);
         httpSession.setAttribute("Current",current);
         return MessageAndData.success().setMessage("下一页");
     }

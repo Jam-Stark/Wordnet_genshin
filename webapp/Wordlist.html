@@ -1,59 +1,79 @@
 ﻿<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="css/StyleSheet1.css">
-    <title>词库</title>
+    <meta charset="utf-8">
+    <title>词库选择</title>
+    <style>
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+            .popup-container h2 {
+                margin-top: 0;
+            }
+    </style>
 </head>
 <body>
-<p>词库</p>
-<a href="Home.html"><img src="images/home.JPG"></a>
+    <button type="button" class="vocab-btn" data-target="vocab1" data-browse="Chuzhongbrowse.html" data-study="Chuzhongstudy.html">初中</button>
+    <button type="button" class="vocab-btn" data-target="vocab2" data-browse="Gaozhongbrowse.html" data-study="Gaozhongstudy.html">高中</button>
+    <button type="button" class="vocab-btn" data-target="vocab3" data-browse="TOEFLbrowse.html" data-study="TOEFLstudy.html">托福</button>
+    <button type="button" class="vocab-btn" data-target="vocab4" data-browse="IELTSbrowse.html" data-study="IELTSstudy.html">雅思</button>
+    <button type="button" class="vocab-btn" data-target="vocab5" data-browse="GREbrowse.html" data-study="GREstudy.html">GRE</button>
+    <button type="button" class="vocab-btn" data-target="vocab6" data-browse="CET4browse.html" data-study="CET4study.html">四级</button>
+    <button type="button" class="vocab-btn" data-target="vocab7" data-browse="CET6browse.html" data-study="CET6study.html">六级</button>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>单词</th>
-    </tr>
-    </thead>
-    <tbody id="table-body">
-    </tbody>
-</table>
+    <div id="popup" class="popup-container">
+        <h2>词库选择</h2>
+        <p>请选择操作：</p>
+        <button type="button" class="popup-btn" data-action="browse">仅浏览</button>
+        <button type="button" class="popup-btn" data-action="study">开始背诵</button>
+    </div>
 
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        // 直接在页面加载时触发Controller函数的请求
-        fetch("http://localhost:8080/SSM_war_exploded/TOEFL/tablet")
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById("table-body");
+    <script>
+        var popup = document.getElementById("popup");
+        var vocabButtons = document.getElementsByClassName("vocab-btn");
+        var popupButtons = document.getElementsByClassName("popup-btn");
 
-                if (data.status === "success") {
-                    const pageInfo = data.data.pageInfo;
+        function showPopup() {
+            popup.style.display = "block";
+        }
 
-                    pageInfo.list.forEach(function (item) {
-                        const row = document.createElement("tr");
-                        const idCell = document.createElement("td");
-                        idCell.textContent = item.id;
-                        const wordCell = document.createElement("td");
-                        wordCell.textContent = item.word;
-                        row.appendChild(idCell);
-                        row.appendChild(wordCell);
-                        tableBody.appendChild(row);
+        function hidePopup() {
+            popup.style.display = "none";
+        }
+
+        function handleAction(action, browseLink, studyLink) {
+            if (action === "browse") {
+                // 执行仅浏览操作，跳转至浏览页面
+                window.location.href = browseLink;
+            } else if (action === "study") {
+                // 执行开始背诵操作，跳转至背诵页面
+                window.location.href = studyLink;
+            }
+        }
+
+        for (var i = 0; i < vocabButtons.length; i++) {
+            vocabButtons[i].addEventListener("click", function () {
+                var browseLink = this.getAttribute("data-browse");
+                var studyLink = this.getAttribute("data-study");
+                showPopup();
+                for (var j = 0; j < popupButtons.length; j++) {
+                    popupButtons[j].addEventListener("click", function () {
+                        var action = this.getAttribute("data-action");
+                        hidePopup();
+                        handleAction(action, browseLink, studyLink);
                     });
-
-                    // After fetching and displaying the data, switch to Wordlist.html
-                    window.location.href = "http://localhost:8080/SSM_war_exploded/Wordlist.html";
-                } else {
-                    // Handle error
-                    console.log("Error: " + data.message);
                 }
-            })
-            .catch(error => {
-                console.error('Fetch Error:', error);
             });
-    });
-</script>
+        }
+    </script>
 </body>
 </html>
-

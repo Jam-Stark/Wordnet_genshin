@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>动态表格</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding-top: 300px;
+      padding-bottom: 500px;  /* 预留出底部的空间 */
+      background-color: #4e555b;
+      color: white;
+    }
+
+    /* 修改表格大小 */
+    #myTable tr {
+      height: 100px;
+      border-top: none;
+      border-bottom: none;
+      text-align: left;
+    }
+    #myTable td:nth-child(1) {
+      width: 100px;
+    }
+    #myTable td:nth-child(2) {
+      width: 200px;
+    }
+    #myTable td:nth-child(3) {
+      width: 900px;
+    }
+
+    #myTable tr:nth-last-child(n+2):nth-child(n+2) {
+      border-top: 1px white;
+      border-bottom: 1px white;
+    }
+
+    #myTable tr:first-child{
+      vertical-align: bottom;
+      text-align: left;
+      border-bottom: 4px solid white;
+      border-top: #4e555b;
+      height: 30px;
+    }
+
+    #myTable tr:last-child{
+      border-bottom: #4e555b;
+    }
+
+    #myTable {
+      border: none;
+      border-collapse: collapse;
+    }
+    #myTable td, #myTable th {
+      border-left: none;
+      border-right: none;
+    }
+
+    .buttonPage {
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+      background-color: #4e555b;
+    }
+
+    #rectangle {
+      width: 1200px;  /* 你可以修改这个值来调整宽度 */
+      height: 50px;  /* 你可以修改这个值来调整高度 */
+      min-height: 50px;
+      background-color: #4e555b;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #buttonhide {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+      margin-left: 90px;
+
+    }
+    #buttonhide button {
+      margin-left: 20px;
+    }
+
+  </style>
+  <script>
+    const date = new Date();
+
+    // function createTable(rowCount, list) {
+    //   var table = document.getElementById("myTable");
+    //   for (var i = 0; i < rowCount; i++) {
+    //     var row = table.insertRow(-1);
+    //     for (var j = 0; j < 3; j++) {
+    //       var cell = row.insertCell(-1);
+    //       if(j==0){cell.innerHTML=list[i].id}
+    //       if(j==1){cell.innerHTML=list[i].word} // 使用后端传来的数据
+    //       if (j==2){cell.innerHTML="explanation"} // 使用后端传来的数据
+    //     }
+    //   }
+    // }
+
+    // 从后端获取数据
+    (function() {
+      fetch('Users/tablet')
+              .then(response => response.json())
+              .then(datazone => {
+                var datalist = datazone.dataZone.datalist;
+                var table = document.getElementById("myTable");
+
+                for (var i = 0; i < datalist.length; i++) {
+                  if (datalist[i] !== null) {
+                    var row = table.insertRow(-1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+
+                    cell1.innerHTML = datalist[i].id;
+                    cell2.innerHTML = datalist[i].word;
+                    cell3.innerHTML = "";
+                  }
+                }
+              });
+    })();
+
+    function updateDate() {
+      document.getElementById("date").innerText = (date.getMonth() + 1) + "月" + date.getDate() + "日";
+    }
+
+    function fetchDataAndUpdateTable() {
+      return fetch('/Users/tablet')
+              .then(response => response.json())
+              .then(datazone => {
+                var datalist = datazone.dataZone.datalist;
+                var table = document.getElementById("myTable");
+
+                for (var i = 0; i < datalist.total; i++) {
+                  var row = table.insertRow(-1);
+                  var cell1 = row.insertCell(0);
+                  var cell2 = row.insertCell(1);
+                  var cell3 = row.insertCell(2);
+
+                  cell1.innerHTML = datalist.list[i].id;
+                  cell2.innerHTML = datalist.list[i].word;
+                  cell3.innerHTML = "";
+                }
+              });
+    }
+
+    function prevDay() {
+      fetch('Users/prepage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin'
+      })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+                date.setDate(date.getDate() - 1);
+                updateDate();
+                return fetchDataAndUpdateTable();
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+    }
+
+    function nextDay() {
+      fetch('Users/tablet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin'
+      })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+                date.setDate(date.getDate() + 1);
+                updateDate();
+                return fetchDataAndUpdateTable();
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+    }
+
+    function toggleColumnContent(colIndex) {
+      var table = document.getElementById("myTable");
+      for (var i = 0; i < table.rows.length; i++) {
+        var cell = table.rows[i].cells[colIndex];
+        if (cell.innerHTML !== "") {
+          cell.dataset.content = cell.innerHTML;  // 保存当前内容
+          cell.innerHTML = "";  // 清空内容
+        } else {
+          cell.innerHTML = cell.dataset.content;  // 恢复内容
+        }
+      }
+    }
+
+    window.onbeforeunload = function() {
+      fetch('Users/wordRecord', {
+        method: 'POST', // 或者 'GET'
+        headers: {
+          'Content-Type': 'application/json',
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        credentials: 'same-origin' // 包括会话cookie
+      })
+              .then(response => response.json())
+              .then(data => {
+                console.log(data);
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+    }
+  </script>
+</head>
+<body onload="createTable(10); updateDate();">
+<div id="rectangle">
+  <div id="buttonhide">
+    <button onclick="toggleColumnContent(1)">单词</button>
+    <button onclick="toggleColumnContent(2)">释义</button>
+  </div>
+</div>
+<table id="myTable" border="1">
+  <tr>
+    <th>序号</th>
+    <th>单词</th>
+    <th>释义</th>
+  </tr>
+</table>
+<div class="buttonPage">
+  <button id="prevPage" onclick="prevDay()">前一天</button>
+  <span id="date"></span>
+  <button id="nextPage" onclick="nextDay()">后一天</button>
+</div>
+</body>
+</html>
