@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>单词搜索结果</title>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var word_spelling = urlParams.get('word_spelling');
+        console.log(word_spelling);
+
+        function searchWord() {
+            var word = document.getElementById('search').value;
+
+            // 创建 XMLHttpRequest 对象
+            var xhr = new XMLHttpRequest();
+
+            // 响应处理函数
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 解析服务器响应的 JSON 数据
+                    var wordData = JSON.parse(xhr.responseText);
+
+                    // 在页面上显示单词及相关信息
+                    document.getElementById('word').textContent = wordData.spelling;
+                    document.getElementById('phonetic').textContent = wordData.phonetic;//
+                    document.getElementById('definition').textContent = wordData.definition;
+                    document.getElementById('translation').textContent = wordData.translation;
+                    document.getElementById('tag').textContent = wordData.tag;
+                    document.getElementById('exchange').textContent = wordData.exchange;
+
+                    var sampleset = wordData.sampleset;
+                    var samplesetElement = document.getElementById('sampleset');
+                    samplesetElement.innerHTML = ''; // 清空示例元素的内容
+
+                    if (sampleset && sampleset.length > 0) {
+                        for (var i = 0; i < sampleset.length; i++) {
+                            var sample = sampleset[i];
+                            var sampleElement = document.createElement('p');
+                            sampleElement.textContent = sample;
+                            samplesetElement.appendChild(sampleElement);
+                        }
+                    }
+                    var synonymWords = wordData.synonymWords;
+                    var synonymWordsElement = document.getElementById('synonymWords');
+                    synonymWordsElement.innerHTML = ''; // 清空同义词元素的内容
+
+                    if (synonymWords && synonymWords.length > 0) {
+                        for (var i = 0; i < synonymWords.length; i++) {
+                            var synonym = synonymWords[i];
+                            var synonymElement = document.createElement('p');
+                            synonymElement.textContent = synonym;
+                            synonymWordsElement.appendChild(synonymElement);
+                        }
+                    }
+                    var exchangeEvery = wordData.exchangeEvery;
+                    var exchangeEveryElement = document.getElementById('exchangeEvery');
+                    exchangeEveryElement.innerHTML = ''; // 清空exchangeEvery元素的内容
+
+                    if (exchangeEvery && exchangeEvery.length > 0) {
+                        for (var i = 0; i < exchangeEvery.length; i++) {
+                            var exchange = exchangeEvery[i];
+                            var exchangeElement = document.createElement('p');
+                            exchangeElement.textContent = exchange;
+                            exchangeEveryElement.appendChild(exchangeElement);
+                        }
+                    }
+
+                    document.getElementById('search').value = ''; // 清空搜索框的值
+                }
+            };
+
+            // 发送 AJAX 请求
+            xhr.open('GET', 'http://localhost:8080/ssmDemo_war/selectResult/information?word_spelling=' + word, true);
+            xhr.send();
+        }
+
+        // 页面加载时自动捕获返回
+        window.onload = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var wordData = JSON.parse(xhr.responseText);
+
+
+                    // 在页面上显示单词及相关信息
+                    document.getElementById('word').textContent = wordData.spelling;
+                    document.getElementById('phonetic').textContent = wordData.phonetic;
+                    document.getElementById('definition').innerHTML = wordData.definition;
+                    document.getElementById('translation').innerHTML = wordData.translation;
+                    document.getElementById('tag').textContent = wordData.tag;
+                    document.getElementById('exchange').textContent = wordData.exchange;
+
+                    var sampleset = wordData.sampleset;
+                    var samplesetElement = document.getElementById('sampleset');
+                    samplesetElement.innerHTML = ''; // 清空示例元素的内容
+
+                    if (sampleset && sampleset.length > 0) {
+                        for (var i = 0; i < sampleset.length; i++) {
+                            var sample = sampleset[i];
+                            var sampleElement = document.createElement('p');
+                            sampleElement.textContent = sample;
+                            samplesetElement.appendChild(sampleElement);
+                        }
+                    }
+
+                    var synonymWords = wordData.synonymWords;
+                    var synonymWordsElement = document.getElementById('synonymWords');
+                    synonymWordsElement.innerHTML = ''; // 清空同义词元素的内容
+
+                    if (synonymWords && synonymWords.length > 0) {
+                        for (var i = 0; i < synonymWords.length; i++) {
+                            var synonym = synonymWords[i];
+                            var synonymElement = document.createElement('p');
+                            synonymElement.textContent = synonym;
+                            synonymWordsElement.appendChild(synonymElement);
+                        }
+                    }
+                    var exchangeEvery = wordData.exchangeEvery;
+                    var exchangeEveryElement = document.getElementById('exchangeEvery');
+                    exchangeEveryElement.innerHTML = ''; // 清空exchangeEvery元素的内容
+
+                    if (exchangeEvery && exchangeEvery.length > 0) {
+                        for (var i = 0; i < exchangeEvery.length; i++) {
+                            var exchange = exchangeEvery[i];
+                            var exchangeElement = document.createElement('p');
+                            exchangeElement.textContent = exchange;
+                            exchangeEveryElement.appendChild(exchangeElement);
+                        }
+                    }
+                }
+            };
+
+            xhr.open('GET', 'http://localhost:8080/ssmDemo_war/selectResult/information?word_spelling=' + word_spelling, true);
+            xhr.send();
+        };
+
+    </script>
+</head>
+<body>
+<h1>单词搜索结果</h1>
+<input type="text" id="search" placeholder="请输入要搜索的单词">
+<button onclick="searchWord()">搜索</button>
+
+<h2 id="word"></h2>
+<p>音标: <span id="phonetic"></span></p>
+<p>定义: <span id="definition"></span></p>
+<p>翻译: <span id="translation"></span></p>
+<p>标签: <span id="tag"></span></p>
+<p>变换: <span id="exchange"></span></p>
+<p>变换: <span id="exchangeEvery"></span></p>
+<h3>示例:</h3>
+<div id="sampleset"></div>
+<p>近义词:<div id="synonymWords"></div></p>
+</body>
+</html>
+

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/StyleSheet1.css">
+    <title>词库</title>
+</head>
+<body>
+<p>词库</p>
+<a href="Home.html"><img src="images/home.JPG"></a>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>单词</th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        // 直接在页面加载时触发Controller函数的请求
+        fetch("http://localhost:8080/SSM_war_exploded/TOEFL/tablet")
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById("table-body");
+
+                if (data.status === "success") {
+                    const pageInfo = data.data.pageInfo;
+
+                    pageInfo.list.forEach(function (item) {
+                        const row = document.createElement("tr");
+                        const idCell = document.createElement("td");
+                        idCell.textContent = item.id;
+                        const wordCell = document.createElement("td");
+                        wordCell.textContent = item.word;
+                        row.appendChild(idCell);
+                        row.appendChild(wordCell);
+                        tableBody.appendChild(row);
+                    });
+
+                    // After fetching and displaying the data, switch to Wordlist.html
+                    window.location.href = "http://localhost:8080/SSM_war_exploded/Wordlist.html";
+                } else {
+                    // Handle error
+                    console.log("Error: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+            });
+    });
+</script>
+</body>
+</html>
+

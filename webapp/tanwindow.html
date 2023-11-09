@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>弹窗示例</title>
+  <style>
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .popup-content {
+      background-color: #fff;
+      width: 300px;
+      padding: 20px;
+      margin: 100px auto;
+      border-radius: 5px;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 5px;
+      background-color: #4CAF50;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-cancel {
+      background-color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+<button id="openPopup" class="btn">点击按钮</button>
+
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <h3>确认弹窗</h3>
+    <p>您确定要执行此操作吗？</p>
+    <button id="confirmBtn" class="btn">确定</button>
+    <button id="cancelBtn" class="btn btn-cancel">取消</button>
+  </div>
+</div>
+
+<script>
+  var openBtn = document.getElementById('openPopup');
+  var popup = document.getElementById('popup');
+  var confirmBtn = document.getElementById('confirmBtn');
+  var cancelBtn = document.getElementById('cancelBtn');
+
+  openBtn.addEventListener('click', function() {
+    popup.style.display = 'block';
+  });
+
+  confirmBtn.addEventListener('click', function() {
+    // 在这里可以添加点击确定按钮后的逻辑
+    alert('您点击了确定按钮');
+    popup.style.display = 'none';
+  });
+
+  cancelBtn.addEventListener('click', function() {
+    popup.style.display = 'none';
+  });
+</script>
+</body>
+</html>

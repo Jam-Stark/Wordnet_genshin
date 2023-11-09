@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>单词搜索</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    function search() {
+      var keyword = document.getElementById('search').value;
+      var dropdownMenu = document.getElementById('dropdown-menu');
+      dropdownMenu.innerHTML = ''; // 清空下拉菜单
+
+      if (keyword !== '') {
+        fetch('http://localhost:8080/ssmDemo_war/selectResult/searchMatch?prefix=' + keyword)
+                .then(function(response) {
+                  if (response.ok) {
+                    return response.json();
+                  } else {
+                    throw new Error('请求失败');
+                  }
+                })
+                .then(function(data) {
+                  if (data != null && data.wordLike.length > 0) {
+                    for (var i = 0; i < data.wordLike.length; i++) {
+                      var option = document.createElement('div');
+                      option.textContent = data.wordLike[i];
+                      dropdownMenu.appendChild(option);
+                    }
+                    dropdownMenu.style.display = 'block';
+                  } else {
+                    dropdownMenu.style.display = 'none';
+                  }
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+      } else {
+        dropdownMenu.style.display = 'none';
+      }
+    }
+
+    function searchWord() {
+      var word = document.getElementById('search').value;
+      window.location.href = 'Words.html?word_spelling=' + encodeURIComponent(word);
+    }
+  </script>
+  <style>
+  #dropdown-menu {
+    display: none; /* 初始状态下隐藏下拉菜单 */
+    position: absolute;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    background-color: #fff;
+  }
+  #dropdown-menu div {
+    padding: 5px;
+    cursor: pointer;
+  }
+  #dropdown-menu div:hover {
+    background-color: #f0f0f0;
+  }
+  </style>
+</head>
+<body>
+<h1>单词搜索</h1>
+<input type="text" id="search" placeholder="输入单词" oninput="search()" />
+<button onclick="searchWord()">搜索</button>
+<div id="dropdown-menu"></div>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--  <title>单词搜索</title>-->
+<!--  <script>-->
+<!--    function searchWord() {-->
+<!--      var keyword = document.getElementById('search').value;-->
+<!--      fetch('http://localhost:8080/ssmDemo_war/selectResult/searchMatch?prefix=' + keyword)-->
+<!--              .then(function(response) {-->
+<!--                if (response.ok) {-->
+<!--                  return response.json();-->
+<!--                } else {-->
+<!--                  throw new Error('请求失败');-->
+<!--                }-->
+<!--              })-->
+<!--              .then(function(data) {-->
+<!--                var dropdownMenu = document.getElementById('dropdown-menu');-->
+<!--                dropdownMenu.innerHTML = ''; // 清空下拉菜单-->
+<!--                if (data != null && data.wordLike.length > 0) {-->
+<!--                  for (var i = 0; i < data.wordLike.length; i++) {-->
+<!--                    var option = document.createElement('div'); // 使用 <div> 元素替代 <option>-->
+<!--                    option.textContent = data.wordLike[i];-->
+<!--                    dropdownMenu.appendChild(option);-->
+<!--                  }-->
+<!--                  dropdownMenu.style.display = 'block'; // 显示下拉菜单-->
+<!--                } else {-->
+<!--                  dropdownMenu.style.display = 'none'; // 隐藏下拉菜单-->
+<!--                }-->
+<!--              })-->
+<!--              .catch(function(error) {-->
+<!--                console.log(error);-->
+<!--              });-->
+<!--    }-->
+<!--  </script>-->
+<!--  <style>-->
+<!--    #dropdown-menu {-->
+<!--      display: none; /* 初始状态下隐藏下拉菜单 */-->
+<!--      position: absolute;-->
+<!--      width: 100%;-->
+<!--      max-height: 200px;-->
+<!--      overflow-y: auto;-->
+<!--      border: 1px solid #ccc;-->
+<!--      background-color: #fff;-->
+<!--    }-->
+<!--    #dropdown-menu div {-->
+<!--      padding: 5px;-->
+<!--      cursor: pointer;-->
+<!--    }-->
+<!--    #dropdown-menu div:hover {-->
+<!--      background-color: #f0f0f0;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>单词搜索</h1>-->
+<!--<input type="text" id="search" placeholder="输入单词" oninput="searchWord()" />-->
+<!--<div id="dropdown-menu"></div>-->
+<!--</body>-->
+<!--</html>-->
