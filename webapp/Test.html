@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>单词测试</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .word-info {
+            margin-bottom: 20px;
+        }
+
+        .meaning {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .phonetic {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .progress {
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .answer {
+            margin-top: 20px;
+        }
+
+            .answer input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+            }
+
+        .submit-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .mistakes {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="wordInfo" class="word-info">
+            <div class="meaning">中文释义</div>
+            <div class="phonetic" style="display: none;"></div>
+        </div>
+
+        <div class="progress">
+            <span>答题进度：</span>
+            <span id="currentQuestion">0</span> / <span id="totalQuestions">0</span>
+        </div>
+
+        <div class="score">
+            分数：0
+        </div>
+
+        <div id="answerSection" class="answer" >
+            <input type="text" id="answerInput" placeholder="请输入拼写">
+            <button type="button" id="submitButton" class="submit-btn">提交</button>
+        </div>
+
+        <div id="feedbackSection" class="feedback"></div>
+
+        <div id="mistakesSection" class="mistakes"></div>
+
+        <button type="button" id="phoneticButton">显示音标</button>
+    </div>
+
+    <script>
+        var wordInfo = document.getElementById("wordInfo");
+        var currentQuestion = document.getElementById("currentQuestion");
+        var totalQuestions = document.getElementById("totalQuestions");
+        var score = document.querySelector(".score");
+        var answerSection = document.getElementById("answerSection");
+        var answerInput = document.getElementById("answerInput");
+        var submitButton = document.getElementById("submitButton");
+        var feedbackSection = document.getElementById("feedbackSection");
+        var mistakesSection = document.getElementById("mistakesSection");
+        var phoneticButton = document.getElementById("phoneticButton");
+
+        var currentWordIndex = 0;
+        var scoreValue = 0;
+        var mistakes = [];
+
+        function showWordInfo() {
+            var wordData = wordsData[currentWordIndex];
+            wordInfo.style.display = "block";
+            wordInfo.querySelector(".meaning").textContent = wordData.meaning;
+            wordInfo.querySelector(".phonetic").textContent = "音标：" + wordData.phonetic;
+        }
+
+        function showPhonetic() {
+            var phonetic = wordInfo.querySelector(".phonetic");
+            if (phonetic.style.display === "none") {
+                phonetic.style.display = "block";
+            } else {
+                phonetic.style.display = "none";
+            }
+        }
+
+        function showNextWord() {
+            currentWordIndex++;
+            if (currentWordIndex < wordsData.length) {
+                showWordInfo();
+                answerInput.value = "";
+                feedbackSection.textContent = "";
+                mistakesSection.textContent = "";
+                currentQuestion.textContent = currentWordIndex + 1;
+                answerSection.style.display = "block";
+            } else {
+                finishTest();
+            }
+        }
+
+        function checkAnswer() {
+            var wordData = wordsData[currentWordIndex];
+            var answer = answerInput.value.trim();
+            if (answer.toLowerCase() === wordData.meaning.toLowerCase()) {
+                scoreValue++;
+                score.textContent = "分数：" + scoreValue;
+                feedbackSection.textContent = "回答正确！";
+            } else {
+                mistakes.push(wordData);
+                feedbackSection.textContent = "回答错误！正确答案是：" + wordData.meaning;
+            }
+            answerSection.style.display = "none";
+            feedbackSection.textContent = "";
+            answerInput.value = "";
+            showNextWord();
+        }
+
+        function finishTest() {
+            answerSection.style.display = "none";
+            phoneticButton.style.display = "none";
+            feedbackSection.textContent = "测试结束！";
+            if (mistakes.length > 0) {
+                var mistakesText = "错题本：";
+                for (var i = 0; i < mistakes.length; i++) {
+                    mistakesText += " " + mistakes[i].meaning;
+                }
+                mistakesSection.textContent = mistakesText;
+            }
+        }
+
+        // 从后端获取单词数据
+        var wordsData = [];
+
+        // 使用Ajax从后端获取数据
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    wordsData = JSON.parse(xhr.responseText);
+                    totalQuestions.textContent = wordsData.length;
+                    showWordInfo();
+                    answerSection.style.display = "block";
+                    phoneticButton.style.display = "block";
+                } else {
+                    console.error("无法获取单词数据");
+                }
+            }
+        };
+        xhr.open("GET", "/api/words改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改改", true);
+        xhr.send();
+
+        phoneticButton.addEventListener("click", showPhonetic);
+        submitButton.addEventListener("click", checkAnswer);
+    </script>
+</body>
+</html>
