@@ -3,15 +3,15 @@ package wordnet.genshin.utils;
 public class TableWord {
     private Long id;
     private String word;
-    private String definition;
+    private String phonetic;
     private String translation;
 
     public TableWord(){};
 
-    public TableWord(Long id, String word, String definition, String translation) {
+    public TableWord(Long id, String word, String phonetic, String translation) {
         this.id = id;
         this.word = word;
-        this.definition = definition;
+        this.phonetic = phonetic;
         this.translation = translation;
     }
 
@@ -31,12 +31,12 @@ public class TableWord {
         this.word = word;
     }
 
-    public String getDefinition() {
-        return definition;
+    public String getphonetic() {
+        return phonetic;
     }
 
-    public void setDefinition(String definition) {
-        this.definition = definition;
+    public void setphonetic(String phonetic) {
+        this.phonetic = phonetic;
     }
 
     public String getTranslation() {
@@ -52,7 +52,7 @@ public class TableWord {
         return "TableWord{" +
                 "id=" + id +
                 ", word='" + word + '\'' +
-                ", definition='" + definition + '\'' +
+                ", phonetic='" + phonetic + '\'' +
                 ", translation='" + translation + '\'' +
                 '}';
     }

@@ -36,7 +36,7 @@ public class TofelServiceImpl implements TofelService {
     public List<Tofel> selectMuti(Integer from, Integer to) {
         List<Tofel> tofelList=new ArrayList<Tofel>();
         for(;from<to;from++){
-tofelList.add(tofelMapper.selectByPrimaryKey(from));};
+            tofelList.add(tofelMapper.selectByPrimaryKey(from));};
         return tofelList;
     }
 

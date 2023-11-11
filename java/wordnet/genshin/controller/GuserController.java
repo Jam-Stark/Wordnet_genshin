@@ -1,8 +1,5 @@
 package wordnet.genshin.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import wordnet.genshin.utils.MessageAndData;
 
-import wordnet.genshin.domain.Guser;
 import wordnet.genshin.service.GuserService;
-
-import wordnet.genshin.domain.Tofel;
 import wordnet.genshin.service.TofelService;
 
 import wordnet.genshin.service.SelectService;
@@ -21,7 +15,6 @@ import wordnet.genshin.utils.TableWord;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,8 +28,6 @@ public class GuserController {
     @Autowired
     private TofelService tofelService;
 
-    @Autowired
-    private SelectService selectService;
 
     @ResponseBody
     @RequestMapping(value = "/register",method = RequestMethod.GET)
@@ -179,7 +170,7 @@ public ModelAndView login(
     public MessageAndData wordRecord(
                                        HttpSession httpSession){
         String username = (String) httpSession.getAttribute("UserName");
-         Long wid=(Long) httpSession.getAttribute("Current");
+         Long wid=(Long) httpSession.getAttribute("TodayFinal");
         boolean status=guserService.wordRecord(wid,username);
         if(status)
             return  MessageAndData.success().setMessage("记录更新成功");
@@ -211,21 +202,21 @@ public ModelAndView login(
         return MessageAndData.success().add("",1);
     }
 
-    @RequestMapping(value="browse")//未登记单词本用户浏览单词本
-    @ResponseBody
-    public MessageAndData browse(
-            @RequestParam(value="from",defaultValue="1")Integer from,
-            HttpSession httpSession
-    ){
-        String uname=(String) httpSession.getAttribute("UserName");
-        from=guserService.getUfinalword(uname).intValue();
-        httpSession.setAttribute("Current",from);
-        Integer to=guserService.getUdaily(uname)+from;
-        List<Tofel> tofelList = tofelService.selectMuti(from, to);
-        PageHelper.startPage(from, to);  //左闭右开 [from,to)
-        PageInfo pageInfo = new PageInfo(tofelList, 0);
-        return MessageAndData.success().add("pageInfo",pageInfo);
-    }
+//    @RequestMapping(value="browse")//未登记单词本用户浏览单词本
+//    @ResponseBody
+//    public MessageAndData browse(
+//            @RequestParam(value="from",defaultValue="1")Integer from,
+//            HttpSession httpSession
+//    ){
+//        String uname=(String) httpSession.getAttribute("UserName");
+//        from=guserService.getUfinalword(uname).intValue();
+//        httpSession.setAttribute("Current",from);
+//        Integer to=guserService.getUdaily(uname)+from;
+//        List<Tofel> tofelList = tofelService.selectMuti(from, to);
+//        PageHelper.startPage(from, to);  //左闭右开 [from,to)
+//        PageInfo pageInfo = new PageInfo(tofelList, 0);
+//        return MessageAndData.success().add("pageInfo",pageInfo);
+//    }
 
     @RequestMapping(value="tablet")  //已选择单词本情况下,每次刷新页面调用一次
     @ResponseBody
@@ -234,40 +225,36 @@ public ModelAndView login(
     ){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
-
+        Integer todayFinal=(Integer) httpSession.getAttribute("TodayFinal");
+        System.out.println("current： "+current);
         Integer from=0;
         if(current!=null){
             from=current;
-            System.out.println("翻页的current "+current);
         }
         else {
             from = guserService.getUfinalword(uname).intValue()+1;
+            current=from;
         }//取得最后记录的单词位置
-        if(current==null){
-            httpSession.setAttribute("Current",from);
+        if(todayFinal==null){
+            httpSession.setAttribute("TodayFinal",current);
+            todayFinal=current;
         }
-        Integer to=0;
+        int to=0;
         if(guserService.getUdaily(uname).toString().isEmpty()){
             to=30;
     }
         else {
             to= guserService.getUdaily(uname)+from;
         }//取得每日计划
-        System.out.println("当前页面current "+current);
+
+        if (current>todayFinal){
+            httpSession.setAttribute("TodayFianl",current);
+        }
+
         String book=guserService.getWordnet(uname);
-        List<TableWord> dataList = null;// 声明一个模板列表，初始为null
-
+        List<?> dataList=new ArrayList<>();
         if (Objects.equals(book, "tofel")) {
-            List<Tofel> wordList = tofelService.selectMuti(from, to);  //匹配单词本
-
-            for ( Integer i = from; i<=to; i++) {
-                TableWord data = new TableWord();
-                data.setDefinition(selectService.selectWordWithBLOBs(wordList.get(i).getWord()).getDefinition());
-                data.setTranslation(selectService.selectWordWithBLOBs(wordList.get(i).getWord()).getTranslation());
-                data.setWord(wordList.get(i).getWord());
-                data.setId(wordList.get(i).getId().longValue());
-                dataList.add(data);
-            }
+        dataList=tofelService.selectMuti(from,to);
         }
 //        } else if (Objects.equals(book, "gre")) {
 //            dataList = greService.selectMuti(from, to);
@@ -281,17 +268,11 @@ public ModelAndView login(
 //            dataList = cet4Service.selectMuti(from, to);
 //        } else if (Objects.equals(book, "cet6")) {
 //            dataList = cet6Service.selectMuti(from, to);
-
-
-
+        httpSession.setAttribute("Current",from);
         if (dataList != null) {
-//            PageHelper.startPage(from, to);  //左闭右开 [from,to)
-//            PageInfo pageInfo = new PageInfo(dataList, 0);
             return MessageAndData.success().add("datalist",dataList);
         }else
             return MessageAndData.error().setMessage("获取失败！");
-
-
     }
 
     @ResponseBody
@@ -299,15 +280,10 @@ public ModelAndView login(
     public MessageAndData nextpage(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
+        System.out.println("current2: "+current);
         Integer next=guserService.getUdaily(uname);
-        if(next==null)            //未注册单词本用户默认30
-        {
-            current+=30;
-        }
-        else {
-            current+=next;
-        };
-
+        //未注册单词本用户默认30
+        current += Objects.requireNonNullElse(next, 30);
         httpSession.setAttribute("Current",current);
         System.out.println("往后翻的current： "+current);
         return MessageAndData.success().setMessage("下一页");
@@ -318,15 +294,10 @@ public ModelAndView login(
     public MessageAndData prepage(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
+
         Integer next=guserService.getUdaily(uname);
-        if(next==null)
-        {
-            current-=30;
-        }
-        else{
-            current-=next;
-        }
-        System.out.println("前翻页的current"+current);
+        current -= Objects.requireNonNullElse(next, 30);
+
         httpSession.setAttribute("Current",current);
         return MessageAndData.success().setMessage("上一页");
     }
@@ -336,8 +307,12 @@ public ModelAndView login(
     public MessageAndData nextone(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
+        Integer todayFinal=(Integer) httpSession.getAttribute("TodayFinal");
         Integer next=guserService.getUdaily(uname);
         current++;
+        if (current>todayFinal){
+            httpSession.setAttribute("TodayFianl",current);
+        }
         httpSession.setAttribute("Current",current);
         return MessageAndData.success().setMessage("下一页");
     }

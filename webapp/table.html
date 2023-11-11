@@ -106,8 +106,8 @@
                     var cell3 = row.insertCell(2);
 
                     cell1.innerHTML = datalist[i].id;
-                    cell2.innerHTML = datalist[i].word;
-                    cell3.innerHTML = "";
+                    cell2.innerHTML = datalist[i].word+"<br>"+"["+datalist[i].phonetic+"]";
+                    cell3.innerHTML = datalist[i].translation.replace(/\\n/g, "<br>");
 
                     if (datalist[i].id == 1) {
                       document.getElementById("prevPage").disabled = true;
@@ -199,8 +199,8 @@
                     var cell3 = row.insertCell(2);
 
                     cell1.innerHTML = datalist[i].id;
-                    cell2.innerHTML = datalist[i].word;
-                    cell3.innerHTML = "";
+                    cell2.innerHTML = datalist[i].word+"<br>"+"["+datalist[i].phonetic+"]";
+                    cell3.innerHTML = datalist[i].translation.replace(/\n/g, "<br>");
                     if (datalist[i].id == 1) {
                       document.getElementById("prevPage").disabled = true;
                     }

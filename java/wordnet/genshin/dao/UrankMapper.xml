@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="wordnet.genshin.dao.TofelMapper">
-  <resultMap id="BaseResultMap" type="wordnet.genshin.domain.Tofel">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="word" jdbcType="VARCHAR" property="word" />
-    <result column="phonetic" jdbcType="VARCHAR" property="phonetic" />
-    <result column="translation" jdbcType="VARCHAR" property="translation" />
+<mapper namespace="wordnet.genshin.dao.UrankMapper">
+  <resultMap id="BaseResultMap" type="wordnet.genshin.domain.Urank">
+    <id column="rid" jdbcType="INTEGER" property="rid" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+    <result column="medal" jdbcType="VARCHAR" property="medal" />
+    <result column="Date" jdbcType="VARCHAR" property="date" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +66,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, word, phonetic, translation
+    rid, uname, medal, Date
   </sql>
-  <select id="selectByExample" parameterType="wordnet.genshin.domain.TofelExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="wordnet.genshin.domain.UrankExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tofel
+    from userrank
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,76 +85,76 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tofel
-    where id = #{id,jdbcType=INTEGER}
+    from userrank
+    where rid = #{rid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from tofel
-    where id = #{id,jdbcType=INTEGER}
+    delete from userrank
+    where rid = #{rid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="wordnet.genshin.domain.TofelExample">
-    delete from tofel
+  <delete id="deleteByExample" parameterType="wordnet.genshin.domain.UrankExample">
+    delete from userrank
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="wordnet.genshin.domain.Tofel">
-    insert into tofel (id, word, phonetic, 
-      translation)
-    values (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{phonetic,jdbcType=VARCHAR}, 
-      #{translation,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="wordnet.genshin.domain.Urank">
+    insert into userrank (rid, uname, medal, 
+      Date)
+    values (#{rid,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR}, #{medal,jdbcType=VARCHAR}, 
+      #{date,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="wordnet.genshin.domain.Tofel">
-    insert into tofel
+  <insert id="insertSelective" parameterType="wordnet.genshin.domain.Urank">
+    insert into userrank
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="rid != null">
+        rid,
       </if>
-      <if test="word != null">
-        word,
+      <if test="uname != null">
+        uname,
       </if>
-      <if test="phonetic != null">
-        phonetic,
+      <if test="medal != null">
+        medal,
       </if>
-      <if test="translation != null">
-        translation,
+      <if test="date != null">
+        Date,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
+      <if test="rid != null">
+        #{rid,jdbcType=INTEGER},
       </if>
-      <if test="word != null">
-        #{word,jdbcType=VARCHAR},
+      <if test="uname != null">
+        #{uname,jdbcType=VARCHAR},
       </if>
-      <if test="phonetic != null">
-        #{phonetic,jdbcType=VARCHAR},
+      <if test="medal != null">
+        #{medal,jdbcType=VARCHAR},
       </if>
-      <if test="translation != null">
-        #{translation,jdbcType=VARCHAR},
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="wordnet.genshin.domain.TofelExample" resultType="java.lang.Long">
-    select count(*) from tofel
+  <select id="countByExample" parameterType="wordnet.genshin.domain.UrankExample" resultType="java.lang.Long">
+    select count(*) from userrank
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tofel
+    update userrank
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="record.rid != null">
+        rid = #{record.rid,jdbcType=INTEGER},
       </if>
-      <if test="record.word != null">
-        word = #{record.word,jdbcType=VARCHAR},
+      <if test="record.uname != null">
+        uname = #{record.uname,jdbcType=VARCHAR},
       </if>
-      <if test="record.phonetic != null">
-        phonetic = #{record.phonetic,jdbcType=VARCHAR},
+      <if test="record.medal != null">
+        medal = #{record.medal,jdbcType=VARCHAR},
       </if>
-      <if test="record.translation != null">
-        translation = #{record.translation,jdbcType=VARCHAR},
+      <if test="record.date != null">
+        Date = #{record.date,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -162,35 +162,35 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tofel
-    set id = #{record.id,jdbcType=INTEGER},
-      word = #{record.word,jdbcType=VARCHAR},
-      phonetic = #{record.phonetic,jdbcType=VARCHAR},
-      translation = #{record.translation,jdbcType=VARCHAR}
+    update userrank
+    set rid = #{record.rid,jdbcType=INTEGER},
+      uname = #{record.uname,jdbcType=VARCHAR},
+      medal = #{record.medal,jdbcType=VARCHAR},
+      Date = #{record.date,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="wordnet.genshin.domain.Tofel">
-    update tofel
+  <update id="updateByPrimaryKeySelective" parameterType="wordnet.genshin.domain.Urank">
+    update userrank
     <set>
-      <if test="word != null">
-        word = #{word,jdbcType=VARCHAR},
+      <if test="uname != null">
+        uname = #{uname,jdbcType=VARCHAR},
       </if>
-      <if test="phonetic != null">
-        phonetic = #{phonetic,jdbcType=VARCHAR},
+      <if test="medal != null">
+        medal = #{medal,jdbcType=VARCHAR},
       </if>
-      <if test="translation != null">
-        translation = #{translation,jdbcType=VARCHAR},
+      <if test="date != null">
+        Date = #{date,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where rid = #{rid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="wordnet.genshin.domain.Tofel">
-    update tofel
-    set word = #{word,jdbcType=VARCHAR},
-      phonetic = #{phonetic,jdbcType=VARCHAR},
-      translation = #{translation,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+  <update id="updateByPrimaryKey" parameterType="wordnet.genshin.domain.Urank">
+    update userrank
+    set uname = #{uname,jdbcType=VARCHAR},
+      medal = #{medal,jdbcType=VARCHAR},
+      Date = #{date,jdbcType=VARCHAR}
+    where rid = #{rid,jdbcType=INTEGER}
   </update>
 </mapper>

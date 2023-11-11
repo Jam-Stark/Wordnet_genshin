@@ -3,14 +3,14 @@ package wordnet.genshin.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TofelExample {
+public class UrankExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TofelExample() {
+    public UrankExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,273 +104,273 @@ public class TofelExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
+        public Criteria andRidIsNull() {
+            addCriterion("rid is null");
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+        public Criteria andRidIsNotNull() {
+            addCriterion("rid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
-            addCriterion("id =", value, "id");
+        public Criteria andRidEqualTo(Integer value) {
+            addCriterion("rid =", value, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
-            addCriterion("id <>", value, "id");
+        public Criteria andRidNotEqualTo(Integer value) {
+            addCriterion("rid <>", value, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
-            addCriterion("id >", value, "id");
+        public Criteria andRidGreaterThan(Integer value) {
+            addCriterion("rid >", value, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("id >=", value, "id");
+        public Criteria andRidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("rid >=", value, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
-            addCriterion("id <", value, "id");
+        public Criteria andRidLessThan(Integer value) {
+            addCriterion("rid <", value, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
-            addCriterion("id <=", value, "id");
+        public Criteria andRidLessThanOrEqualTo(Integer value) {
+            addCriterion("rid <=", value, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
-            addCriterion("id in", values, "id");
+        public Criteria andRidIn(List<Integer> values) {
+            addCriterion("rid in", values, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
-            addCriterion("id not in", values, "id");
+        public Criteria andRidNotIn(List<Integer> values) {
+            addCriterion("rid not in", values, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
-            addCriterion("id between", value1, value2, "id");
+        public Criteria andRidBetween(Integer value1, Integer value2) {
+            addCriterion("rid between", value1, value2, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("id not between", value1, value2, "id");
+        public Criteria andRidNotBetween(Integer value1, Integer value2) {
+            addCriterion("rid not between", value1, value2, "rid");
             return (Criteria) this;
         }
 
-        public Criteria andWordIsNull() {
-            addCriterion("word is null");
+        public Criteria andUnameIsNull() {
+            addCriterion("uname is null");
             return (Criteria) this;
         }
 
-        public Criteria andWordIsNotNull() {
-            addCriterion("word is not null");
+        public Criteria andUnameIsNotNull() {
+            addCriterion("uname is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWordEqualTo(String value) {
-            addCriterion("word =", value, "word");
+        public Criteria andUnameEqualTo(String value) {
+            addCriterion("uname =", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordNotEqualTo(String value) {
-            addCriterion("word <>", value, "word");
+        public Criteria andUnameNotEqualTo(String value) {
+            addCriterion("uname <>", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordGreaterThan(String value) {
-            addCriterion("word >", value, "word");
+        public Criteria andUnameGreaterThan(String value) {
+            addCriterion("uname >", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordGreaterThanOrEqualTo(String value) {
-            addCriterion("word >=", value, "word");
+        public Criteria andUnameGreaterThanOrEqualTo(String value) {
+            addCriterion("uname >=", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordLessThan(String value) {
-            addCriterion("word <", value, "word");
+        public Criteria andUnameLessThan(String value) {
+            addCriterion("uname <", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordLessThanOrEqualTo(String value) {
-            addCriterion("word <=", value, "word");
+        public Criteria andUnameLessThanOrEqualTo(String value) {
+            addCriterion("uname <=", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordLike(String value) {
-            addCriterion("word like", value, "word");
+        public Criteria andUnameLike(String value) {
+            addCriterion("uname like", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordNotLike(String value) {
-            addCriterion("word not like", value, "word");
+        public Criteria andUnameNotLike(String value) {
+            addCriterion("uname not like", value, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordIn(List<String> values) {
-            addCriterion("word in", values, "word");
+        public Criteria andUnameIn(List<String> values) {
+            addCriterion("uname in", values, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordNotIn(List<String> values) {
-            addCriterion("word not in", values, "word");
+        public Criteria andUnameNotIn(List<String> values) {
+            addCriterion("uname not in", values, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordBetween(String value1, String value2) {
-            addCriterion("word between", value1, value2, "word");
+        public Criteria andUnameBetween(String value1, String value2) {
+            addCriterion("uname between", value1, value2, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andWordNotBetween(String value1, String value2) {
-            addCriterion("word not between", value1, value2, "word");
+        public Criteria andUnameNotBetween(String value1, String value2) {
+            addCriterion("uname not between", value1, value2, "uname");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticIsNull() {
-            addCriterion("phonetic is null");
+        public Criteria andMedalIsNull() {
+            addCriterion("medal is null");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticIsNotNull() {
-            addCriterion("phonetic is not null");
+        public Criteria andMedalIsNotNull() {
+            addCriterion("medal is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticEqualTo(String value) {
-            addCriterion("phonetic =", value, "phonetic");
+        public Criteria andMedalEqualTo(String value) {
+            addCriterion("medal =", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticNotEqualTo(String value) {
-            addCriterion("phonetic <>", value, "phonetic");
+        public Criteria andMedalNotEqualTo(String value) {
+            addCriterion("medal <>", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticGreaterThan(String value) {
-            addCriterion("phonetic >", value, "phonetic");
+        public Criteria andMedalGreaterThan(String value) {
+            addCriterion("medal >", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticGreaterThanOrEqualTo(String value) {
-            addCriterion("phonetic >=", value, "phonetic");
+        public Criteria andMedalGreaterThanOrEqualTo(String value) {
+            addCriterion("medal >=", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticLessThan(String value) {
-            addCriterion("phonetic <", value, "phonetic");
+        public Criteria andMedalLessThan(String value) {
+            addCriterion("medal <", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticLessThanOrEqualTo(String value) {
-            addCriterion("phonetic <=", value, "phonetic");
+        public Criteria andMedalLessThanOrEqualTo(String value) {
+            addCriterion("medal <=", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticLike(String value) {
-            addCriterion("phonetic like", value, "phonetic");
+        public Criteria andMedalLike(String value) {
+            addCriterion("medal like", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticNotLike(String value) {
-            addCriterion("phonetic not like", value, "phonetic");
+        public Criteria andMedalNotLike(String value) {
+            addCriterion("medal not like", value, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticIn(List<String> values) {
-            addCriterion("phonetic in", values, "phonetic");
+        public Criteria andMedalIn(List<String> values) {
+            addCriterion("medal in", values, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticNotIn(List<String> values) {
-            addCriterion("phonetic not in", values, "phonetic");
+        public Criteria andMedalNotIn(List<String> values) {
+            addCriterion("medal not in", values, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticBetween(String value1, String value2) {
-            addCriterion("phonetic between", value1, value2, "phonetic");
+        public Criteria andMedalBetween(String value1, String value2) {
+            addCriterion("medal between", value1, value2, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andPhoneticNotBetween(String value1, String value2) {
-            addCriterion("phonetic not between", value1, value2, "phonetic");
+        public Criteria andMedalNotBetween(String value1, String value2) {
+            addCriterion("medal not between", value1, value2, "medal");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationIsNull() {
-            addCriterion("translation is null");
+        public Criteria andDateIsNull() {
+            addCriterion("Date is null");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationIsNotNull() {
-            addCriterion("translation is not null");
+        public Criteria andDateIsNotNull() {
+            addCriterion("Date is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationEqualTo(String value) {
-            addCriterion("translation =", value, "translation");
+        public Criteria andDateEqualTo(String value) {
+            addCriterion("Date =", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationNotEqualTo(String value) {
-            addCriterion("translation <>", value, "translation");
+        public Criteria andDateNotEqualTo(String value) {
+            addCriterion("Date <>", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationGreaterThan(String value) {
-            addCriterion("translation >", value, "translation");
+        public Criteria andDateGreaterThan(String value) {
+            addCriterion("Date >", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationGreaterThanOrEqualTo(String value) {
-            addCriterion("translation >=", value, "translation");
+        public Criteria andDateGreaterThanOrEqualTo(String value) {
+            addCriterion("Date >=", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationLessThan(String value) {
-            addCriterion("translation <", value, "translation");
+        public Criteria andDateLessThan(String value) {
+            addCriterion("Date <", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationLessThanOrEqualTo(String value) {
-            addCriterion("translation <=", value, "translation");
+        public Criteria andDateLessThanOrEqualTo(String value) {
+            addCriterion("Date <=", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationLike(String value) {
-            addCriterion("translation like", value, "translation");
+        public Criteria andDateLike(String value) {
+            addCriterion("Date like", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationNotLike(String value) {
-            addCriterion("translation not like", value, "translation");
+        public Criteria andDateNotLike(String value) {
+            addCriterion("Date not like", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationIn(List<String> values) {
-            addCriterion("translation in", values, "translation");
+        public Criteria andDateIn(List<String> values) {
+            addCriterion("Date in", values, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationNotIn(List<String> values) {
-            addCriterion("translation not in", values, "translation");
+        public Criteria andDateNotIn(List<String> values) {
+            addCriterion("Date not in", values, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationBetween(String value1, String value2) {
-            addCriterion("translation between", value1, value2, "translation");
+        public Criteria andDateBetween(String value1, String value2) {
+            addCriterion("Date between", value1, value2, "date");
             return (Criteria) this;
         }
 
-        public Criteria andTranslationNotBetween(String value1, String value2) {
-            addCriterion("translation not between", value1, value2, "translation");
+        public Criteria andDateNotBetween(String value1, String value2) {
+            addCriterion("Date not between", value1, value2, "date");
             return (Criteria) this;
         }
     }
