@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta charset="UTF-8">
   <title>动态表格</title>
   <style>
     body {
@@ -67,8 +69,10 @@
     }
 
     #rectangle {
-      width: 1200px;  /* 你可以修改这个值来调整宽度 */
-      height: 50px;  /* 你可以修改这个值来调整高度 */
+      display: flex;  /* 添加这一行 */
+      justify-content: space-between;  /* 添加这一行 */
+      width: 1200px;
+      height: 50px;
       min-height: 50px;
       background-color: #4e555b;
       border: none;
@@ -78,34 +82,15 @@
     }
 
     #buttonhide {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 20px;
-      margin-left: 90px;
-
+      margin: 0;  /* 修改这一行 */
     }
     #buttonhide button {
-      margin-left: 20px;
+      margin-right: 20px;
     }
 
   </style>
   <script>
     const date = new Date();
-
-    // function createTable(rowCount, list) {
-    //   var table = document.getElementById("myTable");
-    //   for (var i = 0; i < rowCount; i++) {
-    //     var row = table.insertRow(-1);
-    //     for (var j = 0; j < 3; j++) {
-    //       var cell = row.insertCell(-1);
-    //       if(j==0){cell.innerHTML=list[i].id}
-    //       if(j==1){cell.innerHTML=list[i].word} // 使用后端传来的数据
-    //       if (j==2){cell.innerHTML="explanation"} // 使用后端传来的数据
-    //     }
-    //   }
-    // }
-
-    // 从后端获取数据
     (function() {
       fetch('Users/tablet')
               .then(response => response.json())
@@ -123,6 +108,10 @@
                     cell1.innerHTML = datalist[i].id;
                     cell2.innerHTML = datalist[i].word;
                     cell3.innerHTML = "";
+
+                    if (datalist[i].id == 1) {
+                      document.getElementById("prevPage").disabled = true;
+                    }
                   }
                 }
               });
@@ -130,26 +119,6 @@
 
     function updateDate() {
       document.getElementById("date").innerText = (date.getMonth() + 1) + "月" + date.getDate() + "日";
-    }
-
-    function fetchDataAndUpdateTable() {
-      return fetch('/Users/tablet')
-              .then(response => response.json())
-              .then(datazone => {
-                var datalist = datazone.dataZone.datalist;
-                var table = document.getElementById("myTable");
-
-                for (var i = 0; i < datalist.total; i++) {
-                  var row = table.insertRow(-1);
-                  var cell1 = row.insertCell(0);
-                  var cell2 = row.insertCell(1);
-                  var cell3 = row.insertCell(2);
-
-                  cell1.innerHTML = datalist.list[i].id;
-                  cell2.innerHTML = datalist.list[i].word;
-                  cell3.innerHTML = "";
-                }
-              });
     }
 
     function prevDay() {
@@ -161,11 +130,11 @@
         credentials: 'same-origin'
       })
               .then(response => response.json())
-              .then(data => {
-                console.log(data);
+              .then(datazone => {
+                console.log(datazone);
                 date.setDate(date.getDate() - 1);
                 updateDate();
-                return fetchDataAndUpdateTable();
+                refreshTable();  // 在这里调用refreshTable函数
               })
               .catch((error) => {
                 console.error('Error:', error);
@@ -173,6 +142,27 @@
     }
 
     function nextDay() {
+      fetch('Users/nextpage', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin'
+      })
+              .then(response => response.json())
+              .then(datazone => {
+                console.log(datazone);
+                date.setDate(date.getDate() + 1);
+                updateDate();
+                refreshTable();  // 在这里调用refreshTable函数
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+    }
+
+
+    function refreshTable() {
       fetch('Users/tablet', {
         method: 'POST',
         headers: {
@@ -181,11 +171,41 @@
         credentials: 'same-origin'
       })
               .then(response => response.json())
-              .then(data => {
-                console.log(data);
-                date.setDate(date.getDate() + 1);
-                updateDate();
-                return fetchDataAndUpdateTable();
+              .then(datazone => {
+                var datalist = datazone.dataZone.datalist;
+                var table = document.getElementById("myTable");
+
+                // 清空表格
+                while(table.rows.length > 0) {
+                  table.deleteRow(0);
+                }
+
+                var header = table.createTHead();
+                var row = header.insertRow(0);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+
+                cell1.innerHTML = "序号";
+                cell2.innerHTML = "单词";
+                cell3.innerHTML = "释义";
+                document.getElementById("prevPage").disabled = false;
+                // 用新的数据填充表格
+                for (var i = 0; i < datalist.length; i++) {
+                  if (datalist[i] !== null) {
+                    var row = table.insertRow(-1);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+
+                    cell1.innerHTML = datalist[i].id;
+                    cell2.innerHTML = datalist[i].word;
+                    cell3.innerHTML = "";
+                    if (datalist[i].id == 1) {
+                      document.getElementById("prevPage").disabled = true;
+                    }
+                  }
+                }
               })
               .catch((error) => {
                 console.error('Error:', error);
@@ -230,6 +250,7 @@
     <button onclick="toggleColumnContent(1)">单词</button>
     <button onclick="toggleColumnContent(2)">释义</button>
   </div>
+  <a href="Wordcard.html" ><button>跳转</button></a>
 </div>
 <table id="myTable" border="1">
   <tr>

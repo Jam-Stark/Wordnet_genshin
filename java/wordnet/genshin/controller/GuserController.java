@@ -16,8 +16,12 @@ import wordnet.genshin.service.GuserService;
 import wordnet.genshin.domain.Tofel;
 import wordnet.genshin.service.TofelService;
 
+import wordnet.genshin.service.SelectService;
+import wordnet.genshin.utils.TableWord;
+
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,6 +34,9 @@ public class GuserController {
 
     @Autowired
     private TofelService tofelService;
+
+    @Autowired
+    private SelectService selectService;
 
     @ResponseBody
     @RequestMapping(value = "/register",method = RequestMethod.GET)
@@ -107,7 +114,7 @@ public ModelAndView login(
         String targetUrl = (String) httpSession.getAttribute("targetUrl");
         System.out.println("controller: "+targetUrl);
         if (targetUrl != null && !targetUrl.isEmpty()) {
-            modelAndView.setViewName("redirect:" + targetUrl);
+            modelAndView.setViewName("redirect:.." + targetUrl);
         } else {
             modelAndView.setViewName("redirect:../Home.html");
         }
@@ -227,14 +234,18 @@ public ModelAndView login(
     ){
         String uname=(String) httpSession.getAttribute("UserName");
         Integer current=(Integer) httpSession.getAttribute("Current");
+
         Integer from=0;
         if(current!=null){
             from=current;
             System.out.println("翻页的current "+current);
         }
         else {
-            from = guserService.getUfinalword(uname).intValue();
+            from = guserService.getUfinalword(uname).intValue()+1;
         }//取得最后记录的单词位置
+        if(current==null){
+            httpSession.setAttribute("Current",from);
+        }
         Integer to=0;
         if(guserService.getUdaily(uname).toString().isEmpty()){
             to=30;
@@ -242,13 +253,22 @@ public ModelAndView login(
         else {
             to= guserService.getUdaily(uname)+from;
         }//取得每日计划
-        httpSession.setAttribute("Current",to);        //current记录用户会话内阅读的单词id
         System.out.println("当前页面current "+current);
         String book=guserService.getWordnet(uname);
-        List<?> dataList = null; // 声明一个模板列表，初始为null
+        List<TableWord> dataList = null;// 声明一个模板列表，初始为null
 
         if (Objects.equals(book, "tofel")) {
-            dataList = tofelService.selectMuti(from, to);  //匹配单词本
+            List<Tofel> wordList = tofelService.selectMuti(from, to);  //匹配单词本
+
+            for ( Integer i = from; i<=to; i++) {
+                TableWord data = new TableWord();
+                data.setDefinition(selectService.selectWordWithBLOBs(wordList.get(i).getWord()).getDefinition());
+                data.setTranslation(selectService.selectWordWithBLOBs(wordList.get(i).getWord()).getTranslation());
+                data.setWord(wordList.get(i).getWord());
+                data.setId(wordList.get(i).getId().longValue());
+                dataList.add(data);
+            }
+        }
 //        } else if (Objects.equals(book, "gre")) {
 //            dataList = greService.selectMuti(from, to);
 //        } else if (Objects.equals(book, "zk")) {
@@ -261,7 +281,8 @@ public ModelAndView login(
 //            dataList = cet4Service.selectMuti(from, to);
 //        } else if (Objects.equals(book, "cet6")) {
 //            dataList = cet6Service.selectMuti(from, to);
-        }
+
+
 
         if (dataList != null) {
 //            PageHelper.startPage(from, to);  //左闭右开 [from,to)
@@ -269,6 +290,8 @@ public ModelAndView login(
             return MessageAndData.success().add("datalist",dataList);
         }else
             return MessageAndData.error().setMessage("获取失败！");
+
+
     }
 
     @ResponseBody
@@ -284,8 +307,9 @@ public ModelAndView login(
         else {
             current+=next;
         };
-        System.out.println("往后翻的current： "+current);
+
         httpSession.setAttribute("Current",current);
+        System.out.println("往后翻的current： "+current);
         return MessageAndData.success().setMessage("下一页");
     }
 
@@ -300,7 +324,7 @@ public ModelAndView login(
             current-=30;
         }
         else{
-            current-=2*next;
+            current-=next;
         }
         System.out.println("前翻页的current"+current);
         httpSession.setAttribute("Current",current);

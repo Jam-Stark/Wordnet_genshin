@@ -13,6 +13,7 @@ import wordnet.genshin.domain.Guser;
 import wordnet.genshin.domain.GuserExample;
 import wordnet.genshin.service.GuserService;
 
+import java.util.Date;
 import java.util.List;
 
 @Service(value = "FamiliarService")
@@ -25,6 +26,34 @@ public class FamiliarServiceImpl implements FamiliarService {
     private GuserMapper guserMapper;
 
 
+    @Override
+    public boolean addWord(String word, String uname) {
+
+        boolean flag=true;
+
+        Familiar record=new Familiar();
+        record.setUname(uname);
+        record.setWord(word);
+        if(record.toString().isEmpty()){
+            flag=false;
+        }
+        familiarMapper.insert(record);
+        return flag;
+    }
+public boolean deleteWord(String word,String uname){
+        boolean flag=true;
+
+    FamiliarExample familiarExample=new FamiliarExample();
+    FamiliarExample.Criteria criteria=familiarExample.createCriteria();
+    criteria.andUnameEqualTo(uname).andWordEqualTo(word);
+
+    if(familiarExample.toString().isEmpty()){
+        flag=false;
+    }
+
+    familiarMapper.deleteByExample(familiarExample);
+    return flag;
+}
     @Override
     public boolean detectWord(String word,String uname){
 
@@ -52,10 +81,10 @@ public class FamiliarServiceImpl implements FamiliarService {
     }
 
     @Override
-    public List<Familiar> selectAll() {
+    public List<Familiar> selectByuser(String uname) {
         FamiliarExample familiarExample=new FamiliarExample();
         FamiliarExample.Criteria criteria=familiarExample.createCriteria();
-        criteria.andFidGreaterThan(0);
+        criteria.andUnameEqualTo(uname);
 
         return familiarMapper.selectByExample(familiarExample);
     }
