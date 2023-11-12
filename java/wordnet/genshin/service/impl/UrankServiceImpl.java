@@ -12,6 +12,7 @@ import wordnet.genshin.domain.Urank;
 import wordnet.genshin.dao.UrankMapper;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Collections;
 
@@ -37,6 +38,7 @@ public class UrankServiceImpl implements UrankService {
 
     @Override
     public boolean awardMedal(String Date) {
+
         UrankExample urankExample=new UrankExample();
         UrankExample.Criteria criteria=urankExample.createCriteria();
         criteria.andDateEqualTo(Date);
@@ -44,33 +46,78 @@ public class UrankServiceImpl implements UrankService {
         List<Urank> urankList=urankMapper.selectByExample(urankExample);
 
         CalendarExample calendarExample=new CalendarExample();
-        CalendarExample.Criteria criteria1=calendarExample.createCriteria();
+        CalendarExample.Criteria criteriaC=calendarExample.createCriteria();
+        class MyPair {
+            private String uname;
+            private int number;
 
-        String First;
-        String Second;
-        String third;
+            public MyPair(String uname, int number) {
+                this.uname = uname;
+                this.number = number;
+            }
 
-        List<ConnectionUrlParser.Pair> rank=new ArrayList<>();
+            public String getuname() {
+                return uname;
+            }
+
+            public int getNumber() {
+                return number;
+            }
+        }  //自定义一个pair用于排序
+
+
+        List<MyPair> rank=new ArrayList<>();
 
         for(Urank item:urankList){
-            criteria1.andUnameEqualTo(item.getUname()).andDateEqualTo(Date);
-            ConnectionUrlParser.Pair pair = new ConnectionUrlParser.Pair(item.getUname(), calendarMapper.selectByExample(calendarExample).get(0).getNumber());
+            criteriaC.andUnameEqualTo(item.getUname()).andDateEqualTo(Date);
+            MyPair pair = new MyPair(item.getUname(), calendarMapper.selectByExample(calendarExample).get(0).getNumber());
             rank.add(pair);
         }
-        Collections.sort(rank, new Comparator<ConnectionUrlParser.Pair>() {
+
+        //排序，根据num（每日背的单词数）
+        rank.sort(new Comparator<MyPair>() {
             @Override
-            public int compare(ConnectionUrlParser.Pair pair1, ConnectionUrlParser.Pair pair2) {
-                // 从大到小排序
-                return pair2.getNumber() - pair1.getNumber();
+            public int compare(MyPair o1, MyPair o2) {
+                int number1 = o1.getNumber();
+                int number2 = o2.getNumber();
+
+                // 根据 number 值升序排序
+                return Integer.compare(number1, number2);
             }
         });
 
+        if (!rank.isEmpty()) {
+            // 颁发 Gold 奖牌给排名第一的用户
+            criteria.andUnameEqualTo(rank.get(0).getuname()).andDateEqualTo(Date);
+            urankList.get(0).setMedal("Gold");
+        }
 
-        return false;
+        if (rank.size() >= 2) {
+            // 颁发 Silver 奖牌给排名第二的用户
+            criteria.andUnameEqualTo(rank.get(1).getuname()).andDateEqualTo(Date);
+            urankList.get(1).setMedal("Silver");
+        }
+
+        if (rank.size() >= 3) {
+            // 颁发 Copper 奖牌给排名第三的用户
+            criteria.andUnameEqualTo(rank.get(2).getuname()).andDateEqualTo(Date);
+            urankList.get(2).setMedal("Copper");
+        }
+
+        return !rank.isEmpty();
     }
 
     @Override
-    public boolean addRank(String Date, String uname) {
-        return false;
+    public boolean addRank(String Date,Integer number, String uname) {
+
+        boolean flag=false;
+        Urank item=new Urank();
+        item.setUname(uname);
+        item.setDate(Date);
+        urankMapper.insert(item);
+        if(!item.toString().isEmpty()){
+            flag=true;
+        }
+        return flag;
     }
 }

@@ -10,5 +10,5 @@ public interface UrankService {
 
     public boolean awardMedal(String Date);
 
-    public boolean addRank(String Date,String uname);
+    public boolean addRank(String Date,Integer number,String uname);
 }
