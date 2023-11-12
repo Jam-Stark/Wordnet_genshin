@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <link rel="stylesheet" type=text/css href="css/try.css">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta charset="UTF-8">
   <title>动态表格</title>
@@ -14,7 +15,7 @@
       margin: 0;
       padding-top: 300px;
       padding-bottom: 500px;  /* 预留出底部的空间 */
-      background-color: #4e555b;
+      background-color: #2d2d2d;
       color: white;
     }
 
@@ -44,12 +45,12 @@
       vertical-align: bottom;
       text-align: left;
       border-bottom: 4px solid white;
-      border-top: #4e555b;
+      border-top: #2d2d2d;
       height: 30px;
     }
 
     #myTable tr:last-child{
-      border-bottom: #4e555b;
+      border-bottom: #2d2d2d;
     }
 
     #myTable {
@@ -65,7 +66,7 @@
       width: 100%;
       text-align: center;
       padding: 20px 0;
-      background-color: #4e555b;
+      background-color: #2d2d2d;
     }
 
     #rectangle {
@@ -74,7 +75,7 @@
       width: 1200px;
       height: 50px;
       min-height: 50px;
-      background-color: #4e555b;
+      background-color: #2d2d2d;
       border: none;
       border-radius: 10px;
       margin-bottom: 20px;
@@ -89,180 +90,243 @@
     }
 
   </style>
-  <script>
-    const date = new Date();
-    (function() {
-      fetch('Users/tablet')
-              .then(response => response.json())
-              .then(datazone => {
-                var datalist = datazone.dataZone.datalist;
-                var table = document.getElementById("myTable");
-
-                for (var i = 0; i < datalist.length; i++) {
-                  if (datalist[i] !== null) {
-                    var row = table.insertRow(-1);
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    var cell3 = row.insertCell(2);
-
-                    cell1.innerHTML = datalist[i].id;
-                    cell2.innerHTML = datalist[i].word+"<br>"+"["+datalist[i].phonetic+"]";
-                    cell3.innerHTML = datalist[i].translation.replace(/\\n/g, "<br>");
-
-                    if (datalist[i].id == 1) {
-                      document.getElementById("prevPage").disabled = true;
-                    }
-                  }
-                }
-              });
-    })();
-
-    function updateDate() {
-      document.getElementById("date").innerText = (date.getMonth() + 1) + "月" + date.getDate() + "日";
-    }
-
-    function prevDay() {
-      fetch('Users/prepage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin'
-      })
-              .then(response => response.json())
-              .then(datazone => {
-                console.log(datazone);
-                date.setDate(date.getDate() - 1);
-                updateDate();
-                refreshTable();  // 在这里调用refreshTable函数
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-    }
-
-    function nextDay() {
-      fetch('Users/nextpage', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin'
-      })
-              .then(response => response.json())
-              .then(datazone => {
-                console.log(datazone);
-                date.setDate(date.getDate() + 1);
-                updateDate();
-                refreshTable();  // 在这里调用refreshTable函数
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-    }
-
-
-    function refreshTable() {
-      fetch('Users/tablet', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin'
-      })
-              .then(response => response.json())
-              .then(datazone => {
-                var datalist = datazone.dataZone.datalist;
-                var table = document.getElementById("myTable");
-
-                // 清空表格
-                while(table.rows.length > 0) {
-                  table.deleteRow(0);
-                }
-
-                var header = table.createTHead();
-                var row = header.insertRow(0);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-
-                cell1.innerHTML = "序号";
-                cell2.innerHTML = "单词";
-                cell3.innerHTML = "释义";
-                document.getElementById("prevPage").disabled = false;
-                // 用新的数据填充表格
-                for (var i = 0; i < datalist.length; i++) {
-                  if (datalist[i] !== null) {
-                    var row = table.insertRow(-1);
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    var cell3 = row.insertCell(2);
-
-                    cell1.innerHTML = datalist[i].id;
-                    cell2.innerHTML = datalist[i].word+"<br>"+"["+datalist[i].phonetic+"]";
-                    cell3.innerHTML = datalist[i].translation.replace(/\n/g, "<br>");
-                    if (datalist[i].id == 1) {
-                      document.getElementById("prevPage").disabled = true;
-                    }
-                  }
-                }
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-    }
-
-    function toggleColumnContent(colIndex) {
-      var table = document.getElementById("myTable");
-      for (var i = 0; i < table.rows.length; i++) {
-        var cell = table.rows[i].cells[colIndex];
-        if (cell.innerHTML !== "") {
-          cell.dataset.content = cell.innerHTML;  // 保存当前内容
-          cell.innerHTML = "";  // 清空内容
-        } else {
-          cell.innerHTML = cell.dataset.content;  // 恢复内容
-        }
-      }
-    }
-
-    window.onbeforeunload = function() {
-      fetch('Users/wordRecord', {
-        method: 'POST', // 或者 'GET'
-        headers: {
-          'Content-Type': 'application/json',
-          // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        credentials: 'same-origin' // 包括会话cookie
-      })
-              .then(response => response.json())
-              .then(data => {
-                console.log(data);
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-    }
-  </script>
 </head>
 <body onload="createTable(10); updateDate();">
-<div id="rectangle">
-  <div id="buttonhide">
-    <button onclick="toggleColumnContent(1)">单词</button>
-    <button onclick="toggleColumnContent(2)">释义</button>
+  <div id="mySidebar" class="sidebar">
   </div>
-  <a href="Wordcard.html" ><button>跳转</button></a>
-</div>
-<table id="myTable" border="1">
+
+  <div id="main">
+      <button id="btn1" class="openbtn" onclick="openNav('User')">用户</button>
+      <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
+      <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
+      <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
+      <button id="btn6" class="openbtn" onclick="openMain('Home')">主页</button>
+  </div>
+
+  <div id="rectangle">
+    <div id="buttonhide">
+     <button onclick="toggleColumnContent(1)">单词</button>
+     <button onclick="toggleColumnContent(2)">释义</button>
+    </div>
+    <a href="Wordcard.html" ><button>跳转</button></a>
+ </div>
+ <table id="myTable" border="1">
   <tr>
     <th>序号</th>
     <th>单词</th>
     <th>释义</th>
+    <th>加入熟词本</th>
   </tr>
-</table>
-<div class="buttonPage">
+ </table>
+ <div class="buttonPage">
   <button id="prevPage" onclick="prevDay()">前一天</button>
   <span id="date"></span>
   <button id="nextPage" onclick="nextDay()">后一天</button>
-</div>
+  </div>
+
+  <script>
+
+      const date = new Date();
+      (function() {
+          fetch('Users/tablet')
+              .then(response => response.json())
+              .then(datazone => {
+                  var datalist = datazone.dataZone.datalist;
+                  var table = document.getElementById("myTable");
+
+                  for (var i = 0; i < datalist.length; i++) {
+                      if (datalist[i] !== null) {
+                          var row = table.insertRow(-1);
+                          var cell1 = row.insertCell(0);
+                          var cell2 = row.insertCell(1);
+                          var cell3 = row.insertCell(2);
+                          var cell4 = row.insertCell(3);
+
+                          cell1.innerHTML = datalist[i].id;
+                          cell2.innerHTML = datalist[i].word+"<br>"+"["+datalist[i].phonetic+"]";
+                          cell3.innerHTML = datalist[i].translation.replace(/\\n/g, "<br>");
+                          cell4.innerHTML = '<button data-row-index="' + i + '" onclick="addWord(\'' + datalist[i].word + '\', this)">加入</button>';
+
+                          if (datalist[i].id == 1) {
+                              document.getElementById("prevPage").disabled = true;
+                          }
+                      }
+                  }
+              });
+      })();
+
+      function updateDate() {
+          document.getElementById("date").innerText = (date.getMonth() + 1) + "月" + date.getDate() + "日";
+      }
+
+      function prevDay() {
+          fetch('Users/prepage', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              credentials: 'same-origin'
+          })
+              .then(response => response.json())
+              .then(datazone => {
+                  console.log(datazone);
+                  date.setDate(date.getDate() - 1);
+                  updateDate();
+                  refreshTable();  // 在这里调用refreshTable函数
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+      }
+
+      function nextDay() {
+          fetch('Users/nextpage', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              credentials: 'same-origin'
+          })
+              .then(response => response.json())
+              .then(datazone => {
+                  console.log(datazone);
+                  date.setDate(date.getDate() + 1);
+                  updateDate();
+                  refreshTable();  // 在这里调用refreshTable函数
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+      }
+
+
+      function refreshTable() {
+          fetch('Users/tablet', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              credentials: 'same-origin'
+          })
+              .then(response => response.json())
+              .then(datazone => {
+                  var datalist = datazone.dataZone.datalist;
+                  var table = document.getElementById("myTable");
+
+                  // 清空表格
+                  while(table.rows.length > 0) {
+                      table.deleteRow(0);
+                  }
+
+                  var header = table.createTHead();
+                  var row = header.insertRow(0);
+                  var cell1 = row.insertCell(0);
+                  var cell2 = row.insertCell(1);
+                  var cell3 = row.insertCell(2);
+                  var cell4 = row.insertCell(3);
+
+                  cell1.innerHTML = "序号";
+                  cell2.innerHTML = "单词";
+                  cell3.innerHTML = "释义";
+                  cell4.innerHTML = "加入熟词本"
+
+                  document.getElementById("prevPage").disabled = false;
+                  // 用新的数据填充表格
+                  for (var i = 0; i < datalist.length; i++) {
+                      if (datalist[i] !== null) {
+                          var row = table.insertRow(-1);
+                          var cell1 = row.insertCell(0);
+                          var cell2 = row.insertCell(1);
+                          var cell3 = row.insertCell(2);
+                          var cell4 = row.insertCell(3);
+
+                          cell1.innerHTML = datalist[i].id;
+                          cell2.innerHTML = datalist[i].word+"<br>"+"["+datalist[i].phonetic+"]";
+                          cell3.innerHTML = datalist[i].translation.replace(/\n/g, "<br>");
+                          cell4.innerHTML = '<button data-row-index="' + i + '" onclick="addWord(\'' + datalist[i].word + '\', this)">加入</button>';
+                          if (datalist[i].id == 1) {
+                              document.getElementById("prevPage").disabled = true;
+                          }
+                      }
+                  }
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+      }
+
+      function toggleColumnContent(colIndex) {
+          var table = document.getElementById("myTable");
+          for (var i = 0; i < table.rows.length; i++) {
+              var cell = table.rows[i].cells[colIndex];
+              if (cell.innerHTML !== "") {
+                  cell.dataset.content = cell.innerHTML;  // 保存当前内容
+                  cell.innerHTML = "";  // 清空内容
+              } else {
+                  cell.innerHTML = cell.dataset.content;  // 恢复内容
+              }
+          }
+      }
+
+      window.onbeforeunload = function() {
+          fetch('Users/wordRecord', {
+              method: 'POST', // 或者 'GET'
+              headers: {
+                  'Content-Type': 'application/json',
+                  // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              credentials: 'same-origin' // 包括会话cookie
+          })
+              .then(response => response.json())
+              .then(data => {
+                  console.log(data);
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+      }
+
+    var current_page = null;
+
+    function openNav(page) {
+      if (document.getElementById("mySidebar").style.width == "400px" && current_page == page) {
+        closeNav();
+      } else {
+        document.getElementById("mySidebar").innerHTML = '<iframe id="iframe" src="' + page + '.html"></iframe>';
+        document.getElementById("mySidebar").style.width = "400px";
+        current_page = page;
+      }
+    }
+
+    function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+    }
+
+    function openMain(page) {
+      document.getElementById("main").innerHTML = '<iframe id="mainframe" src="' + page + '.html"></iframe>';
+    }
+
+      function addWord(word, button) {
+          fetch('Familiar/add?word=' + word, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+          })
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  console.log('Success:', data);
+              })
+              .catch((error) => {
+                  console.error('Error:', error);
+              });
+          button.parentElement.parentElement.style.display = 'none';
+      }
+  </script>
 </body>
 </html>

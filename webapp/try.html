@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+      background-color: #2d2d2d;
+    }
+
+    #mySidebar {
+      height: 100%;
+      width: 0px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      right: 100px;  /* 设置为按钮的宽度 */
+      background-color: #2d2d2d;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 0px;
+      padding-bottom: 0px
+    }
+
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #2d2d2d;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      position: fixed;
+      right: 0;
+      width: 100px;
+      height: 50px;
+    }
+
+    .openbtn:hover {
+      background-color: #444;
+    }
+
+    #main {
+      transition: margin-left .5s;
+      padding: 16px;
+    }
+
+    #iframe {
+      width: 100%;
+      height: 99%;
+      margin: 0;
+      border: 2px solid white;
+    }
+
+    #btn1 { top: 20px; }
+    #btn2 { top: 70px; }
+    #btn3 { top: 120px; }
+    #btn4 { top: 170px; }
+    #btn6 { top: 270px; }
+
+
+    #mainframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div id="mySidebar" class="sidebar">
+  <iframe id="iframe" src="Home.html"></iframe>
+</div>
+
+<div id="main">
+  <iframe id="mainframe" src="Home.html"></iframe>
+  <button id="btn1" class="openbtn" onclick="openNav('User')">用户</button>
+  <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
+  <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
+  <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
+  <button id="btn6" class="openbtn" onclick="openMain('Home')">主页</button>
+</div>
+
+<script>
+  var current_page = null;
+
+  function openNav(page) {
+    if (document.getElementById("mySidebar").style.width == "300px" && current_page == page) {
+      closeNav();
+    } else {
+      document.getElementById("iframe").src = page + ".html";
+      document.getElementById("mySidebar").style.width = "400px";
+    }
+    current_page = page;
+  }
+
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+  }
+
+  function openMain(page) {
+    document.getElementById("mainframe").src = page + ".html";
+  }
+
+</script>
+
+</body>
+</html>

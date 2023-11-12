@@ -4,6 +4,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta charset="UTF-8">
   <style>
+    body{
+      background-color: rgba(17, 1, 1, 0.99);
+      color: white;
+    }
     #rectangle {
       width: 100%;
       height: 100vh;
@@ -12,7 +16,7 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      background-color: #f2f2f2;
+      background-color: #2d2d2d;
     }
     #word {
       font-size: 2em;
@@ -22,6 +26,10 @@
       display: flex;
       justify-content: space-between;
       width: 200px;
+      position: absolute;
+      bottom: 10%; /* 将按钮移动到页面底部偏上的位置 */
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     #buttonwordlist {
       position: absolute;
@@ -35,7 +43,7 @@
   <div id="word"></div>
   <div id="phonetic"></div> <!-- 新增的显示音标的行 -->
   <div id="translation"></div> <!-- 新增的显示翻译的行 -->
-  <button id="buttonwordlist" onclick="window.location.href='Tablet.html'">单词列表</button>
+  <button id="buttonwordlist" onclick="window.location.href='table.html'">单词列表</button>
   <div id="buttons">
     <button id="prev">上一个</button>
     <span id="index"></span>

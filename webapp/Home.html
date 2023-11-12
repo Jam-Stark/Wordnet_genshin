@@ -1,22 +1,55 @@
 ﻿<!DOCTYPE html>
-
-<html lang="zh" xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" type=text/css href="css/StyleSheet1.css">
+    <link rel="stylesheet" type=text/css href="css/try.css">
     <title>WORD IMPACT</title>
 </head>
 <body>
-    <p>WORD IMPACT</p>
-    <p>原神, 启动!</p>
-    <nav>
-        <a href="Personal.html">个人</a>
-    </nav>
-    <br><br><br><br><br><br><br>
-    <br><br><br><br><br><br><br>
-    <a href="Wordnetlist.html">词库</a> &nbsp;
-    <a href="Test.html">单词测验</a> &nbsp;
-    <a href="Favorites.html">收藏夹</a> &nbsp;
+<p>WORD IMPACT</p>
+<p>原神, 启动!</p>
+<nav>
+    <a href="Personal.html">个人</a>
+</nav>
+<br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br>
+<a href="Wordnetlist.html">词库</a> &nbsp;
+<a href="Login.html">单词测验</a> &nbsp;
+<a href="Favorites.html">收藏夹</a> &nbsp;
+
+<div id="mySidebar" class="sidebar">
+</div>
+
+<div id="main">
+    <button id="btn1" class="openbtn" onclick="openNav('User')">用户</button>
+    <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
+    <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
+    <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
+    <button id="btn6" class="openbtn" onclick="openMain('Home')">主页</button>
+</div>
+
+<script>
+    var current_page = null;
+
+    function openNav(page) {
+        if (document.getElementById("mySidebar").style.width == "400px" && current_page == page) {
+            closeNav();
+        } else {
+            document.getElementById("mySidebar").innerHTML = '<iframe id="iframe" src="' + page + '.html"></iframe>';
+            document.getElementById("mySidebar").style.width = "400px";
+            current_page = page;
+        }
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+    }
+
+    function openMain(page) {
+        document.getElementById("main").innerHTML = '<iframe id="mainframe" src="' + page + '.html"></iframe>';
+    }
+</script>
 
 </body>
 </html>
