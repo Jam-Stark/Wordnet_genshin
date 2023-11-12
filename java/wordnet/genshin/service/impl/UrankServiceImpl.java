@@ -82,7 +82,7 @@ public class UrankServiceImpl implements UrankService {
                 int number2 = o2.getNumber();
 
                 // 根据 number 值升序排序
-                return Integer.compare(number1, number2);
+                return Integer.compare(number2, number1);
             }
         });
 
@@ -104,6 +104,10 @@ public class UrankServiceImpl implements UrankService {
             urankList.get(2).setMedal("Copper");
         }
 
+        // 删除非前三名的奖牌
+        for (int i = 3; i < urankList.size(); i++) {
+            urankList.get(i).setMedal(null);
+        }
         return !rank.isEmpty();
     }
 
@@ -119,5 +123,14 @@ public class UrankServiceImpl implements UrankService {
             flag=true;
         }
         return flag;
+    }
+
+    @Override
+    public List<Urank> selectAllbyDay(String Date) {
+        UrankExample urankExample=new UrankExample();
+        UrankExample.Criteria criteria=urankExample.createCriteria();
+        criteria.andUnameEqualTo(Date);
+
+        return  urankMapper.selectByExample(urankExample);
     }
 }

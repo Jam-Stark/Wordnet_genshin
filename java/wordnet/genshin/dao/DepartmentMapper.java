@@ -2,8 +2,6 @@ package wordnet.genshin.dao;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import wordnet.genshin.domain.Department;
-import wordnet.genshin.domain.DepartmentExample;
 
 public interface DepartmentMapper {
     long countByExample(DepartmentExample example);

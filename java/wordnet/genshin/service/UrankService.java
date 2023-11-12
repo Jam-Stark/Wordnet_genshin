@@ -11,4 +11,6 @@ public interface UrankService {
     public boolean awardMedal(String Date);
 
     public boolean addRank(String Date,Integer number,String uname);
+
+    public List<Urank> selectAllbyDay(String Date);
 }

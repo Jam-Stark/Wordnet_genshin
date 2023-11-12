@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.ModelAndView;
+import wordnet.genshin.service.FamiliarService;
 import wordnet.genshin.utils.MessageAndData;
 
 import wordnet.genshin.service.GuserService;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Iterator;
 
 @Controller
 
@@ -27,6 +29,9 @@ public class GuserController {
 
     @Autowired
     private TofelService tofelService;
+
+    @Autowired
+    private FamiliarService familiarService;
 
 
     @ResponseBody
@@ -254,7 +259,7 @@ public ModelAndView login(
         String book=guserService.getWordnet(uname);
         List<?> dataList=new ArrayList<>();
         if (Objects.equals(book, "tofel")) {
-        dataList=tofelService.selectMuti(from,to);
+        dataList=tofelService.selectMuti(from,to,uname);
         }
 //        } else if (Objects.equals(book, "gre")) {
 //            dataList = greService.selectMuti(from, to);
@@ -269,6 +274,7 @@ public ModelAndView login(
 //        } else if (Objects.equals(book, "cet6")) {
 //            dataList = cet6Service.selectMuti(from, to);
         httpSession.setAttribute("Current",from);
+
         if (dataList != null) {
             return MessageAndData.success().add("datalist",dataList);
         }else

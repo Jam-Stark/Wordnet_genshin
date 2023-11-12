@@ -7,6 +7,7 @@ import wordnet.genshin.dao.TofelMapper;
 import wordnet.genshin.domain.Tofel;
 import wordnet.genshin.domain.TofelExample;
 import wordnet.genshin.service.TofelService;
+import wordnet.genshin.service.FamiliarService;
 
 import java.util.*;
 
@@ -15,6 +16,8 @@ public class TofelServiceImpl implements TofelService {
 
     @Autowired
     private TofelMapper tofelMapper;
+    @Autowired
+    private FamiliarService familiarService;
 
     @Override
     public List<Tofel> selectOne(String word) {
@@ -33,10 +36,11 @@ public class TofelServiceImpl implements TofelService {
     }
 
     @Override
-    public List<Tofel> selectMuti(Integer from, Integer to) {
+    public List<Tofel> selectMuti(Integer from, Integer to,String uname) {
         List<Tofel> tofelList=new ArrayList<Tofel>();
         for(;from<to;from++){
-            tofelList.add(tofelMapper.selectByPrimaryKey(from));};
+            tofelList.add(tofelMapper.selectByPrimaryKey(from));}
+        tofelList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
         return tofelList;
     }
 

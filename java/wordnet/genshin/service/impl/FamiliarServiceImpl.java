@@ -63,9 +63,6 @@ public boolean deleteWord(String word,String uname){
         FamiliarExample.Criteria criteria=familiarExample.createCriteria();
         criteria.andUnameEqualTo(uname);
 
-//        GuserExample guserExample=new GuserExample();
-//        GuserExample.Criteria gcriteria=guserExample.createCriteria();
-//        gcriteria.andUnameEqualTo(uname);
 
         List<Familiar> familiarList=familiarMapper.selectByExample(familiarExample);
 //        guserMapper.selectByExample(guserExample).isEmpty()

@@ -48,7 +48,7 @@
         <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
         <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
         <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
-        <button id="btn6" class="openbtn" onclick="openMain('Home')">主页</button>
+        <button id="btn6" class="openbtn" onclick="window.location.href = 'Home.html'">主页</button>
     </div>
 
 
@@ -92,19 +92,28 @@
         }
 
         var current_page = null;
+        if(sessionStorage.getItem("current_page")!==null){
+            current_page=sessionStorage.getItem("current_page");
+            openNav(current_page);}
 
+        if(sessionStorage.getItem("current_page")==-1) {
+            console.log("wordnetlist closed!");
+            closeNav();
+        }
         function openNav(page) {
-            if (document.getElementById("mySidebar").style.width == "400px" && current_page == page) {
+            if (document.getElementById("mySidebar").style.width == "400px" && current_page === page) {
                 closeNav();
             } else {
-                document.getElementById("iframe").src = page + ".html";
+                document.getElementById("mySidebar").innerHTML = '<iframe id="iframe" src="' + page + '.html"></iframe>';
                 document.getElementById("mySidebar").style.width = "400px";
                 current_page = page;
+                sessionStorage.setItem("current_page",current_page);
             }
         }
 
         function closeNav() {
             document.getElementById("mySidebar").style.width = "0";
+            sessionStorage.setItem("current_page",-1);
         }
 
         function openMain(page) {
@@ -112,25 +121,7 @@
         }
 
 
-        var current_page = null;
 
-        function openNav(page) {
-            if (document.getElementById("mySidebar").style.width == "400px" && current_page == page) {
-                closeNav();
-            } else {
-                document.getElementById("mySidebar").innerHTML = '<iframe id="iframe" src="' + page + '.html"></iframe>';
-                document.getElementById("mySidebar").style.width = "400px";
-                current_page = page;
-            }
-        }
-
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-        }
-
-        function openMain(page) {
-            document.getElementById("main").innerHTML = '<iframe id="mainframe" src="' + page + '.html"></iframe>';
-        }
     </script>
 </body>
 </html>

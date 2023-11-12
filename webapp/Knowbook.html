@@ -74,19 +74,34 @@
 
     </style>
     <script>
-        var startIndex = 0;  // 全局变量，用于跟踪当前显示的数据的起始索引
+        var startIndex=0;
 
+        if (sessionStorage.getItem("know") !== null) {
+            // 如果 "know" 在 sessionStorage 中存在，将它的值转换为整数
+            startIndex = parseInt(sessionStorage.getItem("know"));
+        } else {
+            // 如果 "know" 在 sessionStorage 中不存在，将 startIndex 初始化为0
+            startIndex = 0;
+        }
+
+        sessionStorage.setItem("know",startIndex);
+        var know = parseInt(sessionStorage.getItem("know")) || 0;
         function nextPage() {
             startIndex += 15;  // 点击"下一页"时，起始索引增加15
+            sessionStorage.setItem("know",startIndex);
+            know = parseInt(sessionStorage.getItem("know")) || 0;
             updateTable();
         }
 
         function prevPage() {
             if (startIndex > 0) {
                 startIndex -= 15;  // 点击"上一页"时，如果起始索引大于0，则减少15
+                sessionStorage.setItem("know",startIndex);
+                know = parseInt(sessionStorage.getItem("know")) || 0;
                 updateTable();
             }
         }
+
 
         function updateTable() {
             var table = document.getElementById("myTable");
@@ -102,18 +117,18 @@
                     var datalist = datazone.dataZone.datalist;
 
                     for (var i = 0; i < 15; i++) {
-                        if (startIndex + i >= datalist.length) {
+                        if (know + i >= datalist.length) {
                             break;  // 如果startIndex + i大于或等于datalist.length，停止添加新的行
                         }
-                        if (datalist[startIndex + i] !== null) {
+                        if (datalist[know + i] !== null) {
                             var row = table.insertRow(-1);
                             var cell1 = row.insertCell(0);
                             var cell2 = row.insertCell(1);
                             var cell3 = row.insertCell(2);
 
                             cell1.innerHTML = i+1;
-                            cell2.innerHTML = datalist[startIndex + i].word;
-                            cell3.innerHTML = '<button data-row-index="' + i + '" onclick="removeWord(\'' + datalist[startIndex + i].word + '\', this)">移除</button>';
+                            cell2.innerHTML = datalist[know + i].word;
+                            cell3.innerHTML = '<button data-row-index="' + i + '" onclick="removeWord(\'' + datalist[know + i].word + '\', this)">移除</button>';
                         }
                     }
 
