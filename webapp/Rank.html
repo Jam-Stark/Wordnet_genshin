@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>排行榜原</title>
+    <style>
+        .podium {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .avatar-container {
+            width: 100px;
+            height: 100px;
+        }
+
+        .first-place .avatar-container {
+            width: 120px;
+            height: 120px;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Podium for top 3 users -->
+    <div class="podium">
+        <div class="place second-place">
+            <div class="avatar-container">
+                <img src="" alt="Second place avatar" class="avatar">
+            </div>
+            <p class="username"></p>
+        </div>
+        <div class="place first-place">
+            <div class="avatar-container">
+                <img src="" alt="First place avatar" class="avatar">
+            </div>
+            <p class="username"></p>
+        </div>
+        <div class="place third-place">
+            <div class="avatar-container">
+                <img src="" alt="Third place avatar" class="avatar">
+            </div>
+            <p class="username"></p>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Table for all other users -->
+    <table>
+        <thead>
+            <tr>
+                <th>排名</th>
+                <th>头像</th>
+                <th>用户名</th>
+                <th>单词数</th>
+            </tr>
+        </thead>
+        <tbody id="user-table">
+            <!-- Use JavaScript to populate this table with the remaining users -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fetch data from backend
+        fetch('your-backend-url')
+            .then(response => response.json())
+            .then(users => {
+                // Unicode medal symbols
+                const medals = ['🥇', '🥈', '🥉'];
+
+                // Populate the podium
+                const places = ['first', 'second', 'third'];
+                for (let i = 0; i < 3; i++) {
+                    const user = users[i];
+                    const placeDiv = document.querySelector(`.${places[i]}-place`);
+
+                    const avatarImg = placeDiv.querySelector('.avatar');
+                    avatarImg.src = `data:image/jpg;base64,${user.avatar}`;
+                    avatarImg.alt = `${user.username} avatar`;
+
+                    const usernameP = placeDiv.querySelector('.username');
+                    usernameP.textContent = `${medals[i]} ${user.username}`;
+                }
+
+                // Populate the table with the remaining users
+                const table = document.getElementById('user-table');
+                for (let i = 3; i < users.length; i++) {
+                    const user = users[i];
+
+                    const row = document.createElement('tr');
+
+                    const rankCell = document.createElement('td');
+                    rankCell.textContent = user.rank;
+                    row.appendChild(rankCell);
+
+                    const avatarCell = document.createElement('td');
+                    const avatarImg = document.createElement('img');
+                    avatarImg.src = `data:image/jpg;base64,${user.avatar}`;
+                    avatarImg.alt = `${user.username} avatar`;
+                    avatarCell.appendChild(avatarImg);
+                    row.appendChild(avatarCell);
+
+                    const usernameCell = document.createElement('td');
+                    usernameCell.textContent = user.username;
+                    row.appendChild(usernameCell);
+
+                    const wordsCountCell = document.createElement('td');
+                    wordsCountCell.textContent = user.wordsCount;
+                    row.appendChild(wordsCountCell);
+
+                    table.appendChild(row);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    </script>
+</body>
+</html>

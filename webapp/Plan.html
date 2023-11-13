@@ -1,0 +1,119 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>我的页面</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2d2d2d; /* 将整个页面背景色修改为灰色 */
+        }
+
+        #container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px; /* 调整容器下方的间距 */
+        }
+
+        #myImage {
+            margin-left: 10px; /* 调整图片左侧的间距 */
+            margin-right: 200px;
+            width: 600px; /* 增加图片宽度 25% */
+            height: 900px; /* 增加图片高度 25% */
+        }
+
+        #progressContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* 将进度条和a/b放置在右侧 */
+            margin-left: 30px; /* 调整进度条和a/b的左侧间距 */
+        }
+
+        #progressBar {
+            width: 500px; /* 增加进度条宽度一倍 */
+            height: 60px; /* 增加进度条高度一倍 */
+            background-color: #f3f3f3;
+        }
+
+        #progressBar div {
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.5s; /* 添加动画过渡效果，使宽度变化平滑 */
+        }
+
+        #text {
+            margin-right: 175px;
+            margin-top: 50px; /* 调整文本上方的间距 */
+            font-size: 36px; /* 增大文本字体大小一倍 */
+        }
+
+        #goalText {
+            margin-right: 100px;
+            margin-top: 30px; /* 调整今日目标文本上方的间距 */
+            font-size: 24px; /* 修改今日目标文本字体大小 */
+            color: white; /* 修改今日目标文本颜色为白色 */
+            text-align: right; /* 将文本右对齐 */
+        }
+
+        #wordCountText {
+            margin-right: 130px;
+            margin-top: 30px; /* 调整剩余单词数文本上方的间距 */
+            font-size: 24px; /* 修改剩余单词数文本字体大小 */
+            color: white; /* 修改剩余单词数文本颜色为白色 */
+            text-align: right; /* 将文本右对齐 */
+        }
+
+        #startButton {
+            width: 300px;
+            height: 80px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <img id="myImage" src="" alt="我的图片">
+    <div id="progressContainer">
+        <div id="progressBar"><div></div></div>
+        <p id="text"></p>
+        <p id="goalText"></p> <!-- 添加今日目标文本 -->
+        <p id="wordCountText"></p> <!-- 添加剩余单词数文本 -->
+    </div>
+</div>
+<button id="startButton" onclick="window.location.href='table.html'">开始</button>
+
+<script>
+    // TODO: 替换这部分代码以从后端获取实际的 JSON 数据
+    var jsonData = {
+        "image": "images/toefl.jpg",  // 图片文件名
+        "progress": 50,  // 进度百分比
+        "a": 15,  // a 的值
+        "b": 20,  // b 的值
+        "goal": "完成100个单词", // 今日目标
+        "wordCount": 85 // 剩余单词数
+    };
+
+    document.getElementById("myImage").src = jsonData.image;
+    var progressBar = document.getElementById("progressBar").children[0];
+
+    function updateProgress() {
+        progressBar.style.width = (jsonData.a / jsonData.b) * 100 + '%'; /* 基于 a/b 比例更新宽度 */
+        document.getElementById("text").innerHTML = jsonData.a + '/' + jsonData.b;
+        document.getElementById("goalText").innerHTML = "今日目标：" + jsonData.goal;
+        document.getElementById("wordCountText").innerHTML = "剩余单词数：" + jsonData.wordCount;
+    }
+
+    updateProgress(); // 初始更新
+
+    // TODO: 实现定期从后端获取更新数据并调用 updateProgress() 函数来更新进度条和文本的逻辑
+    // 可以使用 setInterval() 或其他机制来获取数据和更新进度条
+
+</script>
+</body>
