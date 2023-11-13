@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="UTF-8">
+    <title>动态表格</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 95vh;
+            margin: 0;
+            padding-top: 20px;
+            padding-bottom: 20px;  /* 预留出底部的空间 */
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        /* 修改表格大小 */
+        #myTable tr {
+            height: 40px;
+            border-top: none;
+            border-bottom: none;
+            text-align: left;
+        }
+        #myTable td:nth-child(1) {
+            width: 100px;
+        }
+        #myTable td:nth-child(2) {
+            width: 200px;
+        }
+        #myTable td:nth-child(3) {
+            width: 150px;
+        }
+
+        /*#myTable tr:nth-last-child(n+2):nth-child(n+2) {*/
+        /*    border-top: 1px white;*/
+        /*    border-bottom: 1px white;*/
+        /*}*/
+
+        #myTable tr:first-child{
+            vertical-align: bottom;
+            text-align: left;
+            border-bottom: 4px solid white;
+            border-top: #2d2d2d;
+            height: 30px;
+        }
+
+        #myTable tr:last-child{
+            border-bottom: #2d2d2d;
+        }
+
+        #myTable {
+            border: none;
+            border-collapse: collapse;
+        }
+        #myTable td, #myTable th {
+            border-left: none;
+            border-right: none;
+        }
+
+        .buttonPage {
+            position: fixed;  /* 将 .buttonPage 定位到视口，这样它就会始终保持在屏幕的相同位置，即使页面滚动 */
+            bottom: 20px;  /* 将 .buttonPage 从底部向上移动 20px */
+            left: 0;  /* 从左边开始，确保 .buttonPage 占据整个宽度 */
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #2d2d2d;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+    </style>
+    <script>
+        var startIndex = 0;  // 全局变量，用于跟踪当前显示的数据的起始索引
+
+        function nextPage() {
+            startIndex += 15;  // 点击"下一页"时，起始索引增加15
+            updateTable();
+        }
+
+        function prevPage() {
+            if (startIndex > 0) {
+                startIndex -= 15;  // 点击"上一页"时，如果起始索引大于0，则减少15
+                updateTable();
+            }
+        }
+
+        function updateTable() {
+            var table = document.getElementById("myTable");
+            // 清空表格
+            for(var i = table.rows.length - 1; i > 0; i--)
+            {
+                table.deleteRow(i);
+            }
+
+            fetch('newbook/show')
+                .then(response => response.json())
+                .then(datazone => {
+                    var datalist = datazone.dataZone.datalist;
+                    var lastDate = null;  // 用于存储上一行的日期
+
+                    for (var i = 0; i < 15; i++) {
+                        if (startIndex + i >= datalist.length) {
+                            break;
+                        }
+                        if (datalist[startIndex + i] !== null) {
+                            var row = table.insertRow(-1);
+                            var cell1 = row.insertCell(0);
+                            var cell2 = row.insertCell(1);
+                            var cell3 = row.insertCell(2);
+                            var cell4 = row.insertCell(3);
+
+                            cell1.innerHTML = i+1;
+                            cell2.innerHTML = datalist[startIndex + i].word;
+
+                            // 如果这一行的日期与上一行不同，则显示日期
+                            if (datalist[startIndex + i].date !== lastDate) {
+                                cell3.innerHTML = datalist[startIndex + i].date;
+                                lastDate = datalist[startIndex + i].date;
+                            } else {
+                                cell3.innerHTML = '';  // 否则，不显示日期
+                            }
+
+                            cell4.innerHTML = '<button data-row-index="' + i + '" onclick="removeWord(\'' + datalist[startIndex + i].word + '\', this)">移除</button>';
+                        }
+                    }
+                    document.getElementById("prevPage").disabled = (startIndex == 0);
+                    document.getElementById("nextPage").disabled = (startIndex + 15 >= datalist.length);
+                });
+        }
+
+        function removeWord(word, button) {
+            fetch('newbook/delete?word=' + word, {
+                method: 'POST',  // 或者其他适合你的后端的HTTP方法
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // 如果你的后端需要请求体，你可以在这里添加
+                // body: JSON.stringify({ word: word })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            button.parentElement.parentElement.style.display = 'none';
+        }
+    </script>
+</head>
+<body onload="updateTable();">
+<h1 style="position: absolute; top: 10%; font-size: 32px;">生词本</h1>
+<table id="myTable" border="1">
+    <tr>
+        <th>序号</th>
+        <th>单词</th>
+        <th>加入日期</th>
+    </tr>
+</table>
+<div class="buttonPage">
+    <button id="prevPage" onclick="prevPage()">上一页</button>
+    <button id="nextPage" onclick="nextPage()">下一页</button>
+</div>
+</body>
+</html>

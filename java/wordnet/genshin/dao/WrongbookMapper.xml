@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="wordnet.genshin.domain.Wrongbook">
     <id column="wrongid" jdbcType="INTEGER" property="wrongid" />
     <result column="word" jdbcType="VARCHAR" property="word" />
-    <result column="wrongdata" jdbcType="DATE" property="wrongdata" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="wrongdata" jdbcType="VARCHAR" property="wrongdata" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    wrongid, word, wrongdata
+    wrongid, word, username, wrongdata
   </sql>
   <select id="selectByExample" parameterType="wordnet.genshin.domain.WrongbookExample" resultMap="BaseResultMap">
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="wordnet.genshin.domain.Wrongbook">
-    insert into wrongbook (wrongid, word, wrongdata
-      )
-    values (#{wrongid,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{wrongdata,jdbcType=DATE}
-      )
+    insert into wrongbook (wrongid, word, username, 
+      wrongdata)
+    values (#{wrongid,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{wrongdata,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="wordnet.genshin.domain.Wrongbook">
     insert into wrongbook
@@ -111,6 +112,9 @@
       </if>
       <if test="word != null">
         word,
+      </if>
+      <if test="username != null">
+        username,
       </if>
       <if test="wrongdata != null">
         wrongdata,
@@ -123,8 +127,11 @@
       <if test="word != null">
         #{word,jdbcType=VARCHAR},
       </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
       <if test="wrongdata != null">
-        #{wrongdata,jdbcType=DATE},
+        #{wrongdata,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -143,8 +150,11 @@
       <if test="record.word != null">
         word = #{record.word,jdbcType=VARCHAR},
       </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
       <if test="record.wrongdata != null">
-        wrongdata = #{record.wrongdata,jdbcType=DATE},
+        wrongdata = #{record.wrongdata,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -155,7 +165,8 @@
     update wrongbook
     set wrongid = #{record.wrongid,jdbcType=INTEGER},
       word = #{record.word,jdbcType=VARCHAR},
-      wrongdata = #{record.wrongdata,jdbcType=DATE}
+      username = #{record.username,jdbcType=VARCHAR},
+      wrongdata = #{record.wrongdata,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -166,8 +177,11 @@
       <if test="word != null">
         word = #{word,jdbcType=VARCHAR},
       </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
       <if test="wrongdata != null">
-        wrongdata = #{wrongdata,jdbcType=DATE},
+        wrongdata = #{wrongdata,jdbcType=VARCHAR},
       </if>
     </set>
     where wrongid = #{wrongid,jdbcType=INTEGER}
@@ -175,7 +189,8 @@
   <update id="updateByPrimaryKey" parameterType="wordnet.genshin.domain.Wrongbook">
     update wrongbook
     set word = #{word,jdbcType=VARCHAR},
-      wrongdata = #{wrongdata,jdbcType=DATE}
+      username = #{username,jdbcType=VARCHAR},
+      wrongdata = #{wrongdata,jdbcType=VARCHAR}
     where wrongid = #{wrongid,jdbcType=INTEGER}
   </update>
 </mapper>

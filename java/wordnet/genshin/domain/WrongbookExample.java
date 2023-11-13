@@ -1,8 +1,6 @@
 package wordnet.genshin.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class WrongbookExample {
@@ -104,32 +102,6 @@ public class WrongbookExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andWrongidIsNull() {
@@ -262,6 +234,76 @@ public class WrongbookExample {
             return (Criteria) this;
         }
 
+        public Criteria andUsernameIsNull() {
+            addCriterion("username is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameIsNotNull() {
+            addCriterion("username is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameEqualTo(String value) {
+            addCriterion("username =", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotEqualTo(String value) {
+            addCriterion("username <>", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameGreaterThan(String value) {
+            addCriterion("username >", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameGreaterThanOrEqualTo(String value) {
+            addCriterion("username >=", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameLessThan(String value) {
+            addCriterion("username <", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameLessThanOrEqualTo(String value) {
+            addCriterion("username <=", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameLike(String value) {
+            addCriterion("username like", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotLike(String value) {
+            addCriterion("username not like", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameIn(List<String> values) {
+            addCriterion("username in", values, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotIn(List<String> values) {
+            addCriterion("username not in", values, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameBetween(String value1, String value2) {
+            addCriterion("username between", value1, value2, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotBetween(String value1, String value2) {
+            addCriterion("username not between", value1, value2, "username");
+            return (Criteria) this;
+        }
+
         public Criteria andWrongdataIsNull() {
             addCriterion("wrongdata is null");
             return (Criteria) this;
@@ -272,53 +314,63 @@ public class WrongbookExample {
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataEqualTo(Date value) {
-            addCriterionForJDBCDate("wrongdata =", value, "wrongdata");
+        public Criteria andWrongdataEqualTo(String value) {
+            addCriterion("wrongdata =", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataNotEqualTo(Date value) {
-            addCriterionForJDBCDate("wrongdata <>", value, "wrongdata");
+        public Criteria andWrongdataNotEqualTo(String value) {
+            addCriterion("wrongdata <>", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataGreaterThan(Date value) {
-            addCriterionForJDBCDate("wrongdata >", value, "wrongdata");
+        public Criteria andWrongdataGreaterThan(String value) {
+            addCriterion("wrongdata >", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("wrongdata >=", value, "wrongdata");
+        public Criteria andWrongdataGreaterThanOrEqualTo(String value) {
+            addCriterion("wrongdata >=", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataLessThan(Date value) {
-            addCriterionForJDBCDate("wrongdata <", value, "wrongdata");
+        public Criteria andWrongdataLessThan(String value) {
+            addCriterion("wrongdata <", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("wrongdata <=", value, "wrongdata");
+        public Criteria andWrongdataLessThanOrEqualTo(String value) {
+            addCriterion("wrongdata <=", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataIn(List<Date> values) {
-            addCriterionForJDBCDate("wrongdata in", values, "wrongdata");
+        public Criteria andWrongdataLike(String value) {
+            addCriterion("wrongdata like", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataNotIn(List<Date> values) {
-            addCriterionForJDBCDate("wrongdata not in", values, "wrongdata");
+        public Criteria andWrongdataNotLike(String value) {
+            addCriterion("wrongdata not like", value, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("wrongdata between", value1, value2, "wrongdata");
+        public Criteria andWrongdataIn(List<String> values) {
+            addCriterion("wrongdata in", values, "wrongdata");
             return (Criteria) this;
         }
 
-        public Criteria andWrongdataNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("wrongdata not between", value1, value2, "wrongdata");
+        public Criteria andWrongdataNotIn(List<String> values) {
+            addCriterion("wrongdata not in", values, "wrongdata");
+            return (Criteria) this;
+        }
+
+        public Criteria andWrongdataBetween(String value1, String value2) {
+            addCriterion("wrongdata between", value1, value2, "wrongdata");
+            return (Criteria) this;
+        }
+
+        public Criteria andWrongdataNotBetween(String value1, String value2) {
+            addCriterion("wrongdata not between", value1, value2, "wrongdata");
             return (Criteria) this;
         }
     }

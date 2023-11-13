@@ -5,6 +5,10 @@ public class Ielts {
 
     private String word;
 
+    private String phonetic;
+
+    private String translation;
+
     public Integer getId() {
         return id;
     }
@@ -19,5 +23,21 @@ public class Ielts {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public String getPhonetic() {
+        return phonetic;
+    }
+
+    public void setPhonetic(String phonetic) {
+        this.phonetic = phonetic;
+    }
+
+    public String getTranslation() {
+        return translation;
+    }
+
+    public void setTranslation(String translation) {
+        this.translation = translation;
     }
 }

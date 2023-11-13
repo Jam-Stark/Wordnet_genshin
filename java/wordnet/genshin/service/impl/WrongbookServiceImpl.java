@@ -7,6 +7,7 @@ import wordnet.genshin.domain.Wrongbook;
 import wordnet.genshin.domain.WrongbookExample;
 import wordnet.genshin.service.WrongbookService;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,15 +16,18 @@ public class WrongbookServiceImpl implements WrongbookService {
     @Autowired
     private WrongbookMapper wrongbookMapper;
 
-    public boolean InsertOne(String word, Date date){
-        date = new Date();
+    public boolean InsertOne(String word, String uname){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // 定义日期格式
+        String dateString = dateFormat.format(date); // 将Date对象转换为String类型
         Wrongbook wrongbook = new Wrongbook();
-        wrongbook.setWrongdata(date);
+        wrongbook.setWrongdata(dateString);
         wrongbook.setWord(word);
+        wrongbook.setUsername(uname);
 
         WrongbookExample wrongexample = new WrongbookExample();
         WrongbookExample.Criteria criteria = wrongexample.createCriteria();
-        criteria.andWordEqualTo(word);
+        criteria.andWordEqualTo(word).andUsernameEqualTo(uname);
 
         List<Wrongbook> wrongbookList=wrongbookMapper.selectByExample(wrongexample);
         if(!wrongbookList.isEmpty()){
@@ -36,14 +40,14 @@ public class WrongbookServiceImpl implements WrongbookService {
         }
     }
 
-    public boolean DeleteOne(String word){
+    public boolean DeleteOne(String word,String uname){
         WrongbookExample wrongexample = new WrongbookExample();
         WrongbookExample.Criteria criteria = wrongexample.createCriteria();
-        criteria.andWordEqualTo(word);
+        criteria.andWordEqualTo(word).andUsernameEqualTo(uname);
 
         List<Wrongbook> wrongbookList=wrongbookMapper.selectByExample(wrongexample);
         if(wrongbookList.isEmpty()){
-            System.out.println("生词本中不存在该单词");
+            System.out.println("错题本中不存在该单词");
             return false;
         }
         else {
@@ -61,6 +65,13 @@ public class WrongbookServiceImpl implements WrongbookService {
 
         return wrongbookMapper.selectByExample(wrongexample).get(0);
     }
+    @Override
+    public List<Wrongbook> selectByuser(String uname) {
+        WrongbookExample wrongbookExample=new WrongbookExample();
+        WrongbookExample.Criteria criteria=wrongbookExample.createCriteria();
+        criteria.andUsernameEqualTo(uname);
 
+        return wrongbookMapper.selectByExample(wrongbookExample);
+    }
 
 }

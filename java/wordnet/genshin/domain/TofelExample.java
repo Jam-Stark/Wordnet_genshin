@@ -233,6 +233,146 @@ public class TofelExample {
             addCriterion("word not between", value1, value2, "word");
             return (Criteria) this;
         }
+
+        public Criteria andPhoneticIsNull() {
+            addCriterion("phonetic is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticIsNotNull() {
+            addCriterion("phonetic is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticEqualTo(String value) {
+            addCriterion("phonetic =", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticNotEqualTo(String value) {
+            addCriterion("phonetic <>", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticGreaterThan(String value) {
+            addCriterion("phonetic >", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticGreaterThanOrEqualTo(String value) {
+            addCriterion("phonetic >=", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticLessThan(String value) {
+            addCriterion("phonetic <", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticLessThanOrEqualTo(String value) {
+            addCriterion("phonetic <=", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticLike(String value) {
+            addCriterion("phonetic like", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticNotLike(String value) {
+            addCriterion("phonetic not like", value, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticIn(List<String> values) {
+            addCriterion("phonetic in", values, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticNotIn(List<String> values) {
+            addCriterion("phonetic not in", values, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticBetween(String value1, String value2) {
+            addCriterion("phonetic between", value1, value2, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneticNotBetween(String value1, String value2) {
+            addCriterion("phonetic not between", value1, value2, "phonetic");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationIsNull() {
+            addCriterion("translation is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationIsNotNull() {
+            addCriterion("translation is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationEqualTo(String value) {
+            addCriterion("translation =", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationNotEqualTo(String value) {
+            addCriterion("translation <>", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationGreaterThan(String value) {
+            addCriterion("translation >", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationGreaterThanOrEqualTo(String value) {
+            addCriterion("translation >=", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationLessThan(String value) {
+            addCriterion("translation <", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationLessThanOrEqualTo(String value) {
+            addCriterion("translation <=", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationLike(String value) {
+            addCriterion("translation like", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationNotLike(String value) {
+            addCriterion("translation not like", value, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationIn(List<String> values) {
+            addCriterion("translation in", values, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationNotIn(List<String> values) {
+            addCriterion("translation not in", values, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationBetween(String value1, String value2) {
+            addCriterion("translation between", value1, value2, "translation");
+            return (Criteria) this;
+        }
+
+        public Criteria andTranslationNotBetween(String value1, String value2) {
+            addCriterion("translation not between", value1, value2, "translation");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

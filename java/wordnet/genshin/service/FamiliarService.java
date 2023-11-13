@@ -6,8 +6,12 @@ import java.util.*;
 
 public interface FamiliarService {
 
+    public boolean addWord(String word,String uname);
+
     public boolean detectWord(String word,String uname);
 
-    public List<Familiar> selectAll();
+    public boolean deleteWord(String word,String uname);
+
+    public List<Familiar> selectByuser(String uname);
 
 }

@@ -4,7 +4,8 @@
   <resultMap id="BaseResultMap" type="wordnet.genshin.domain.Newbook">
     <id column="newid" jdbcType="INTEGER" property="newid" />
     <result column="newword" jdbcType="VARCHAR" property="newword" />
-    <result column="newdata" jdbcType="DATE" property="newdata" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="newdata" jdbcType="VARCHAR" property="newdata" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    newid, newword, newdata
+    newid, newword, username, newdata
   </sql>
   <select id="selectByExample" parameterType="wordnet.genshin.domain.NewbookExample" resultMap="BaseResultMap">
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="wordnet.genshin.domain.Newbook">
-    insert into newbook (newid, newword, newdata
-      )
-    values (#{newid,jdbcType=INTEGER}, #{newword,jdbcType=VARCHAR}, #{newdata,jdbcType=DATE}
-      )
+    insert into newbook (newid, newword, username, 
+      newdata)
+    values (#{newid,jdbcType=INTEGER}, #{newword,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+      #{newdata,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="wordnet.genshin.domain.Newbook">
     insert into newbook
@@ -111,6 +112,9 @@
       </if>
       <if test="newword != null">
         newword,
+      </if>
+      <if test="username != null">
+        username,
       </if>
       <if test="newdata != null">
         newdata,
@@ -123,8 +127,11 @@
       <if test="newword != null">
         #{newword,jdbcType=VARCHAR},
       </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
       <if test="newdata != null">
-        #{newdata,jdbcType=DATE},
+        #{newdata,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -143,8 +150,11 @@
       <if test="record.newword != null">
         newword = #{record.newword,jdbcType=VARCHAR},
       </if>
+      <if test="record.username != null">
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
       <if test="record.newdata != null">
-        newdata = #{record.newdata,jdbcType=DATE},
+        newdata = #{record.newdata,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -155,7 +165,8 @@
     update newbook
     set newid = #{record.newid,jdbcType=INTEGER},
       newword = #{record.newword,jdbcType=VARCHAR},
-      newdata = #{record.newdata,jdbcType=DATE}
+      username = #{record.username,jdbcType=VARCHAR},
+      newdata = #{record.newdata,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -166,8 +177,11 @@
       <if test="newword != null">
         newword = #{newword,jdbcType=VARCHAR},
       </if>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
       <if test="newdata != null">
-        newdata = #{newdata,jdbcType=DATE},
+        newdata = #{newdata,jdbcType=VARCHAR},
       </if>
     </set>
     where newid = #{newid,jdbcType=INTEGER}
@@ -175,7 +189,8 @@
   <update id="updateByPrimaryKey" parameterType="wordnet.genshin.domain.Newbook">
     update newbook
     set newword = #{newword,jdbcType=VARCHAR},
-      newdata = #{newdata,jdbcType=DATE}
+      username = #{username,jdbcType=VARCHAR},
+      newdata = #{newdata,jdbcType=VARCHAR}
     where newid = #{newid,jdbcType=INTEGER}
   </update>
 </mapper>

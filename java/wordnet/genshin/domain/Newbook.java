@@ -1,13 +1,13 @@
 package wordnet.genshin.domain;
 
-import java.util.Date;
-
 public class Newbook {
     private Integer newid;
 
     private String newword;
 
-    private Date newdata;
+    private String username;
+
+    private String newdata;
 
     public Integer getNewid() {
         return newid;
@@ -25,11 +25,19 @@ public class Newbook {
         this.newword = newword;
     }
 
-    public Date getNewdata() {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNewdata() {
         return newdata;
     }
 
-    public void setNewdata(Date newdata) {
+    public void setNewdata(String newdata) {
         this.newdata = newdata;
     }
 }

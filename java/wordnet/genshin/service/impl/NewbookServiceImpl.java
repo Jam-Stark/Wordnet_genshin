@@ -8,6 +8,7 @@ import wordnet.genshin.domain.NewbookExample;
 import wordnet.genshin.service.NewbookService;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,15 +17,18 @@ public class NewbookServiceImpl implements NewbookService {
     @Autowired
     private NewbookMapper newbookMapper;
 
-    public boolean InsertOne(String word, Date date){
-        date = new Date();
+    public boolean InsertOne(String word,String uname){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // 定义日期格式
+        String dateString = dateFormat.format(date); // 将Date对象转换为String类型
         Newbook newbook = new Newbook();
-        newbook.setNewdata(date);
+        newbook.setNewdata(dateString);
         newbook.setNewword(word);
+        newbook.setUsername(uname);
 
         NewbookExample newexample = new NewbookExample();
         NewbookExample.Criteria criteria = newexample.createCriteria();
-        criteria.andNewwordEqualTo(word);
+        criteria.andNewwordEqualTo(word).andUsernameEqualTo(uname);
 
         List<Newbook> newbookList=newbookMapper.selectByExample(newexample);
         if(!newbookList.isEmpty()){
@@ -37,10 +41,10 @@ public class NewbookServiceImpl implements NewbookService {
         }
     }
 
-    public boolean DeleteOne(String word){
+    public boolean DeleteOne(String word,String uname){
         NewbookExample newexample = new NewbookExample();
         NewbookExample.Criteria criteria = newexample.createCriteria();
-        criteria.andNewwordEqualTo(word);
+        criteria.andNewwordEqualTo(word).andUsernameEqualTo(uname);
 
         List<Newbook> newbookList=newbookMapper.selectByExample(newexample);
         if(newbookList.isEmpty()){
@@ -61,6 +65,14 @@ public class NewbookServiceImpl implements NewbookService {
         criteria.andNewwordEqualTo(word);
 
         return newbookMapper.selectByExample(newexample).get(0);
+    }
+    @Override
+    public List<Newbook> selectByuser(String uname) {
+        NewbookExample newbookExample=new NewbookExample();
+        NewbookExample.Criteria criteria=newbookExample.createCriteria();
+        criteria.andUsernameEqualTo(uname);
+
+        return newbookMapper.selectByExample(newbookExample);
     }
 
 

@@ -1,13 +1,13 @@
 package wordnet.genshin.domain;
 
-import java.util.Date;
-
 public class Wrongbook {
     private Integer wrongid;
 
     private String word;
 
-    private Date wrongdata;
+    private String username;
+
+    private String wrongdata;
 
     public Integer getWrongid() {
         return wrongid;
@@ -25,11 +25,19 @@ public class Wrongbook {
         this.word = word;
     }
 
-    public Date getWrongdata() {
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getWrongdata() {
         return wrongdata;
     }
 
-    public void setWrongdata(Date wrongdata) {
+    public void setWrongdata(String wrongdata) {
         this.wrongdata = wrongdata;
     }
 }

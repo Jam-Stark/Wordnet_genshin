@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/StyleSheet1.css">
+    <script src="https://cdn.jsdelivr.net/npm/leancloud-storage/dist/av-min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    <title>登录原</title>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#submit").click(function(e) {
+                e.preventDefault(); // 阻止表单默认提交
+
+                var username = $("#username").val();
+                var password = $("#password").val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080/SSM_war_exploded/Users/login",
+                    data: { name: username, password: password },
+                    success: function(data) {
+                        // 处理登录成功后的逻辑
+                        console.log("登录成功");
+                        window.location = data;
+                    },
+                    error: function(error) {
+                        // 处理登录失败后的逻辑
+                        console.log("登录失败: " + error);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<a href="Home.html"><img src="images/home.JPG"></a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6" >
+            <form class="form-horizontal">
+                <span class="heading">登录</span>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" placeholder="密码">
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" id="submit">登录</button>
+                </div>
+                <div class="form-group">
+                    <span>没有账号？<a href="Register.html">注册</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
