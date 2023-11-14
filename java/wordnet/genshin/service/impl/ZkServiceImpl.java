@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wordnet.genshin.dao.ZKMapper;
 import wordnet.genshin.domain.ZK;
+import wordnet.genshin.domain.ZK;
 import wordnet.genshin.domain.ZKExample;
+import wordnet.genshin.service.FamiliarService;
 import wordnet.genshin.service.ZkService;
 
 import java.util.ArrayList;
@@ -15,7 +17,8 @@ public class ZkServiceImpl implements ZkService {
 
     @Autowired
     private ZKMapper zkMapper;
-
+    @Autowired
+    private FamiliarService familiarService;
     @Override
     public List<ZK> selectOne(String word) {
 
@@ -33,11 +36,20 @@ public class ZkServiceImpl implements ZkService {
     }
 
     @Override
-    public List<ZK> selectMuti(Integer from, Integer to) {
-        List<ZK> zkList=new ArrayList<ZK>();
-        for(;from<to;from++){
-            zkList.add(zkMapper.selectByPrimaryKey(from));};
-        return zkList;
+    public List<ZK> selectMuti(Integer from, Integer to, String uname) {
+        List<ZK> ZKList = new ArrayList<ZK>();
+
+        for (; from < to; from++) {
+            ZKList.add(zkMapper.selectByPrimaryKey(from));
+        }
+
+        ZKList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
+
+        if (ZKList.size() > 15) {
+            return ZKList.subList(0, 15);
+        }
+
+        return ZKList;
     }
 
 

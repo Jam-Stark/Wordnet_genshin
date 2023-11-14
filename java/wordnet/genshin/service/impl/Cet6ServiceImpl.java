@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import wordnet.genshin.dao.Cet6Mapper;
 import wordnet.genshin.domain.Cet6;
 import wordnet.genshin.domain.Cet6Example;
+import wordnet.genshin.domain.Cet6;
 import wordnet.genshin.service.Cet6Service;
+import wordnet.genshin.service.FamiliarService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,8 @@ public class Cet6ServiceImpl implements Cet6Service {
 
     @Autowired
     private Cet6Mapper cet6Mapper;
-
+    @Autowired
+    private FamiliarService familiarService;
     @Override
     public List<Cet6> selectOne(String word) {
 
@@ -33,12 +36,20 @@ public class Cet6ServiceImpl implements Cet6Service {
     }
 
     @Override
-    public List<Cet6> selectMuti(Integer from, Integer to) {
-        List<Cet6> cet6List=new ArrayList<Cet6>();
-        for(;from<to;from++){
-            cet6List.add(cet6Mapper.selectByPrimaryKey(from));};
-        return cet6List;
-    }
+    public List<Cet6> selectMuti(Integer from, Integer to,String uname) {
+        List<Cet6> Cet6List = new ArrayList<Cet6>();
 
+        for (; from < to; from++) {
+            Cet6List.add(cet6Mapper.selectByPrimaryKey(from));
+        }
+
+        Cet6List.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
+
+        if (Cet6List.size() > 15) {
+            return Cet6List.subList(0, 15);
+        }
+
+        return Cet6List;
+    }
 
 }

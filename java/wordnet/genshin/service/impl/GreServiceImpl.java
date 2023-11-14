@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import wordnet.genshin.dao.GREMapper;
 import wordnet.genshin.domain.GRE;
 import wordnet.genshin.domain.GREExample;
+import wordnet.genshin.service.FamiliarService;
 import wordnet.genshin.service.GreService;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class GreServiceImpl implements GreService {
 
     @Autowired
     private GREMapper greMapper;
+    @Autowired
+    private FamiliarService familiarService;
 
     @Override
     public List<GRE> selectOne(String word) {
@@ -33,11 +36,20 @@ public class GreServiceImpl implements GreService {
     }
 
     @Override
-    public List<GRE> selectMuti(Integer from, Integer to) {
-        List<GRE> greList=new ArrayList<GRE>();
-        for(;from<to;from++){
-            greList.add(greMapper.selectByPrimaryKey(from));};
-        return greList;
+    public List<GRE> selectMuti(Integer from, Integer to,String uname) {
+        List<GRE> GREList = new ArrayList<GRE>();
+
+        for (; from < to; from++) {
+            GREList.add(greMapper.selectByPrimaryKey(from));
+        }
+
+        GREList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
+
+        if (GREList.size() > 15) {
+            return GREList.subList(0, 15);
+        }
+
+        return GREList;
     }
 
 

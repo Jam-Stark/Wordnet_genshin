@@ -11,6 +11,7 @@ import wordnet.genshin.utils.WordInfoDTO;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,11 +55,11 @@ public class WordTestController {
     @ResponseBody
     @RequestMapping(value = "/tonow", method = RequestMethod.GET)
     public List<WordInfoDTO> selectToNow(HttpSession httpSession) {
-        Integer todayFinal=(Integer) httpSession.getAttribute("TodayFinal");
+        Integer todayFinal = (Integer) httpSession.getAttribute("TodayFinal");
         String username = (String) httpSession.getAttribute("UserName");
         //Long finalword=guserService.getUfinalword(username);
         String booktype = null;
-        if(guserService.checkBook(username)) {
+        if (guserService.checkBook(username)) {
             booktype = guserService.getWordnet(username);
         }
         //搜索当前单词本全部已学内容
@@ -68,16 +69,25 @@ public class WordTestController {
         List<WordInfoDTO> wordInfoDTO = new ArrayList<WordInfoDTO>();//问题同上
         //匹配单词本
         if (
-            Objects.equals(booktype, "tofel")
+                Objects.equals(booktype, "tofel")
         ) {
-                List<Tofel> dataList = tofelService.selectMuti(1, todayFinal+1,username);//比实际索引值+1
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//            List<Tofel> dataList = tofelService.selectMuti(1, todayFinal+1);//比实际索引值+1
+            List<Tofel> dataList = tofelService.selectMuti(1, todayFinal+1,username);
+            List<Tofel> finalList;
+            if (dataList.size() > 10) {
+                Collections.shuffle(dataList); // 打乱顺序
+                finalList = dataList.subList(0, 10); // 获取前15个元素
+            } else {
+                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+                Collections.shuffle(finalList); // 打乱顺序
+            }
+            for (int i = 0; i < finalList.size(); i++) {
+                wordsList.add(i, selectservice.selectWord(finalList.get(i).getWord()));
+                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(finalList.get(i).getWord()));
                 //设置返回类的属性
                 WordInfoDTO wordDTO = new WordInfoDTO();
                 wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+                wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
                 //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
                 wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
                 //wordDTO.setTag(wordsList.get(i).getTag());
@@ -85,7 +95,15 @@ public class WordTestController {
                 wordInfoDTO.add(i, wordDTO);
             }
 //        } else if (Objects.equals(booktype, "gre")) {
-//            List<GRE> dataList = GreService.selectMuti(1, todayFinal+1);
+//            List<Gre> dataList = greService.selectMuti(1, todayFinal+1);
+//            List<Gre> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -99,8 +117,16 @@ public class WordTestController {
 //                //wordDTO.setExchange(wordsList.get(i).getExchange());
 //                wordInfoDTO.add(i, wordDTO);
 //            }
-//       } else if (Objects.equals(booktype, "ielts")) {
+//        } else if (Objects.equals(booktype, "ielts")) {
 //            List<Ielts> dataList = ieltsService.selectMuti(1, todayFinal+1);
+//            List<Ielts> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -115,7 +141,15 @@ public class WordTestController {
 //                wordInfoDTO.add(i, wordDTO);
 //            }
 //        } else if (Objects.equals(booktype, "zk")) {
-//            List<ZK> dataList = zkService.selectMuti(1, todayFinal+1);
+//            List<Zk> dataList = zkService.selectMuti(1, todayFinal+1);
+//            List<Zk> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -130,7 +164,15 @@ public class WordTestController {
 //                wordInfoDTO.add(i, wordDTO);
 //            }
 //        } else if (Objects.equals(booktype, "gk")) {
-//            List<GK> dataList = gkService.selectMuti(1, todayFinal+1);
+//            List<Gk> dataList = gkService.selectMuti(1, todayFinal+1);
+//            List<Gk> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -146,6 +188,14 @@ public class WordTestController {
 //            }
 //        } else if (Objects.equals(booktype, "cet4")) {
 //            List<Cet4> dataList = cet4Service.selectMuti(1, todayFinal+1);
+//            List<Cet4> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -161,6 +211,14 @@ public class WordTestController {
 //            }
 //        } else if (Objects.equals(booktype, "cet6")) {
 //            List<Cet6> dataList = cet6Service.selectMuti(1, todayFinal+1);
+//            List<Cet6> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -174,29 +232,28 @@ public class WordTestController {
 //                //wordDTO.setExchange(wordsList.get(i).getExchange());
 //                wordInfoDTO.add(i, wordDTO);
 //            }
-//        }
+        }
 //        //加入到words_en_cn
 //        List<Words_en_cn> wordsList =new ArrayList<Words_en_cn>();
 //        for(int i=0;i<dataList.size();i++){
 //            wordsList.add(i,selectservice.selectWord(dataList.get(i).));
-        }
-        //
-        //String username = "caobaoquan";
-        //检查单词是否在熟词本中
-        for (int i = 0; i < wordInfoDTO.size(); i++) {
-            if (familiarService.detectWord(wordInfoDTO.get(i).getSpelling(), username)) {
-                wordInfoDTO.remove(i);
+//        }
+            //
+            //String username = "caobaoquan";
+            //检查单词是否在熟词本中
+            for (int i = 0; i < wordInfoDTO.size(); i++) {
+                if (familiarService.detectWord(wordInfoDTO.get(i).getSpelling(), username)) {
+                    wordInfoDTO.remove(i);
+                }
             }
-        }
 
 
 //        List<Words_en_cn> wordsList =new ArrayList<Words_en_cn>(tofelList.size());
 //        for(int i=0;i<tofelList.size();i++){
 //            wordsList.set(i,selectservice.selectWord(tofelList.get(i).getWord()));
 //        }
-        return wordInfoDTO;
-    }
-
+            return wordInfoDTO;
+        }
     @ResponseBody
     @RequestMapping(value = "/today", method = RequestMethod.GET)
     public List<WordInfoDTO> selectToday(HttpSession httpSession) {
@@ -218,6 +275,14 @@ public class WordTestController {
                 Objects.equals(booktype, "tofel")
         ) {
             List<Tofel> dataList = tofelService.selectMuti(finalword, todayFinal+1,username);//比实际索引值+1
+            List<Tofel> finalList;
+            if (dataList.size() > 10) {
+                Collections.shuffle(dataList); // 打乱顺序
+                finalList = dataList.subList(0, 10); // 获取前15个元素
+            } else {
+                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+                Collections.shuffle(finalList); // 打乱顺序
+            }
             for (int i = 0; i < dataList.size(); i++) {
                 wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
                 wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -232,7 +297,15 @@ public class WordTestController {
                 wordInfoDTO.add(i, wordDTO);
             }
 //        } else if (Objects.equals(booktype, "gre")) {
-//            List<GRE> dataList = greService.selectMuti(finalword, todayFinal+1);
+//            List<Gre> dataList = greService.selectMuti(finalword, todayFinal+1);
+//            List<Gre> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -248,6 +321,14 @@ public class WordTestController {
 //            }
 //        } else if (Objects.equals(booktype, "ielts")) {
 //            List<Ielts> dataList = ieltsService.selectMuti(finalword, todayFinal+1);
+//            List<Ielts> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -262,7 +343,15 @@ public class WordTestController {
 //                wordInfoDTO.add(i, wordDTO);
 //            }
 //        } else if (Objects.equals(booktype, "zk")) {
-//            List<ZK> dataList = zkService.selectMuti(finalword, todayFinal+1);
+//            List<Zk> dataList = zkService.selectMuti(finalword, todayFinal+1);
+//            List<Zk> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -277,7 +366,15 @@ public class WordTestController {
 //                wordInfoDTO.add(i, wordDTO);
 //            }
 //        } else if (Objects.equals(booktype, "gk")) {
-//            List<GK> dataList = gkService.selectMuti(finalword, todayFinal+1);
+//            List<Gk> dataList = gkService.selectMuti(finalword, todayFinal+1);
+//            List<Gk> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -293,6 +390,14 @@ public class WordTestController {
 //            }
 //        } else if (Objects.equals(booktype, "cet4")) {
 //            List<Cet4> dataList = cet4Service.selectMuti(finalword, todayFinal+1);
+//            List<Cet4> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -308,6 +413,14 @@ public class WordTestController {
 //            }
 //        } else if (Objects.equals(booktype, "cet6")) {
 //            List<Cet6> dataList = cet6Service.selectMuti(finalword, todayFinal+1);
+//            List<Cet6> finalList;
+//            if (dataList.size() > 10) {
+//                Collections.shuffle(dataList); // 打乱顺序
+//                finalList = dataList.subList(0, 10); // 获取前15个元素
+//            } else {
+//                finalList = new ArrayList<>(dataList); // 复制元素到新的List
+//                Collections.shuffle(finalList); // 打乱顺序
+//            }
 //            for (int i = 0; i < dataList.size(); i++) {
 //                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
 //                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));

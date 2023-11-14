@@ -2,10 +2,10 @@
 <html lang="zh" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="css/StyleSheet1.css">
+    <link rel="stylesheet" type="text/css" href="StyleSheet1.css">
     <script src="https://cdn.jsdelivr.net/npm/leancloud-storage/dist/av-min.js"></script>
     <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
-    <title>登录原</title>
+    <title>LOGIN</title>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#submit").click(function(e) {
@@ -16,7 +16,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8080/SSM_war_exploded/Users/login",
+                    url: "Users/login",
                     data: { name: username, password: password },
                     success: function(data) {
                         // 处理登录成功后的逻辑
@@ -31,16 +31,89 @@
             });
         });
     </script>
+    <style>
+
+        .white-link {
+            color: white;
+        }
+
+        body{
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        .container {
+            width: 500px;
+            margin: 100px auto;
+            padding: 40px;
+            box-shadow: 5px 5px 5px #090707;
+            border-radius: 20px;
+            border: 2px solid grey;
+            position: relative;
+            text-align: center;
+        }
+
+        .heading {
+            margin-bottom: 60px;
+            position: relative;
+            top: -20px;
+            text-align: center;
+            font-size: 30px;
+            letter-spacing: 2px;
+            font-weight: bold;
+            /*background: #2d2d2d;*/
+            /*color: white;*/
+        }
+    </style>
+    <style>
+        /* 使用CSS来设置输入框的样式 */
+        input[type=text] {
+            width: 400px;
+            padding: 10px;
+            height: 20px;
+            border-radius: 40px; /* 设置边框圆角为20像素 */
+            border: none;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            margin-bottom: 20px;
+        }
+        input[type=password] {
+            width: 400px; /* 设置输入框宽度为300像素 */
+            height: 20px;
+            padding: 10px;
+            border: none;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            border-radius: 40px; /* 设置边框圆角为20像素 */
+            margin-bottom: 20px;
+        }
+    </style>
+    <style>
+        button{
+            width: 80px;
+            padding: 5px 20px;
+            height: 30px;
+            margin: auto; /* 添加此行以使按钮居中 */
+            display: block; /* 添加此行以使按钮居中 */
+            border-radius: 10px;
+            font-size: 14px;
+            position: relative;
+            background-color: #2d2d2d; /* 设置按钮背景色 */
+            color: white; /* 设置按钮字体颜色 */
+        }
+    </style>
 </head>
 <body>
-<a href="Home.html"><img src="images/home.JPG"></a>
+<a href="Home.html"><img src="images/word%20impact.png" width="200px 200px "></a>
 <div class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6" >
             <form class="form-horizontal">
                 <span class="heading">登录</span>
                 <div class="form-group">
-                    <input type="text" class="form-control" id="username" placeholder="用户名">
+                    <input type="text" class="form-control" id="username" placeholder="用户名" value="" >
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" id="password" placeholder="密码">
@@ -49,12 +122,14 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-default" id="submit">登录</button>
                 </div>
+                <br>
                 <div class="form-group">
-                    <span>没有账号？<a href="Register.html">注册</a></span>
+                    <span>没有账号？<a href="Register.html" class="white-link">注册</a></span>
                 </div>
             </form>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

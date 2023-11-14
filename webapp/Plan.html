@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,6 +47,7 @@
         }
 
         #text {
+            color: white;
             margin-right: 175px;
             margin-top: 50px; /* 调整文本上方的间距 */
             font-size: 36px; /* 增大文本字体大小一倍 */
@@ -83,8 +82,9 @@
     <div id="progressContainer">
         <div id="progressBar"><div></div></div>
         <p id="text"></p>
-        <p id="goalText"></p>
-        <p id="wordCountText"></p>
+        <p id="goalText"></p> <!-- 添加今日目标文本 -->
+        <button id="setGoalButton" onclick="setGoal()">设置目标数</button> <!-- 添加设置目标数按钮 -->
+        <p id="wordCountText"></p> <!-- 添加剩余单词数文本 -->
     </div>
 </div>
 <button id="startButton" onclick="window.location.href='table.html'">开始</button>
@@ -95,13 +95,15 @@
         image.onload = function() {
             document.getElementById("myImage").src = this.src;
         };
-        image.src = "data:image/jpeg;base64," + jsonData.image.base64ImageData;
+        image.src = "data:image/jpeg;base64," + jsonData.dataZone.PlanInfo.image.base64ImageData;
 
         var progressBar = document.getElementById("progressBar").children[0];
-        progressBar.style.width = (jsonData.Learned / jsonData.Goal) * 100 + '%';
-        document.getElementById("text").innerHTML = jsonData.Learned + '/' + jsonData.Goal;
-        document.getElementById("goalText").innerHTML = "今日目标：" + jsonData.Sum;
-        document.getElementById("wordCountText").innerHTML = "剩余单词数：" + jsonData.BookName;
+        progressBar.style.width = (jsonData.dataZone.PlanInfo.learned / jsonData.dataZone.PlanInfo.sum) * 100 + '%';
+        document.getElementById("text").innerHTML = "已背：" + jsonData.dataZone.PlanInfo.learned;
+        document.getElementById("goalText").innerHTML = "今日目标：" + jsonData.dataZone.PlanInfo.goal;
+
+        var remainingWords = jsonData.dataZone.PlanInfo.sum - jsonData.dataZone.PlanInfo.learned;
+        document.getElementById("wordCountText").innerHTML = "剩余单词数：" + remainingWords;
     }
 
     function fetchDataAndRunUpdate() {
@@ -117,6 +119,28 @@
 
     fetchDataAndRunUpdate(); // 初始获取数据并更新界面
 
-    // TODO: 使用 setInterval() 或其他机制定期调用 fetchDataAndRunUpdate() 函数来获取数据并更新界面
+    // 用户输入目标数，并发送给后端
+    function setGoal() {
+        var goal = prompt("请输入今日目标数：");
+        if (goal !== null && goal !== "") {
+            var url = 'your-backend-url/Users/setGoal?goal=' + encodeURIComponent(goal); // 替换为实际的后端设置目标数的 URL
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        fetchDataAndRunUpdate(); // 更新界面显示
+                    } else {
+                        console.error('设置目标数时发生错误');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+
+    // 定期调用 fetchDataAndRunUpdate() 函数来获取数据并更新界面
+    setInterval(fetchDataAndRunUpdate, 30000); // 每30秒更新一次，可以根据需要调整时间间隔
+
 </script>
 </body>
+</html>

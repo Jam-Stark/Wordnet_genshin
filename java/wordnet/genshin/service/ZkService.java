@@ -10,6 +10,6 @@ public interface ZkService {
 
     public ZK selectOne(int id);
 
-    public List<ZK> selectMuti(Integer from, Integer to);
+    public List<ZK> selectMuti(Integer from, Integer to,String uname);
 
 }

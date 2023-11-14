@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import wordnet.genshin.dao.IeltsMapper;
 import wordnet.genshin.domain.Ielts;
 import wordnet.genshin.domain.IeltsExample;
+import wordnet.genshin.domain.Ielts;
+import wordnet.genshin.service.FamiliarService;
 import wordnet.genshin.service.IeltsService;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ public class IeltsServiceImpl implements IeltsService {
 
     @Autowired
     private IeltsMapper ieltsMapper;
+    @Autowired
+    private FamiliarService familiarService;
 
     @Override
     public List<Ielts> selectOne(String word) {
@@ -33,11 +37,20 @@ public class IeltsServiceImpl implements IeltsService {
     }
 
     @Override
-    public List<Ielts> selectMuti(Integer from, Integer to) {
-        List<Ielts> ieltsList=new ArrayList<Ielts>();
-        for(;from<to;from++){
-            ieltsList.add(ieltsMapper.selectByPrimaryKey(from));};
-        return ieltsList;
+    public List<Ielts> selectMuti(Integer from, Integer to, String uname) {
+        List<Ielts> IeltsList = new ArrayList<Ielts>();
+
+        for (; from < to; from++) {
+            IeltsList.add(ieltsMapper.selectByPrimaryKey(from));
+        }
+
+        IeltsList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
+
+        if (IeltsList.size() > 15) {
+            return IeltsList.subList(0, 15);
+        }
+
+        return IeltsList;
     }
 
 

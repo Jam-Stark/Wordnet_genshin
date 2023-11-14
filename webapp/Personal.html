@@ -5,6 +5,40 @@
     <meta charset="UTF-8">
     <title>个人主页原</title>
     <style>
+
+        body {
+            background-color: #2d2d2d;
+            color: #ffc0cb; /* This is a light pink color */
+            font-family: Arial, sans-serif;
+        }
+
+        #calendar {
+            background-color: #333; /* 深灰色背景 */
+            color: papayawhip; /* 浅色文字 */
+            flex-wrap: wrap;
+        }
+
+        /*.dayCell {*/
+        /*    width: 14.28%; !* This will give you 7 equal columns *!*/
+        /*    border: 1px solid #ffc0cb;*/
+        /*    box-sizing: border-box; !* This makes sure the border is included in the width *!*/
+        /*    padding: 10px;*/
+        /*    display: flex;*/
+        /*    justify-content: center;*/
+        /*    align-items: center;*/
+        /*    border-radius: 100px; !* This will make the corners rounded *!*/
+        /*}*/
+
+        #calendar th,
+        #calendar td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        #calendar .today {
+            color: #fff; /* 当天日期的文字颜色设为白色 */
+        }
+
         h1 {
             text-align: center;
         }
@@ -75,9 +109,12 @@
 <body>
     <div class="container">
         <h1>个人主页</h1>
-        <div id="avatar">
-            <button id="avatarButton">更换头像</button>
+        <div id="avatar" style=" cursor:pointer ">
+            
         </div>
+
+        <p id="username"></p>
+
         <table id="calendar">
             <tr>
                 <th>日</th>
@@ -91,189 +128,150 @@
         </table>
     </div>
 
-    <div id="modal" class="modal">
-        <div id="modal-content" class="modal-content">
-            <h2>选择头像</h2>
-            <img src="Picture/1.jpg" alt="Avatar 1" onclick="selectAvatar('Picture/1.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/2.jpg" alt="Avatar 2" onclick="selectAvatar('Picture/2.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/3.jpg" alt="Avatar 3" onclick="selectAvatar('Picture/3.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/4.jpg" alt="Avatar 4" onclick="selectAvatar('Picture/4.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/5.jpg" alt="Avatar 5" onclick="selectAvatar('Picture/5.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/6.jpg" alt="Avatar 6" onclick="selectAvatar('Picture/6.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/7.jpg" alt="Avatar 7" onclick="selectAvatar('Picture/7.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/8.jpg" alt="Avatar 8" onclick="selectAvatar('Picture/8.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/9.jpg" alt="Avatar 9" onclick="selectAvatar('Picture/9.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/10.jpg" alt="Avatar 10" onclick="selectAvatar('Picture/10.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/11.jpg" alt="Avatar 11" onclick="selectAvatar('Picture/11.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/12.jpg" alt="Avatar 12" onclick="selectAvatar('Picture/12.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/13.jpg" alt="Avatar 13" onclick="selectAvatar('Picture/13.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/14.jpg" alt="Avatar 14" onclick="selectAvatar('Picture/14.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/15.jpg" alt="Avatar 15" onclick="selectAvatar('Picture/15.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/16.jpg" alt="Avatar 16" onclick="selectAvatar('Picture/16.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/17.jpg" alt="Avatar 17" onclick="selectAvatar('Picture/17.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/18.jpg" alt="Avatar 18" onclick="selectAvatar('Picture/18.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/19.jpg" alt="Avatar 19" onclick="selectAvatar('Picture/19.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/22.jpg" alt="Avatar 20" onclick="selectAvatar('Picture/22.jpg')" onload="adjustImageSize(this)">
-            <img src="Picture/21.jpg" alt="Avatar 21" onclick="selectAvatar('Picture/21.jpg')" onload="adjustImageSize(this)">
-
-        </div>
-    </div>
+  
 
     <script>
-        function adjustImageSize(img) {
-            var maxWidth = 90; // 设置最大宽度
-            var maxHeight = 90; // 设置最大高度
+  
 
-            var width = img.width;
-            var height = img.height;
-
-            var ratio = 1;
-
-            if (width > maxWidth) {
-                ratio = maxWidth / width;
-            }
-
-            if (height > maxHeight) {
-                var heightRatio = maxHeight / height;
-                ratio = Math.min(ratio, heightRatio);
-            }
-
-            if (ratio < 1) {
-                img.style.width = (width * ratio) + "px";
-                img.style.height = (height * ratio) + "px";
-            }
-        }
-
-        function selectAvatar(avatarUrl) {
+         function setAvatar(base64ImageData) {
             var avatarElement = document.getElementById("avatar");
-            var avatarImg = document.createElement("img");
-            avatarImg.src = avatarUrl;
-            avatarImg.alt = "Avatar";
+            var avatarImage = document.createElement("img");
+            avatarImage.src = 'data:image/jpg;base64,' + base64ImageData;
+            avatarImage.alt = "Avatar";
+            avatarImage.addEventListener("load", function () {
+                var width = avatarImage.width;
+                var height = avatarImage.height;
 
-            avatarImg.addEventListener("load", function () {
-                var width = avatarImg.width;
-                var height = avatarImg.height;
-
-                // 根据图片的宽高比例调整图片显示大小，使其自适应头像框
                 if (width > height) {
-                    avatarImg.style.width = "100%";
-                    avatarImg.style.height = "auto";
+                    avatarImage.style.width = "100%";
+                    avatarImage.style.height = "auto";
                 } else {
-                    avatarImg.style.width = "auto";
-                    avatarImg.style.height = "100%";
+                    avatarImage.style.width = "auto";
+                    avatarImage.style.height = "100%";
                 }
             });
 
             avatarElement.innerHTML = "";
-            avatarElement.appendChild(avatarImg);
-
-            var modal = document.getElementById("modal");
-            modal.style.display = "none";
-
-
-
+            avatarElement.appendChild(avatarImage);
         }
 
+
         document.addEventListener("DOMContentLoaded", function (event) {
+
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth();
             var avatarElement = document.getElementById("avatar");
-            var avatarButton = document.getElementById("avatarButton");
-            var modal = document.getElementById("modal");
-            var modalContent = document.getElementById("modal-content");
-
-            avatarButton.addEventListener("click", function () {
-                modal.style.display = "block";
-            });
-
-            modal.addEventListener("click", function (event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
+            avatarElement.addEventListener("click", function () {
+                fetch('Calendar/getAllSculpture')
+                    .then(response => response.json())
+                    .then(avatarList => {
+                        var avatarPopup = window.open("", "Avatar Selector", "width=600,height=600");
+                        for (var i = 0; i < avatarList.length; i++) {
+                            var avatar = avatarList[i];
+                            var avatarImage = document.createElement("img");
+                            avatarImage.src = 'data:image/jpg;base64,' + avatar.base64ImageData;
+                            avatarImage.alt = avatar.fileName;
+                            avatarImage.style.cursor = "pointer";
+                            avatarImage.addEventListener("click", function () {
+                                avatarPopup.close();
+                                fetch('Calendar/setSculpture?fname=' + this.alt)
+                                    .then(response => {
+                                        if (response.ok) {
+                                            setAvatar(this.src);
+                                        }
+                                    });
+                            });
+                            avatarPopup.document.body.appendChild(avatarImage);
+                        }
+                    });
             });
 
             function renderCalendar() {
                 var calendarElement = document.getElementById("calendar");
-                var today = new Date();
 
-                var year = today.getFullYear();
-                var month = today.getMonth();
+                var firstDayOfMonth = new Date(year, month, 1);
+                var lastDayOfMonth = new Date(year, month + 1, 0);
+                var firstDayOfWeek = firstDayOfMonth.getDay();
+                var daysInMonth = lastDayOfMonth.getDate();
 
-                // 请求数据
-                fetch('Calendar/show')
-                    .then(response => response.json())
-                    .then(data => {
-                        var firstDayOfMonth = new Date(year, month, 1);
-                        var lastDayOfMonth = new Date(year, month + 1, 0);
-                        var firstDayOfWeek = firstDayOfMonth.getDay();
-                        var daysInMonth = lastDayOfMonth.getDate();
+                var days = [];
+                for (var i = 0; i < firstDayOfWeek; i++) {
+                    days.push("");
+                }
 
-                        var days = [];
-                        for (var i = 0; i < firstDayOfWeek; i++) {
-                            days.push("");
-                        }
+                for (var i = 1; i <= daysInMonth; i++) {
+                    days.push(i);
+                }
 
-                        for (var i = 1; i <= daysInMonth; i++) {
-                            days.push(i);
-                        }
+                var html = "";
+                var monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+                var monthYearRow = "<tr><th colspan='7'>" + monthNames[month] + " " + year + "</th></tr>";
+                var weekDaysRow = "<tr><td>周日</td><td>周一</td><td>周二</td><td>周三</td><td>周四</td><td>周五</td><td>周六</td></tr>";
+                html += monthYearRow;
+                html += weekDaysRow;
 
-                        var html = "";
-                        var monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
-                        var monthYearRow = "<tr><th colspan='7'>" + monthNames[month] + " " + year + "</th></tr>";
-                        html += monthYearRow;
-
-                        var row = "<tr>";
-                        for (var i = 0; i < days.length; i++) {
-                            if (i > 0 && i % 7 === 0) {
-                                row += "</tr>";
-                                html += row;
-                                row = "<tr>";
-                            }
-                            if (days[i] === "") {
-                                row += "<td></td>";
-                            } else {
-                                var className = "";
-                                if (
-                                    year === today.getFullYear() &&
-                                    month === today.getMonth() &&
-                                    days[i] === today.getDate()
-                                ) {
-                                    className = "today";
-                                }
-
-                                // 查找是否有对应的数据
-                                var date = new Date(year, month, days[i]).toISOString().split('T')[0]; // convert to YYYY-MM-DD format
-                                var item = data.find(item => item.date === date);
-                                if (item) {
-                                    if (item.medal) {
-                                        // 使用Unicode来代表金银铜牌
-                                        var medals = {
-                                            'gold': '🥇',
-                                            'silver': '🥈',
-                                            'bronze': '🥉'
-                                        };
-                                        row += "<td class='" + className + "'>" + days[i] + " " + medals[item.medal] + "</td>";
-                                    } else if (item.complete) {
-                                        row += "<td class='" + className + "'>" + days[i] + " ✔️</td>";
-                                    } else {
-                                        row += "<td class='" + className + "'>" + days[i] + " ❌</td>";
-                                    }
-                                } else {
-                                    row += "<td class='" + className + "'>" + days[i] + "</td>";
-                                }
-                            }
-                        }
+                var row = "<tr>";
+                for (var i = 0; i < days.length; i++) {
+                    if (i > 0 && i % 7 === 0) {
                         row += "</tr>";
                         html += row;
+                        row = "<tr>";
+                    }
+                    if (days[i] === "") {
+                        row += "<td></td>";
+                    } else {
+                        var className = "";
+                        if (
+                            year === today.getFullYear() &&
+                            month === today.getMonth() &&
+                            days[i] === today.getDate()
+                        ) {
+                            className = "today";
+                        }
+                        row += "<td class='" + className + "' id='day" + days[i] + "'>" + days[i] + "</td>";
+                    }
+                }
+                row += "</tr>";
+                html += row;
 
-                        calendarElement.innerHTML = html;
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+                calendarElement.innerHTML = html;
             }
 
             renderCalendar();
 
+            fetch('Users/information')
+                .then(response => response.json())
+                .then(data => {
+                    setAvatar(data.sculpture.base64ImageData);
+                   
 
+                    
+
+                    var calendarItems = data.calendarList;
+                    for (var i = 0; i < calendarItems.length; i++) {
+                        var date = new Date(calendarItems[i].date);
+                        if (date.getMonth() === month && date.getFullYear() === year) {
+                            var dayCell = document.getElementById('day' + date.getDate());
+                            dayCell.className = "dayCell";
+                            if (calendarItems[i].medal) {
+                                var medals = {
+                                    'Gold': '🥇',
+                                    'Silver': '🥈',
+                                    'Bronze': '🥉'
+                                };
+                                dayCell.innerHTML += " " + medals[calendarItems[i].medal];
+                            }
+                            else if (calendarItems[i].completed) {
+                                dayCell.innerHTML += " ✔️";
+                            }
+                            else {
+                                dayCell.innerHTML += " ❌";
+                            }
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
 </body>

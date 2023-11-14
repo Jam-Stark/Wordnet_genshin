@@ -10,6 +10,6 @@ public interface Cet4Service {
 
     public Cet4 selectOne(int id);
 
-    public List<Cet4> selectMuti(Integer from, Integer to);
+    public List<Cet4> selectMuti(Integer from, Integer to,String uname);
 
 }

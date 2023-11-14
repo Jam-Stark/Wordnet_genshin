@@ -11,92 +11,79 @@
     <style>
         p1 {
             text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-            transform: perspective(1000px) ;
             font-weight: bold;
             color: white;
             text-align: center; /* 文字水平居中 */
-            font-size: 36px; /* 调整标题文字大小 */
+            font-size: 50px; /* 调整标题文字大小 */
             position: absolute;
-            margin-top: 200px;
-            margin-left: 40%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            margin-top: -100px;
         }
-    </style>
-    <style>
         .searchcontainer {
-            text-align: center;
-            margin-top: 50px;
-        }
+            position: fixed; /* 固定位置 */
+            top:50px; /* 置于屏幕顶部 */
+            width: 100%; /* 宽度为100% */
+            display: flex; /* 使用弹性布局 */
+            justify-content: center; /* 水平居中 */
+            background-color: transparent; /* 背景色为白色 */
 
-        .custom-search-button {
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #ccc;
-            color: rgba(16, 13, 13, 0.84);
-            text-decoration: none;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
         }
-
-        .custom-input {
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            width: 200px;
-            box-sizing: border-box;
-        }
-    </style>
-    <style>
         .button-container {
             position: relative; /* 使用弹性盒子布局 */
         }
         .round-button {
+            top: 50%;
+            left: 50%;
             display: inline-block;
             text-align: center;
             text-decoration: none;
             border-radius: 50%;
-            width: 68px;
-            height: 68px;
-            background-color: rgb(43, 43, 44);
+            width: 77px;
+            height: 77px;
+            background-color: rgb(49, 49, 51);
             color: white;
             border: none;
-            position: fixed;
-            text-align: center;
             font-weight: bold;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-
-        }
-        .round-button:nth-child(1) {
-            top: 300px; /* 调整第一个按钮的上偏移量 */
-            left: 41%; /* 调整第一个按钮的左偏移量 */
+            margin: 0 20px;
         }
 
-        .round-button:nth-child(2) {
-            top: 300px; /* 调整第二个按钮的上偏移量 */
-            left: 47%; /* 调整第二个按钮的右偏移量 */
+        .round-button:nth-last-child(1){
+            margin-top: 0px;
         }
 
-        .round-button:nth-child(3) {
-            top: 300px; /* 调整第三个按钮的下偏移量 */
-            left: 53%; /* 将第三个按钮水平居中 */
-            /* 水平居中偏移量的修正 */
-        }
         .round-button:hover {
-            background-color: #090707;
+            background-color: rgb(128,128,128);
         }
         .round-button span {
-            line-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
         }
 
         #dropdown-menu {
+            position: fixed;
+            top: 90px;
+            left: calc(50% - 40px) ;
+            transform: translateX(-50%); /* 水平居中 */
             display: none; /* 初始状态下隐藏下拉菜单 */
-            position: absolute;
-            width: 35%;
             max-height: 200px;
             overflow-y: auto;
             border: 1px solid #ccc;
-            background-color: #2d2d2d;
+            background-color: rgb(49, 49, 51);
+            color: white;
+            width: 500px; /* 使下拉菜单的宽度与搜索框一致 */
         }
+
+        form {
+            display: flex; /* 使用弹性布局 */
+        }
+
+
+
         #dropdown-menu div {
             padding: 5px;
             cursor: pointer;
@@ -105,18 +92,47 @@
             background-color: black;
         }
 
+        #search {
+            border-radius: 50px; /* 圆角 */
+            font-size: 1.2em; /* 放大字体 */
+            padding: 10px; /* 增加内边距 */
+            width: 500px; /* 调整宽度 */
+            height: 20px;
+
+        }
+
+
+        button {
+            background-color: #2d2d2d; /* 背景色 */
+            color: white; /* 字体颜色 */
+            border-radius: 20px;
+            padding: 10px 20px; /* 增加内边距 */
+            text-align: center; /* 文字居中 */
+            text-decoration: none; /* 移除下划线 */
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px; /* 在搜索框右侧添加间距 */
+        }
+
+        button:hover{
+            background-color: rgb(128,128,128);
+        }
+
     </style>
 
 </head>
 <body>
+<a href="Home.html"><img src="images/word%20impact.png" width="200px 200px "></a>
 <p1>WORD IMPACT</p1>
-<br><br><br><br><br><br><br>
+<br><br>
+<br><br><br><br><br>
 <br><br><br><br><br><br><br>
 <div class="button-container" style="text-align: center;">
-    <a href="Wordnetlist.html" class="round-button">
+    <a href="Wordnetlist.html" class="round-button" >
         <span>词库</span>
-    </a> &nbsp;
-    <a href="Login.html" class="round-button">
+    </a>
+    <a href="Test.html" class="round-button">
         <span>单词测验</span>
     </a> &nbsp;
 
@@ -127,21 +143,23 @@
 <div id="mySidebar" class="sidebar">
 </div>
 
+
+<div class="searchcontainer">
+    <form>
+        <input type="text" id="search" placeholder="输入单词" oninput="searchaaa()" />
+        <button onclick="searchWord(event)">搜索</button>
+        <div id="dropdown-menu"></div>
+    </form>
+</div>
+
+
 <div id="main">
     <button id="btn1" class="openbtn" onclick="openNav('Personal')">用户</button>
     <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
     <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
     <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
-    <button id="btn6" class="openbtn" onclick="window.location.href = 'Home.html'">主页</button>
 </div>
 
-<div class="searchcontainer">
-    <form>
-        <input type="text" id="search" placeholder="输入单词" oninput="searchaaa()" />
-            <button onclick="searchWord(event)">搜索</button>
-        <div id="dropdown-menu"></div>
-    </form>
-</div>
 <script>
     var current_page = null;
     if(sessionStorage.getItem("current_page")!==null){
@@ -211,6 +229,27 @@
         e.preventDefault();
         var word = document.getElementById('search').value;
         window.location.href = 'Words.html?word_spelling=' + encodeURIComponent(word);
+    }
+
+    function checkWordnet(event) {
+        event.preventDefault(); // 阻止链接的默认行为
+
+        fetch('Users/checkWordnet', {
+            method: 'POST', // 或者 'GET'
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            credentials: 'same-origin' // 包括会话cookie
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // 在这里处理你的数据
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
 
 </script>

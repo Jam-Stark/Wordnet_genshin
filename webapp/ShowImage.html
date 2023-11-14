@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Plan Info</title>
+    <style>
+        /* 基本样式，用于显示图像 */
+        img {
+            max-width: 400px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Plan Information</h1>
+<div id="planInfo"></div> <!-- 显示计划信息的容器 -->
+<img id="bookImage" alt="Book Image"> <!-- 显示图像的元素 -->
+
+<script>
+    // 获取数据的函数
+    async function fetchData() {
+        try {
+            const response = await fetch('/Users/plan'); // 向后端发送请求
+            const responseData = await response.json(); // 解析响应数据为 JSON 格式
+
+            // 提取数据
+            const planInfo = responseData.dataZone.PlanInfo;
+
+            // 显示计划信息
+            const planInfoContainer = document.getElementById("planInfo");
+            planInfoContainer.innerHTML = `
+            <p>Book Name: ${planInfo.bookName}</p>
+            <p>Goal: ${planInfo.goal}</p>
+            <p>Learned: ${planInfo.learned}</p>
+        `;
+
+            // 显示图像
+            const bookImageElement = document.getElementById("bookImage");
+            bookImageElement.src = `data:image/jpeg;base64, ${planInfo.image.base64ImageData}`;
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    // 页面加载时调用获取数据的函数
+    fetchData();
+
+</script>
+
+</body>
+</html>

@@ -35,10 +35,6 @@
             width: 150px;
         }
 
-        /*#myTable tr:nth-last-child(n+2):nth-child(n+2) {*/
-        /*    border-top: 1px white;*/
-        /*    border-bottom: 1px white;*/
-        /*}*/
 
         #myTable tr:first-child{
             vertical-align: bottom;
@@ -70,6 +66,17 @@
             padding: 20px 0;
             background-color: #2d2d2d;
         }
+        .buttonPage button{
+            border-radius: 10px;
+            background-color: #2d2d2d;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .buttonPage button:hover{
+            background-color: rgb(128,128,128);
+        }
 
         h1 {
             font-size: 32px;
@@ -80,10 +87,8 @@
         var startIndex=0;
 
         if (sessionStorage.getItem("know") !== null) {
-            // 如果 "know" 在 sessionStorage 中存在，将它的值转换为整数
             startIndex = parseInt(sessionStorage.getItem("know"));
         } else {
-            // 如果 "know" 在 sessionStorage 中不存在，将 startIndex 初始化为0
             startIndex = 0;
         }
 

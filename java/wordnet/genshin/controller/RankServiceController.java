@@ -21,15 +21,6 @@ public class RankServiceController {
     @Autowired
     UrankService urankService;
 
-//    @ResponseBody
-//    @RequestMapping("awardMedal")
-//    public MessageAndData award(){
-//        LocalDate currentDate = LocalDate.now();
-//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 日期格式
-//        String date = currentDate.format(dateFormatter);
-//
-//        return MessageAndData.success().setMessage(date);
-//    }
 
     @RequestMapping("addRecord")
     public MessageAndData add(HttpSession httpSession) {

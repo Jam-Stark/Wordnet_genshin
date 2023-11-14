@@ -2,11 +2,85 @@
 
 <html lang="zh" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 视口高度 */
+            margin: 0;
+            background-color: #2d2d2d;
+            color: white;
+        }
+
+        .container {
+            width: 500px;
+            margin: 100px auto;
+            padding: 40px;
+            box-shadow: 0 0 10px #888888;
+            border-radius: 20px;
+            border: 2px solid grey;
+            position: relative;
+            text-align: center;
+        }
+        .heading {
+            margin-bottom: 60px;
+            position: relative;
+            top: -20px;
+
+            text-align: center;
+            font-size: 30px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        .btn-default {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+    </style>
+    <style>
+        /* 使用CSS来设置输入框的样式 */
+        input[type=text] {
+            width: 400px;
+            padding: 10px;
+            height: 20px;
+            border-radius: 20px; /* 设置边框圆角为20像素 */
+            border: none;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            margin-bottom: 20px;
+        }
+        input[type=password] {
+            width: 400px; /* 设置输入框宽度为300像素 */
+            height: 20px;
+            padding: 10px;
+            border: none;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            border-radius: 20px; /* 设置边框圆角为20像素 */
+            margin-bottom: 20px;
+        }
+    </style>
+    <style>
+        button{
+            width: 80px;
+            padding: 5px 20px;
+            height: 30px;
+            margin-left: 80%;
+            border-radius: 10px;
+            font-size: 14px;
+            position: relative;
+
+        }
+    </style>
     <meta charset="utf-8" />
     <link rel="stylesheet" type=text/css href="StyleSheet1.css">
     <script src="https://cdn.jsdelivr.net/npm/leancloud-storage/dist/av-min.js"></script>
-    <script type="text/javascript" src="./JS/jquery-3.5.1.min.js"></script>
-    <title>注册原</title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+    <title>REGISTER</title>
     <script type="text/javascript">
         $(function () {
             AV.init({
@@ -35,30 +109,74 @@
             });
         });
     </script>
+
+
 </head>
 <body>
-    <a href="Home.html"><img src="Buttom/home.JPG"></a>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-3 col-md-6">
-                <form class="form-horizontal" action="http://localhost:8080/Register">
-                    <span class="heading">注册</span>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="username" placeholder="用户名">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-control" id="password" placeholder="密码">
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default" id="submit">注册</button>
-                    </div>
-                    <div class="form-group">
-                        <span>已有账号？<a href="Login.html">登录</a></span>
-                    </div>
-                </form>
-            </div>
+<a href="Home.html" style="position:absolute; top:0; left:0;"><img src="images/word%20impact.png" width="200px 200px "></a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <form class="form-horizontal" id="registerForm">
+                <span class="heading">注册</span>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" placeholder="密码">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="repassword" placeholder="确认密码">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="email" placeholder="邮箱">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn-default" id="submit">注册</button>
+                </div>
+                <div class="form-group">
+                    <span>已有账号？<a href="Login.html">登录</a></span>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
+<script type="text/javascript">
+    $(function () {
+        $("#submit").off("click").on("click", function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var repassword = $("#repassword").val();
+            var email = $("#email").val();
+
+            if (password !== repassword) {
+                alert("密码和确认密码不匹配");
+                return;
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "Users/register",
+                data: {
+                    name: username,
+                    password: password,
+                    mail: email
+                },
+                success: function (response) {
+                    window.location = "Login.html";
+                },
+                error: function (error) {
+                    alert("注册失败：" + error);
+                }
+            });
+
+            $("#username").val("");
+            $("#password").val("");
+            $("#repassword").val("");
+            $("#email").val("");
+        });
+    });
+</script>
 </body>
 </html>

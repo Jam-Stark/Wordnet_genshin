@@ -1,122 +1,291 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var currentWordIndex = 0;
-      var wordsList;
-      var score = 0;
-      var correctCount = 0;
-
-      // 页面加载时获取要测的单词列表
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "testResult/tonow", true);
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          wordsList = JSON.parse(xhr.responseText);
-          showWordQuiz(currentWordIndex);
-          updateScoreDisplay();
-        } else if (xhr.readyState === 4 && xhr.status !== 200) {
-          console.log("Error: " + xhr.statusText);
-        }
-      };
-      xhr.send();
-
-      // 显示当前单词
-      function showWordQuiz(index) {
-        var currentWord = wordsList[index];
-        document.getElementById("quiz").textContent = currentWord.translation;
-      }
-
-      // 更新得分显示
-      function updateScoreDisplay() {
-        var scoreDisplay = correctCount + "/" + wordsList.length;
-        document.getElementById("score").textContent = scoreDisplay;
-      }
-
-      // 提交答案
-      document.getElementById("submitBtn").addEventListener("click", function () {
-        var spelling = document.getElementById("spellingInput").value;
-
-        // 发送答案并获取结果
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "testResult/single?i=" + currentWordIndex + "&spelling=" + spelling + "&List=" + encodeURIComponent(JSON.stringify(wordsList)), true);
-        xhr.onreadystatechange = function () {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            var data = JSON.parse(xhr.responseText);
-            if (data) {
-              document.getElementById("spellingInput").style.color = "green";
-              document.getElementById("resultMessage").textContent = "答案正确！";
-              score++; // 答案正确，增加得分
-              correctCount++; // 答案正确，增加正确答案数量
-            } else {
-              document.getElementById("spellingInput").style.color = "red";
-              document.getElementById("resultMessage").textContent = "答案错误！";
-              // 答案错误，将单词插入错题本
-              var wrongBookXhr = new XMLHttpRequest();
-              wrongBookXhr.open("GET", "wrongbook/insert?word=" + encodeURIComponent(wordsList[currentWordIndex].spelling), true);
-              wrongBookXhr.onreadystatechange = function () {
-                if (wrongBookXhr.readyState === 4 && wrongBookXhr.status === 200) {
-                  console.log("单词已插入错题本");
-                } else if (wrongBookXhr.readyState === 4 && wrongBookXhr.status !== 200) {
-                  console.log("Error: " + wrongBookXhr.statusText);
-                }
-              };
-              wrongBookXhr.send();
-            }
-            currentWordIndex++;
-
-            // 如果还有单词，则显示下一个单词
-            if (currentWordIndex < wordsList.length) {
-              showWordQuiz(currentWordIndex);
-            } else {
-              document.getElementById("quizContainer").style.display = "none";
-              document.getElementById("endMessage").style.display = "block";
-            }
-
-            updateScoreDisplay(); // 更新得分显示
-          } else if (xhr.readyState === 4 && xhr.status !== 200) {
-            console.log("Error: " + xhr.statusText);
-          }
-        };
-        xhr.send();
-      });
-    });
-  </script>
-
-  <style>
-    .correct {
-      color: green;
-    }
-
-    .incorrect {
-      color: red;
-    }
-
-    #endMessage {
-      display: none;
-    }
-  </style>
+    <meta charset="utf-8" />
 </head>
 <body>
-<h1>单词测验</h1>
+
+<style>
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* 视口高度 */
+        margin: 0;
+        background-color: #2d2d2d;
+        color: white;
+    }
+
+    #quizContainer {
+
+        width: 80%; /* 根据需要调整 */
+        height: 500px;
+        padding: 20px;
+        background-color: #2d2d2d;
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* 添加阴影效果 */
+
+    }
+
+    /* 为 h1 创建样式 */
+    #quizContainer h1 {
+        left:50%;
+        transform: translateX(+600px);
+        font-size: 32px;
+        color: white;
+        font-weight: bold;
+        left: 50%;
+
+    }
+
+    /* 为 quiz 创建样式 */
+    #quiz {
+        text-align: center;
+        font-size: 30px;
+    }
+
+    /* 为 spellingInput 创建样式 */
+    #spellingInput {
+        left:50%;
+        transform: translateX(+410px);
+        height: 30px;
+        width: 500px;
+        border-radius: 30px;
+        padding: 10px;
+        font-size: 20px;
+        border: 1px solid #ddd;
+    }
+
+    /* 为 submitBtn 创建样式 */
+    #submitBtn {
+        left:50%;
+        transform: translateX(+630px);
+        padding: 10px 20px;
+        background-color: #2d2d2d;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        background-image: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+    }
+
+    /* 为 resultMessage 创建样式 */
+    #resultMessage {
+        text-align: center;
+        padding-left: 50px;
+        color: #007BFF;
+    }
+
+    /* 为 score 创建样式 */
+    #score {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* 为 progress 创建样式 */
+    #progress {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    #quizContainer {
+        position: relative;
+    }
+
+    #container {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    #togglePhoneticBtn {
+        order: 1;
+        background-color: #2d2d2d;
+        color: white;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        background-image: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+    }
+
+    #phoneticContainer {
+        order: 2;
+
+    }
+
+
+    /* 为 endMessage 创建样式 */
+    #endMessage {
+        width: 100%;
+        padding: 20px;
+        background-color: #2d2d2d;
+        display: none;
+        text-align: center;
+    }
+
+    /* 为 h2 创建样式 */
+    #endMessage h2 {
+        text-align: center;
+        font-size: 24px;
+        color: white;
+    }
+
+    /* 为 scoreDisplay 创建样式 */
+    #scoreDisplay {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 24px;
+        color: white;
+    }
+
+    /* 为 returnBtn 创建样式 */
+    #returnBtn {
+        left:50%;
+        padding: 10px 20px;
+        background-color: #2d2d2d;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        background-image: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+    }
+
+
+</style>
+
 <div id="quizContainer">
-  <div id="quiz"></div>
-  <input type="text" id="spellingInput" />
-  <button id="submitBtn">提交</button>
-  <p id="resultMessage"></p>
-  <p id="score"></p>
+    <h1>单词测试</h1>
+    <br><br>
+    <div id="quiz"></div>
+    <br><br><br>
+    <input type="text" id="spellingInput" placeholder="输入单词拼写">
+    <br><br>
+    <button id="submitBtn">提交</button>
+    <span id="resultMessage"></span>
+    <p id="score">正确个数: <span id="correctCount">0</span>/<span id="totalCountScore">0</span></p>
+    <p id="progress">测验进度: <span id="currentCount">0</span>/<span id="totalCountProgress">0</span></p>
+    <div id="container">
+        <button id="togglePhoneticBtn">显示音标</button>
+        <span id="phoneticContainer"></span>
+    </div>
 </div>
-<div id="endMessage">
-  <p>测验结束！</p>
-  <button id="returnBtn">返回</button>
+
+<div id="endMessage" style="display: none;">
+    <h2>测试结束</h2>
+    <p id="scoreDisplay"></p>
+    <button id="returnBtn">返回主页</button>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  // 返回Home页面
-  document.getElementById("returnBtn").addEventListener("click", function () {
-    window.location.href = "Home.html";
-  });
+    document.addEventListener("DOMContentLoaded", function () {
+        var currentWordIndex = 0;
+        var wordsList;
+        var score = 0;
+        var correctCount = 0;
+        var showPhonetic = false;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "testResult/tonow", true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                wordsList = JSON.parse(xhr.responseText);
+                showWordQuiz(currentWordIndex);
+                updateScoreDisplay();
+            } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                console.log("Error: " + xhr.statusText);
+            }
+        };
+        xhr.send();
+
+        function showWordQuiz(index) {
+            var currentWord = wordsList[index];
+            document.getElementById("quiz").innerHTML = currentWord.translation.replace(/\\n/g, "<br>");;
+
+            var phoneticContainer = document.getElementById("phoneticContainer");
+            phoneticContainer.innerHTML = "";
+
+            var phoneticSpan = document.createElement("span");
+            phoneticSpan.textContent = currentWord.phonetic;
+            phoneticSpan.style.display = showPhonetic ? "inline" : "none";
+            phoneticContainer.appendChild(phoneticSpan);
+        }
+
+        function updateScoreDisplay() {
+            var totalCount = wordsList.length;
+            document.getElementById("correctCount").textContent = correctCount;
+            document.getElementById("totalCountScore").textContent = totalCount;
+            document.getElementById("currentCount").textContent = currentWordIndex + 1; // 更新当前进度
+            document.getElementById("totalCountProgress").textContent = totalCount;
+        }
+
+        document.getElementById("submitBtn").addEventListener("click", function () {
+
+            var spelling = document.getElementById("spellingInput").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "testResult/single?i=" + currentWordIndex + "&spelling=" + spelling + "&List=" + encodeURIComponent(JSON.stringify(wordsList)), true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    if (data) {
+                        document.getElementById("spellingInput").style.color = "green";
+                        document.getElementById("resultMessage").textContent = "答案正确！";
+                        document.getElementById("resultMessage").style.color = "green";
+                        score++;
+                        correctCount++;
+                    } else {
+                        document.getElementById("spellingInput").style.color = "red";
+                        document.getElementById("resultMessage").textContent = "答案错误！";
+                        document.getElementById("resultMessage").style.color = "red";
+                        var wrongBookXhr = new XMLHttpRequest();
+                        wrongBookXhr.open("GET", "wrongbook/insert?word=" + encodeURIComponent(wordsList[currentWordIndex].spelling), true);
+                        wrongBookXhr.onreadystatechange = function () {
+                            if (wrongBookXhr.readyState === 4 && wrongBookXhr.status === 200) {
+                                console.log("单词已插入错题本");
+                            } else if (wrongBookXhr.readyState === 4 && wrongBookXhr.status !== 200) {
+                                console.log("Error: " + wrongBookXhr.statusText);
+                            }
+                        };
+                        wrongBookXhr.send();
+                    }
+                    currentWordIndex++;
+
+                    if (currentWordIndex < wordsList.length) {
+                        showWordQuiz(currentWordIndex);
+                    } else {
+                        endTest();
+                    }
+
+                    updateScoreDisplay();
+                } else if (xhr.readyState === 4 && xhr.status !== 200) {
+                    console.log("Error: " + xhr.statusText);
+                }
+            };
+            xhr.send();
+        });
+
+        function showScore() {
+            var scoreDisplay = "测试结束！\n";
+            scoreDisplay += "总得分: " + score + "/" + wordsList.length + "\n";
+            scoreDisplay += "正确个数: " + correctCount + "\n";
+            scoreDisplay += "错误个数: " + (wordsList.length - correctCount) + "\n";
+            document.getElementById("scoreDisplay").textContent = scoreDisplay;
+            document.getElementById("endMessage").style.display = "block";
+            document.getElementById("quizContainer").style.display = "none";
+        }
+
+        document.getElementById("togglePhoneticBtn").addEventListener("click", function () {
+            showPhonetic = !showPhonetic;
+            var phoneticSpan = document.getElementById("phoneticContainer").querySelector("span");
+            phoneticSpan.style.display = showPhonetic ? "inline" : "none";
+        });
+
+        document.getElementById("returnBtn").addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+
+        function endTest() {
+            showScore();
+        }
+
+    });
 </script>
 </body>
 </html>

@@ -49,6 +49,23 @@ public class GuserServiceImpl implements GuserService {
     }
 
     @Override
+    public boolean setUdaily(Integer daily,String uname) {
+
+        boolean flag= false;
+        GuserExample userExample=new GuserExample();
+        GuserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andUnameEqualTo(uname);
+
+        List<Guser> guserList=userMapper.selectByExample(userExample);
+
+        if(!guserList.get(0).getUwordnet().isEmpty()) {
+            guserList.get(0).setUdaily(daily);
+            flag = true;
+        }
+        return flag;
+    }
+
+    @Override
     public String getWordnet(String uname) {
         GuserExample userExample=new GuserExample();
         GuserExample.Criteria criteria=userExample.createCriteria();

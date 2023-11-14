@@ -11,6 +11,6 @@ public interface GreService {
 
     public GRE selectOne(int id);
 
-    public List<GRE> selectMuti(Integer from, Integer to);
+    public List<GRE> selectMuti(Integer from, Integer to,String uname);
 
 }

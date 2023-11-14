@@ -10,6 +10,6 @@ public interface IeltsService {
 
     public Ielts selectOne(int id);
 
-    public List<Ielts> selectMuti(Integer from, Integer to);
+    public List<Ielts> selectMuti(Integer from, Integer to,String uname);
 
 }

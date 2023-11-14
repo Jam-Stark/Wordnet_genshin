@@ -10,6 +10,6 @@ public interface GkService {
 
     public GK selectOne(int id);
 
-    public List<GK> selectMuti(Integer from, Integer to);
+    public List<GK> selectMuti(Integer from, Integer to,String uname);
 
 }

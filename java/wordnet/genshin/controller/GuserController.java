@@ -5,24 +5,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.ModelAndView;
-import wordnet.genshin.service.FamiliarService;
-import wordnet.genshin.service.ImageService;
+import wordnet.genshin.dao.UserImageMapper;
+import wordnet.genshin.service.*;
 import wordnet.genshin.utils.MessageAndData;
-
-import wordnet.genshin.service.GuserService;
-import wordnet.genshin.service.TofelService;
 
 import wordnet.genshin.domain.Images;
 import wordnet.genshin.utils.PlanInfo;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
 import wordnet.genshin.utils.Image;
 import wordnet.genshin.utils.UserInfo;
-
-import java.util.Base64;
 
 @Controller
 
@@ -33,9 +27,36 @@ public class GuserController {
 
     @Autowired
     private TofelService tofelService;
-
+    @Autowired
+    private Tofel_lService tofelLService;
+    @Autowired
+    private IeltsService ieltsService;
+    @Autowired
+    private Ielts_lService ieltsLService;
+    @Autowired
+    private GreService greService;
+    @Autowired
+    private Gre_lService greLService;
+    @Autowired
+    private Cet4Service cet4Service;
+    @Autowired
+    private Cet4_lService cet4LService;
+    @Autowired
+    private Cet6Service cet6Service;
+    @Autowired
+    private Cet6_lService cet6LService;
+    @Autowired
+    private ZkService zkService;
+    @Autowired
+    private Zk_lService zkLService;
+    @Autowired
+    private GkService gkService;
+    @Autowired
+    private Gk_lService gkLService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+   private CalendarService calendarService;
 
 
     @ResponseBody
@@ -48,18 +69,18 @@ public class GuserController {
     ){
         ModelAndView modelAndView=new ModelAndView();
         boolean status = guserService.addUser(name,password,mail);
-        if(status){
-            String targetUrl = (String) httpSession.getAttribute("targetUrl");
-            if (targetUrl != null && !targetUrl.isEmpty()) {
-                modelAndView.setViewName("redirect:" + targetUrl); //这里可能会重定向出问题
-            } else {
-                modelAndView.setViewName("redirect:../Home.html");
-            }
-        }
-        else {
-            //modelAndView.setViewName("redirect:../Login.html");
-            modelAndView.addObject("error", "该用户名已存在");
-        }
+//        if(status){
+//            String targetUrl = (String) httpSession.getAttribute("targetUrl");
+//            if (targetUrl != null && !targetUrl.isEmpty()) {
+//                modelAndView.setViewName("redirect:" + targetUrl); //这里可能会重定向出问题
+//            } else {
+//                modelAndView.setViewName("redirect:../Home.html");
+//            }
+//        }
+//        else {
+//            //modelAndView.setViewName("redirect:../Login.html");
+//            modelAndView.addObject("error", "该用户名已存在");
+//        }
         return modelAndView;
     }
 //    @RequestMapping(value = "/register",method = RequestMethod.GET)
@@ -147,8 +168,6 @@ public ModelAndView login(
         return modelAndView;
     }
 
-
-@ResponseBody
     @RequestMapping("/setWordbook")
     public MessageAndData setWordbook(
             @RequestParam(value = "book") String book,
@@ -174,8 +193,25 @@ public ModelAndView login(
         }
     }
 
+    @RequestMapping("setGoal")
+    public MessageAndData setGoal(
+            @RequestParam(value = "goal")Integer goal,
+            HttpSession httpSession){
+        String username = (String) httpSession.getAttribute("UserName");
+        if(username!=null){
+            boolean status=guserService.setUdaily(goal,username);
+            if (status) {
+                return MessageAndData.success().setMessage("设置Wordbook成功");
+            } else {
+                return MessageAndData.error().setMessage("设置Wordbook失败");}
+        }else {
+            // 用户未登录或session失效，可以进行相应处理
+            return MessageAndData.error().setMessage("用户未登录或session失效");
+        }
+    }
+
     @ResponseBody
-    @RequestMapping("/wordRecord")   //单词本关闭时调用，记录最后背的单词
+    @RequestMapping("/wordrecord")   //单词本关闭时调用，记录最后背的单词
     public MessageAndData wordRecord(
                                        HttpSession httpSession){
         String username = (String) httpSession.getAttribute("UserName");
@@ -195,10 +231,10 @@ public ModelAndView login(
         String bookUrl=null;
         if(guserService.checkBook(uname)) {
             bookUrl = guserService.getWordnet(uname);
-            modelAndView.setViewName("redirect:/"+bookUrl+".html"); //跳转到对应单词本的地址
+            modelAndView.setViewName("redirect:http://localhost:8080/SSM_war_exploded/table.html"); //跳转到对应单词本的地址
         }
         else
-            modelAndView.setViewName("redirect:../Wordlist.html");
+            modelAndView.setViewName("redirect:http://localhost:8080/SSM_war_exploded/Wordnetlist.html");
 
         return modelAndView;
     }
@@ -240,19 +276,34 @@ public ModelAndView login(
         List<?> dataList=new ArrayList<>();
         if (Objects.equals(book, "tofel")) {
         dataList=tofelService.selectMuti(from,to,uname);
-        }
-//        } else if (Objects.equals(book, "gre")) {
-//            dataList = greService.selectMuti(from, to);
-//        } else if (Objects.equals(book, "zk")) {
-//            dataList = zkService.selectMuti(from, to);
-//        } else if (Objects.equals(book, "gk")) {
-//            dataList = gkService.selectMuti(from, to);
-//        } else if (Objects.equals(book, "ielts")) {
-//            dataList = ieltsService.selectMuti(from, to);
-//        } else if (Objects.equals(book, "cet4")) {
-//            dataList = cet4Service.selectMuti(from, to);
-//        } else if (Objects.equals(book, "cet6")) {
-//            dataList = cet6Service.selectMuti(from, to);
+        } else if (Objects.equals(book, "tofel_l")) {
+            dataList=tofelLService.selectMuti(from,to,uname);
+        } else if (Objects.equals(book, "gre")) {
+            dataList = greService.selectMuti(from, to,uname);
+        } else if (Objects.equals(book, "gre_l")) {
+            dataList = greLService.selectMuti(from, to,uname);
+        } else if (Objects.equals(book, "zk")) {
+            dataList = zkService.selectMuti(from, to,uname);
+        }else if (Objects.equals(book, "zk_l")) {
+            dataList = zkLService.selectMuti(from, to,uname);
+        } else if (Objects.equals(book, "gk")) {
+            dataList = gkService.selectMuti(from, to,uname);
+        } else if (Objects.equals(book, "gk_l")) {
+            dataList = gkLService.selectMuti(from, to,uname);
+        }else if (Objects.equals(book, "ielts")) {
+            dataList = ieltsService.selectMuti(from, to,uname);
+            System.out.println("ielts_l");
+        } else if (Objects.equals(book, "ielts_l")) {
+            dataList = ieltsLService.selectMuti(from, to,uname);
+        }else if (Objects.equals(book, "cet4")) {
+            dataList = cet4Service.selectMuti(from, to,uname);
+        } else if (Objects.equals(book, "cet4_l")) {
+            dataList = cet4LService.selectMuti(from, to,uname);
+        }else if (Objects.equals(book, "cet6")) {
+            dataList = cet6Service.selectMuti(from, to,uname);
+        }else if (Objects.equals(book, "cet6_l")) {
+            dataList = cet6LService.selectMuti(from, to,uname);}
+
         httpSession.setAttribute("Current",from);
 
         if (dataList != null) {
@@ -315,43 +366,55 @@ public ModelAndView login(
         return MessageAndData.success().setMessage("下一页");
     }
 
+    @ResponseBody
     @RequestMapping(value = "plan")
-    public PlanInfo showPlan(HttpSession httpSession){
+    public MessageAndData showPlan(HttpSession httpSession){
         String uname=(String) httpSession.getAttribute("UserName");
         PlanInfo info=new PlanInfo();
-        String bname=guserService.getWordnet(uname);
-        info.setBookName(bname);
+        String bname= guserService.getWordnet(uname);
+        info.setBookName(String.format("%s.jpg", bname));
         info.setGoal(guserService.getUdaily(uname));
         info.setLearned(guserService.getUfinalword(uname).intValue());
-
+        System.out.println(bname);
         Image pic=new Image();
         pic.setFileName(bname);
-        // 将图像数据转换为Base64编码
-        String base64ImageData = Base64.getEncoder().encodeToString(imageService.getBookImage(bname + ".jpg").getData());
+        String base64ImageData = Base64.getEncoder().encodeToString(imageService.getBookImage(String.format("%s.jpg", bname)).getData());
         pic.setBase64ImageData(base64ImageData);
         info.setImage(pic);
 
-        if(bname=="tofel" || bname=="tofel_l")
+        if(Objects.equals(bname, "tofel") || Objects.equals(bname, "tofel_l"))
             info.setSum(6974);
-        if(bname=="zk" || bname=="zk_l")
+        if(Objects.equals(bname, "zk") || Objects.equals(bname, "zk_l"))
             info.setSum(1603);
-        if(bname=="gk" ||bname=="gk_l")
+        if(Objects.equals(bname, "gk") || Objects.equals(bname, "gk_l"))
             info.setSum(3677);
-        if(bname=="cet4" || bname=="cet4_l")
+        if(Objects.equals(bname, "cet4") || Objects.equals(bname, "cet4_l"))
             info.setSum(3849);
-        if(bname=="cet6" || bname=="cet6_l")
+        if(Objects.equals(bname, "cet6") || Objects.equals(bname, "cet6_l"))
             info.setSum(5407);
-        if(bname=="ielts" || bname=="ielts_l")
+        if(Objects.equals(bname, "ielts") || Objects.equals(bname, "ielts_l"))
             info.setSum(5040);
-        if(bname=="gre" || bname=="gre_l")
+        if(Objects.equals(bname, "gre") || Objects.equals(bname, "gre_l"))
             info.setSum(7504);
-        System.out.println("PlanInfo sent successfully: " + info);
-        return info;
+
+        return MessageAndData.success().add("PlanInfo",info);
     }
 
+    @ResponseBody
     @RequestMapping(value = "information")
     public UserInfo showUserInfo(HttpSession httpSession){
+        String uname=(String) httpSession.getAttribute("UserName");
+        UserInfo userInfo=new UserInfo();
 
-        return null;
+        userInfo.setCalendarList(calendarService.showByUser(uname));
+        Image pic=new Image();
+        // 将图像数据转换为Base64编码
+        String base64ImageData = Base64.getEncoder().encodeToString(imageService.getSculptureByUname(uname).getData());
+        pic.setBase64ImageData(base64ImageData);
+        userInfo.setSculpture(pic);
+
+        return userInfo;
     }
+
+
 }

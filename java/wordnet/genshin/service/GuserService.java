@@ -11,6 +11,8 @@ public interface GuserService {
 
     public Integer getUdaily(String name);
 
+    public boolean setUdaily(Integer daily,String uname);
+
     public String getWordnet(String uname);
 
     public boolean addUser(String name,String password,String mail);

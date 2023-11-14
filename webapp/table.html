@@ -69,6 +69,18 @@
       background-color: #2d2d2d;
     }
 
+    .buttonPage button{
+        border-radius: 10px;
+        background-color: #2d2d2d;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .buttonPage button:hover{
+        background-color: rgb(128,128,128);
+    }
+
     #rectangle {
       display: flex;  /* 添加这一行 */
       justify-content: space-between;  /* 添加这一行 */
@@ -86,6 +98,7 @@
         margin: 0;  /* 修改这一行 */
     }
     #buttonhide button {
+        border-radius: 15px;
         margin-right: 20px;
         width: 80px; /* 设置按钮的宽度 */
         height: 50px;
@@ -95,6 +108,36 @@
         font-size: 14px;
         font-weight: bold;
         cursor: pointer;
+    }
+    #buttonhide button:hover{
+        background-color: rgb(128,128,128);
+    }
+
+    .custom-button{
+        padding: 10px 20px;
+        display: inline-block;
+        border-radius: 3px;
+        background-color: #2d2d2d;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px; /* 改变按钮字体大小 */
+        margin-right: 5px;
+        border: none; /* 移除按钮边框 */
+    }
+
+    .custom-button:hover{
+        background-color: rgb(128,128,128);
+    }
+
+    button{
+        background-color: #2d2d2d;
+        color: white;
+        border: none; /* 移除按钮边框 */
+        border-radius: 15px;
+    }
+    button:hover{
+        background-color: rgb(128,128,128);
     }
 
   </style>
@@ -133,21 +176,6 @@
   <span id="date"></span>
   <button id="nextPage" onclick="nextDay()">后一天</button>
   </div>
-
-  <style>
-      .custom-button{
-          padding: 10px 20px;
-          display: inline-block;
-          border-radius: 3px;
-          background-color: #2d2d2d;
-          color: #fff;
-          text-decoration: none;
-          font-weight: bold;
-          font-size: 14px; /* 改变按钮字体大小 */
-          margin-right: 5px;
-          border: none; /* 移除按钮边框 */
-      }
-  </style>
 
   <script>
 
@@ -294,7 +322,7 @@
       }
 
       window.onbeforeunload = function() {
-          fetch('Users/wordRecord', {
+          fetch('Users/wordrecord', {
               method: 'POST', // 或者 'GET'
               headers: {
                   'Content-Type': 'application/json',

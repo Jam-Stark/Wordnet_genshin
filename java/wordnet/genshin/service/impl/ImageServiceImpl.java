@@ -26,7 +26,7 @@ public class ImageServiceImpl implements ImageService {
         ImagesExample imagesExample=new ImagesExample();
         ImagesExample.Criteria criteria=imagesExample.createCriteria();
         criteria.andNameEqualTo(dataName);
-        return imagesMapper.selectByExample(imagesExample).get(0);
+        return imagesMapper.selectByExampleWithBLOBs(imagesExample).get(0);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
         Book_imagesExample bookImagesExample = new Book_imagesExample();
         Book_imagesExample.Criteria criteria = bookImagesExample.createCriteria();
         criteria.andNameEqualTo(dataName);
-        List<Book_images> imagesList = bookImagesMapper.selectByExample(bookImagesExample);
+        List<Book_images> imagesList = bookImagesMapper.selectByExampleWithBLOBs(bookImagesExample);
 
         if (imagesList.isEmpty()) {
             // 如果结果为空，可以抛出异常或者返回默认值
@@ -57,17 +57,40 @@ public class ImageServiceImpl implements ImageService {
         ImagesExample.Criteria criteria1=imagesExample.createCriteria();
         criteria1.andNameEqualTo(userImageMapper.selectByExample(userImageExample).get(0).getFname());
 
-        return imagesMapper.selectByExample(imagesExample).get(0);
+        return imagesMapper.selectByExampleWithBLOBs(imagesExample).get(0);
     }
 
     @Override
-    public void setUserSculpture(String uname, String dataName) {
+    public boolean setUserSculpture(String uname, String dataName) {
         UserImageExample userImageExample=new UserImageExample();
         UserImageExample.Criteria criteria=userImageExample.createCriteria();
         criteria.andUnameEqualTo(uname);
-
-        userImageMapper.selectByExample(userImageExample).get(0).setFname(dataName);
+        System.out.println("Final jpg: "+dataName);
+        System.out.println("Username:  "+uname);
+        UserImage item=new UserImage();
+        item.setFname(dataName);
+        item.setUname(uname);
+        userImageMapper.updateByExample(item,userImageExample);
+        return true;
     }
 
+    @Override
+    public List<Book_images> getAllBook() {
+
+        Book_imagesExample bookImagesExample=new Book_imagesExample();
+        Book_imagesExample.Criteria criteria=bookImagesExample.createCriteria();
+        criteria.andIdIsNotNull();
+
+        return bookImagesMapper.selectByExampleWithBLOBs(bookImagesExample);
+    }
+
+    @Override
+    public List<Images> getAllSculpture() {
+        ImagesExample imagesExample=new ImagesExample();
+        ImagesExample.Criteria criteria=imagesExample.createCriteria();
+        criteria.andIdIsNotNull();
+
+        return imagesMapper.selectByExampleWithBLOBs(imagesExample);
+    }
 
 }
