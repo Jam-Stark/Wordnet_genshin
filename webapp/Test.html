@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" type=text/css href="css/try.css">
 </head>
 <body>
 
@@ -57,23 +58,26 @@
     }
 
     /* 为 submitBtn 创建样式 */
+    #submitContainer {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+
     #submitBtn {
-        left:50%;
-        transform: translateX(+630px);
         padding: 10px 20px;
         background-color: #2d2d2d;
         color: white;
         cursor: pointer;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
         background-image: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+        order: 1;
     }
 
-    /* 为 resultMessage 创建样式 */
     #resultMessage {
-        text-align: center;
-        padding-left: 50px;
-        color: #007BFF;
+        order: 2;
     }
+
 
     /* 为 score 创建样式 */
     #score {
@@ -149,6 +153,17 @@
 
 </style>
 
+<div id="mySidebar" class="sidebar">
+</div>
+
+<div id="main">
+    <button id="btn1" class="openbtn" onclick="openNav('Personal')">用户</button>
+    <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
+    <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
+    <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
+    <button id="btn6" class="openbtn" onclick="window.location.href = 'Home.html'">主页</button>
+</div>
+
 <div id="quizContainer">
     <h1>单词测试</h1>
     <br><br>
@@ -156,8 +171,10 @@
     <br><br><br>
     <input type="text" id="spellingInput" placeholder="输入单词拼写">
     <br><br>
-    <button id="submitBtn">提交</button>
-    <span id="resultMessage"></span>
+    <div id="submitContainer">
+        <button id="submitBtn">提交</button>
+        <span id="resultMessage"></span>
+    </div>
     <p id="score">正确个数: <span id="correctCount">0</span>/<span id="totalCountScore">0</span></p>
     <p id="progress">测验进度: <span id="currentCount">0</span>/<span id="totalCountProgress">0</span></p>
     <div id="container">
@@ -286,6 +303,49 @@
         }
 
     });
+
+    var current_page = null;
+
+    function openNav(page) {
+        if (document.getElementById("mySidebar").style.width == "400px" && current_page == page) {
+            closeNav();
+        } else {
+            document.getElementById("mySidebar").innerHTML = '<iframe id="iframe" src="' + page + '.html"></iframe>';
+            document.getElementById("mySidebar").style.width = "400px";
+            current_page = page;
+        }
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+    }
+
+    function openMain(page) {
+        document.getElementById("main").innerHTML = '<iframe id="mainframe" src="' + page + '.html"></iframe>';
+    }
+
+    function addWord(word, button) {
+        fetch('Familiar/add?word=' + word, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        button.parentElement.parentElement.style.display = 'none';
+    }
+
 </script>
 </body>
 </html>
