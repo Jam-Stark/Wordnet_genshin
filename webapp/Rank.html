@@ -57,7 +57,6 @@
         <thead>
             <tr>
                 <th>排名</th>
-                <th>头像</th>
                 <th>用户名</th>
                 <th>单词数</th>
             </tr>
@@ -69,50 +68,46 @@
 
     <script>
         // Fetch data from backend
-        fetch('your-backend-url')
+        fetch('Rank/TodayRank')
             .then(response => response.json())
-            .then(users => {
+            .then(response => {
+                const users = response.dataZone.datalist;
+
                 // Unicode medal symbols
                 const medals = ['🥇', '🥈', '🥉'];
 
                 // Populate the podium
                 const places = ['first', 'second', 'third'];
-                for (let i = 0; i < 3; i++) {
-                    const user = users[i];
+                for (let i = 0; i < Math.min(3, users.length); i++) {
+                    const user = users[i].urank;
                     const placeDiv = document.querySelector(`.${places[i]}-place`);
 
+                    // If the user has an avatar url, use it. If not, use a default image
                     const avatarImg = placeDiv.querySelector('.avatar');
-                    avatarImg.src = `data:image/jpg;base64,${user.avatar}`;
-                    avatarImg.alt = `${user.username} avatar`;
+                    avatarImg.src = user.avatar ? `data:image/jpg;base64,${user.avatar}` : 'path-to-default-avatar.jpg';
+                    avatarImg.alt = `${user.uname} avatar`;
 
                     const usernameP = placeDiv.querySelector('.username');
-                    usernameP.textContent = `${medals[i]} ${user.username}`;
+                    usernameP.textContent = `${medals[i]} ${user.uname}`;
                 }
 
                 // Populate the table with the remaining users
                 const table = document.getElementById('user-table');
                 for (let i = 3; i < users.length; i++) {
-                    const user = users[i];
+                    const user = users[i].urank;
 
                     const row = document.createElement('tr');
 
                     const rankCell = document.createElement('td');
-                    rankCell.textContent = user.rank;
+                    rankCell.textContent = i + 1;
                     row.appendChild(rankCell);
 
-                    const avatarCell = document.createElement('td');
-                    const avatarImg = document.createElement('img');
-                    avatarImg.src = `data:image/jpg;base64,${user.avatar}`;
-                    avatarImg.alt = `${user.username} avatar`;
-                    avatarCell.appendChild(avatarImg);
-                    row.appendChild(avatarCell);
-
                     const usernameCell = document.createElement('td');
-                    usernameCell.textContent = user.username;
+                    usernameCell.textContent = user.uname;
                     row.appendChild(usernameCell);
 
                     const wordsCountCell = document.createElement('td');
-                    wordsCountCell.textContent = user.wordsCount;
+                    wordsCountCell.textContent = users[i].number;
                     row.appendChild(wordsCountCell);
 
                     table.appendChild(row);

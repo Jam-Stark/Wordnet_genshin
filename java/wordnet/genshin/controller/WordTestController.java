@@ -18,8 +18,8 @@ import java.util.Objects;
 @RequestMapping(value = "testResult")
 public class WordTestController {
     private static final int WORDS_COUNT = 10; // Number of words to be fetched for the quiz
-    @Autowired
-    private SingleTestController singleTestController;
+//    @Autowired
+//    private SingleTestController singleTestController;
     @Autowired
     private WordTestService wordTestService;
     @Autowired
@@ -70,7 +70,7 @@ public class WordTestController {
         if (
             Objects.equals(booktype, "tofel")
         ) {
-            List<Tofel> dataList = tofelService.selectMuti(1, todayFinal+1);//比实际索引值+1
+                List<Tofel> dataList = tofelService.selectMuti(1, todayFinal+1,username);//比实际索引值+1
             for (int i = 0; i < dataList.size(); i++) {
                 wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
                 wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -84,102 +84,102 @@ public class WordTestController {
                 //wordDTO.setExchange(wordsList.get(i).getExchange());
                 wordInfoDTO.add(i, wordDTO);
             }
-        } else if (Objects.equals(booktype, "gre")) {
-            List<Gre> dataList = greService.selectMuti(1, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "ielts")) {
-            List<Ielts> dataList = ieltsService.selectMuti(1, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "zk")) {
-            List<Zk> dataList = zkService.selectMuti(1, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "gk")) {
-            List<Gk> dataList = gkService.selectMuti(1, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "cet4")) {
-            List<Cet4> dataList = cet4Service.selectMuti(1, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "cet6")) {
-            List<Cet6> dataList = cet6Service.selectMuti(1, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        }
+//        } else if (Objects.equals(booktype, "gre")) {
+//            List<GRE> dataList = GreService.selectMuti(1, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//       } else if (Objects.equals(booktype, "ielts")) {
+//            List<Ielts> dataList = ieltsService.selectMuti(1, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "zk")) {
+//            List<ZK> dataList = zkService.selectMuti(1, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "gk")) {
+//            List<GK> dataList = gkService.selectMuti(1, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "cet4")) {
+//            List<Cet4> dataList = cet4Service.selectMuti(1, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "cet6")) {
+//            List<Cet6> dataList = cet6Service.selectMuti(1, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        }
 //        //加入到words_en_cn
 //        List<Words_en_cn> wordsList =new ArrayList<Words_en_cn>();
 //        for(int i=0;i<dataList.size();i++){
 //            wordsList.add(i,selectservice.selectWord(dataList.get(i).));
-//        }
+        }
         //
         //String username = "caobaoquan";
         //检查单词是否在熟词本中
@@ -217,7 +217,7 @@ public class WordTestController {
         if (
                 Objects.equals(booktype, "tofel")
         ) {
-            List<Tofel> dataList = tofelService.selectMuti(finalword, todayFinal+1);//比实际索引值+1
+            List<Tofel> dataList = tofelService.selectMuti(finalword, todayFinal+1,username);//比实际索引值+1
             for (int i = 0; i < dataList.size(); i++) {
                 wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
                 wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
@@ -231,96 +231,96 @@ public class WordTestController {
                 //wordDTO.setExchange(wordsList.get(i).getExchange());
                 wordInfoDTO.add(i, wordDTO);
             }
-        } else if (Objects.equals(booktype, "gre")) {
-            List<Gre> dataList = greService.selectMuti(finalword, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "ielts")) {
-            List<Ielts> dataList = ieltsService.selectMuti(finalword, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "zk")) {
-            List<Zk> dataList = zkService.selectMuti(finalword, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "gk")) {
-            List<Gk> dataList = gkService.selectMuti(finalword, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "cet4")) {
-            List<Cet4> dataList = cet4Service.selectMuti(finalword, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
-        } else if (Objects.equals(booktype, "cet6")) {
-            List<Cet6> dataList = cet6Service.selectMuti(finalword, todayFinal+1);
-            for (int i = 0; i < dataList.size(); i++) {
-                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
-                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
-                //设置返回类的属性
-                WordInfoDTO wordDTO = new WordInfoDTO();
-                wordDTO.setSpelling(wordsList.get(i).getWord());
-                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
-                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
-                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
-                //wordDTO.setTag(wordsList.get(i).getTag());
-                //wordDTO.setExchange(wordsList.get(i).getExchange());
-                wordInfoDTO.add(i, wordDTO);
-            }
+//        } else if (Objects.equals(booktype, "gre")) {
+//            List<GRE> dataList = greService.selectMuti(finalword, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "ielts")) {
+//            List<Ielts> dataList = ieltsService.selectMuti(finalword, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "zk")) {
+//            List<ZK> dataList = zkService.selectMuti(finalword, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "gk")) {
+//            List<GK> dataList = gkService.selectMuti(finalword, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "cet4")) {
+//            List<Cet4> dataList = cet4Service.selectMuti(finalword, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
+//        } else if (Objects.equals(booktype, "cet6")) {
+//            List<Cet6> dataList = cet6Service.selectMuti(finalword, todayFinal+1);
+//            for (int i = 0; i < dataList.size(); i++) {
+//                wordsList.add(i, selectservice.selectWord(dataList.get(i).getWord()));
+//                wordsListWithBLOBs.add(i, selectservice.selectWordWithBLOBs(dataList.get(i).getWord()));
+//                //设置返回类的属性
+//                WordInfoDTO wordDTO = new WordInfoDTO();
+//                wordDTO.setSpelling(wordsList.get(i).getWord());
+//                //wordDTO.setPhonetic(wordsList.get(i).getPhonetic());
+//                //wordDTO.setDefinition(wordsListWithBLOBs.get(i).getDefinition());
+//                wordDTO.setTranslation(wordsListWithBLOBs.get(i).getTranslation());
+//                //wordDTO.setTag(wordsList.get(i).getTag());
+//                //wordDTO.setExchange(wordsList.get(i).getExchange());
+//                wordInfoDTO.add(i, wordDTO);
+//            }
         }
 //        //加入到words_en_cn
 //        List<Words_en_cn> wordsList =new ArrayList<Words_en_cn>();

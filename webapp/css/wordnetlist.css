@@ -1,0 +1,83 @@
+body{
+            background-color: #2d2d2d;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .center {
+            display: grid;
+            gap: 15px;
+            place-items: center;
+        }
+
+        .button {
+            width: 300px;
+            height: 150px;
+            background-color: #2d2d2d;
+            border: none;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 15px 25px;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+            padding-left: 30px;
+        }
+
+        .button::after {
+            content: "";
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 100px;
+            background-size: cover;
+        }
+
+        .button1::after {
+            background-image: url('../images/chuzhong.jpg');
+        }
+
+        .button2::after {
+            background-image: url('../images/gaozhong.jpg');
+        }
+
+        .button3::after {
+            background-image: url('../images/cet4.jpg');
+        }
+
+        .button4::after {
+            background-image: url('../images/cet6.jpg');
+        }
+
+        .button5::after {
+            background-image: url('../images/toefl.jpg');
+        }
+
+        .button6::after {
+            background-image: url('../images/ielts.jpg');
+        }
+
+        .button7::after {
+            background-image: url('../images/gre.jpg');
+        }
+
+
+        .button span {
+            display: block;
+        }
+
+        .button span:nth-child(3) {
+            font-size: 0.8em;
+        }

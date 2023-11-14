@@ -83,10 +83,18 @@
     }
 
     #buttonhide {
-      margin: 0;  /* 修改这一行 */
+        margin: 0;  /* 修改这一行 */
     }
     #buttonhide button {
-      margin-right: 20px;
+        margin-right: 20px;
+        width: 80px; /* 设置按钮的宽度 */
+        height: 50px;
+        background-color: #2d2d2d;
+        color: white;
+        border: none;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
     }
 
   </style>
@@ -108,7 +116,9 @@
      <button onclick="toggleColumnContent(1)">单词</button>
      <button onclick="toggleColumnContent(2)">释义</button>
     </div>
-    <a href="Wordcard.html" ><button>跳转</button></a>
+      <a href="Wordcard.html" class="custom-button" >
+          <span>跳转</span>
+      </a>
  </div>
  <table id="myTable" border="1">
   <tr>
@@ -123,6 +133,21 @@
   <span id="date"></span>
   <button id="nextPage" onclick="nextDay()">后一天</button>
   </div>
+
+  <style>
+      .custom-button{
+          padding: 10px 20px;
+          display: inline-block;
+          border-radius: 3px;
+          background-color: #2d2d2d;
+          color: #fff;
+          text-decoration: none;
+          font-weight: bold;
+          font-size: 14px; /* 改变按钮字体大小 */
+          margin-right: 5px;
+          border: none; /* 移除按钮边框 */
+      }
+  </style>
 
   <script>
 

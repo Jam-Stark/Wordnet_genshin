@@ -83,37 +83,40 @@
     <div id="progressContainer">
         <div id="progressBar"><div></div></div>
         <p id="text"></p>
-        <p id="goalText"></p> <!-- 添加今日目标文本 -->
-        <p id="wordCountText"></p> <!-- 添加剩余单词数文本 -->
+        <p id="goalText"></p>
+        <p id="wordCountText"></p>
     </div>
 </div>
 <button id="startButton" onclick="window.location.href='table.html'">开始</button>
 
 <script>
-    // TODO: 替换这部分代码以从后端获取实际的 JSON 数据
-    var jsonData = {
-        "image": "images/toefl.jpg",  // 图片文件名
-        "progress": 50,  // 进度百分比
-        "a": 15,  // a 的值
-        "b": 20,  // b 的值
-        "goal": "完成100个单词", // 今日目标
-        "wordCount": 85 // 剩余单词数
-    };
+    function updateProgress(jsonData) {
+        var image = new Image();
+        image.onload = function() {
+            document.getElementById("myImage").src = this.src;
+        };
+        image.src = "data:image/jpeg;base64," + jsonData.image.base64ImageData;
 
-    document.getElementById("myImage").src = jsonData.image;
-    var progressBar = document.getElementById("progressBar").children[0];
-
-    function updateProgress() {
-        progressBar.style.width = (jsonData.a / jsonData.b) * 100 + '%'; /* 基于 a/b 比例更新宽度 */
-        document.getElementById("text").innerHTML = jsonData.a + '/' + jsonData.b;
-        document.getElementById("goalText").innerHTML = "今日目标：" + jsonData.goal;
-        document.getElementById("wordCountText").innerHTML = "剩余单词数：" + jsonData.wordCount;
+        var progressBar = document.getElementById("progressBar").children[0];
+        progressBar.style.width = (jsonData.Learned / jsonData.Goal) * 100 + '%';
+        document.getElementById("text").innerHTML = jsonData.Learned + '/' + jsonData.Goal;
+        document.getElementById("goalText").innerHTML = "今日目标：" + jsonData.Sum;
+        document.getElementById("wordCountText").innerHTML = "剩余单词数：" + jsonData.BookName;
     }
 
-    updateProgress(); // 初始更新
+    function fetchDataAndRunUpdate() {
+        fetch('Users/plan') // 替换为实际的后端数据获取 URL
+            .then(response => response.json())
+            .then(jsonData => {
+                updateProgress(jsonData);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
-    // TODO: 实现定期从后端获取更新数据并调用 updateProgress() 函数来更新进度条和文本的逻辑
-    // 可以使用 setInterval() 或其他机制来获取数据和更新进度条
+    fetchDataAndRunUpdate(); // 初始获取数据并更新界面
 
+    // TODO: 使用 setInterval() 或其他机制定期调用 fetchDataAndRunUpdate() 函数来获取数据并更新界面
 </script>
 </body>

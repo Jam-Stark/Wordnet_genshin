@@ -17,14 +17,14 @@ public class LoginInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        String user = (String) session.getAttribute("Username");
+        String user = (String) session.getAttribute("UserName");
 
        // System.out.println("user: "+user);
         if (user != null) {
             return true; // 用户已经登录则放行
         }
 
-        if (!(uri.indexOf("/Home.html") >= 0) && !(uri.indexOf("/Users/login") >= 0)) {
+        if (!(uri.indexOf("/Home.html") >= 0) && !(uri.indexOf("/Users/login") >= 0) ) {
             // 如果用户访问的是需要登录的页面，记录目标页面的 URL
             String targetUrl = request.getRequestURI();
             System.out.println("targetUrl_unchaged"+targetUrl);

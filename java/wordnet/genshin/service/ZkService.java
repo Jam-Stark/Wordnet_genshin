@@ -1,15 +1,15 @@
 package wordnet.genshin.service;
 
-import wordnet.genshin.domain.Zk;
+import wordnet.genshin.domain.ZK;
 
 import java.util.List;
 
 public interface ZkService {
 
-    public List<Zk> selectOne(String word);
+    public List<ZK> selectOne(String word);
 
-    public Zk selectOne(int id);
+    public ZK selectOne(int id);
 
-    public List<Zk> selectMuti(Integer from, Integer to);
+    public List<ZK> selectMuti(Integer from, Integer to);
 
 }

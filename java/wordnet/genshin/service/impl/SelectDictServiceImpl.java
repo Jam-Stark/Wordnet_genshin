@@ -1,6 +1,6 @@
 package wordnet.genshin.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import  org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wordnet.genshin.dao.DictMapper;
 import wordnet.genshin.domain.DictWithBLOBs;

@@ -1,2 +1,4 @@
-package wordnet.genshin.utils;public class UserInfo {
+package wordnet.genshin.utils;
+
+public class UserInfo {
 }

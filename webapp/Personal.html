@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>个人主页原</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        #avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 20px auto;
+            background-color: lightgray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+            #avatar img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+
+        #calendar {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #calendar th,
+            #calendar td {
+                border: 1px solid black;
+                padding: 10px;
+            }
+
+            #calendar th {
+                background-color: lightgray;
+            }
+
+            #calendar td.today {
+                background-color: lightblue;
+            }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 20% auto;
+            padding: 20px;
+            width: 50%;
+        }
+
+        .modal img {
+            max-width: 100%;
+            max-height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>个人主页</h1>
+        <div id="avatar">
+            <button id="avatarButton">更换头像</button>
+        </div>
+        <table id="calendar">
+            <tr>
+                <th>日</th>
+                <th>一</th>
+                <th>二</th>
+                <th>三</th>
+                <th>四</th>
+                <th>五</th>
+                <th>六</th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="modal" class="modal">
+        <div id="modal-content" class="modal-content">
+            <h2>选择头像</h2>
+            <img src="Picture/1.jpg" alt="Avatar 1" onclick="selectAvatar('Picture/1.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/2.jpg" alt="Avatar 2" onclick="selectAvatar('Picture/2.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/3.jpg" alt="Avatar 3" onclick="selectAvatar('Picture/3.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/4.jpg" alt="Avatar 4" onclick="selectAvatar('Picture/4.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/5.jpg" alt="Avatar 5" onclick="selectAvatar('Picture/5.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/6.jpg" alt="Avatar 6" onclick="selectAvatar('Picture/6.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/7.jpg" alt="Avatar 7" onclick="selectAvatar('Picture/7.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/8.jpg" alt="Avatar 8" onclick="selectAvatar('Picture/8.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/9.jpg" alt="Avatar 9" onclick="selectAvatar('Picture/9.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/10.jpg" alt="Avatar 10" onclick="selectAvatar('Picture/10.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/11.jpg" alt="Avatar 11" onclick="selectAvatar('Picture/11.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/12.jpg" alt="Avatar 12" onclick="selectAvatar('Picture/12.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/13.jpg" alt="Avatar 13" onclick="selectAvatar('Picture/13.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/14.jpg" alt="Avatar 14" onclick="selectAvatar('Picture/14.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/15.jpg" alt="Avatar 15" onclick="selectAvatar('Picture/15.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/16.jpg" alt="Avatar 16" onclick="selectAvatar('Picture/16.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/17.jpg" alt="Avatar 17" onclick="selectAvatar('Picture/17.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/18.jpg" alt="Avatar 18" onclick="selectAvatar('Picture/18.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/19.jpg" alt="Avatar 19" onclick="selectAvatar('Picture/19.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/22.jpg" alt="Avatar 20" onclick="selectAvatar('Picture/22.jpg')" onload="adjustImageSize(this)">
+            <img src="Picture/21.jpg" alt="Avatar 21" onclick="selectAvatar('Picture/21.jpg')" onload="adjustImageSize(this)">
+
+        </div>
+    </div>
+
+    <script>
+        function adjustImageSize(img) {
+            var maxWidth = 90; // 设置最大宽度
+            var maxHeight = 90; // 设置最大高度
+
+            var width = img.width;
+            var height = img.height;
+
+            var ratio = 1;
+
+            if (width > maxWidth) {
+                ratio = maxWidth / width;
+            }
+
+            if (height > maxHeight) {
+                var heightRatio = maxHeight / height;
+                ratio = Math.min(ratio, heightRatio);
+            }
+
+            if (ratio < 1) {
+                img.style.width = (width * ratio) + "px";
+                img.style.height = (height * ratio) + "px";
+            }
+        }
+
+        function selectAvatar(avatarUrl) {
+            var avatarElement = document.getElementById("avatar");
+            var avatarImg = document.createElement("img");
+            avatarImg.src = avatarUrl;
+            avatarImg.alt = "Avatar";
+
+            avatarImg.addEventListener("load", function () {
+                var width = avatarImg.width;
+                var height = avatarImg.height;
+
+                // 根据图片的宽高比例调整图片显示大小，使其自适应头像框
+                if (width > height) {
+                    avatarImg.style.width = "100%";
+                    avatarImg.style.height = "auto";
+                } else {
+                    avatarImg.style.width = "auto";
+                    avatarImg.style.height = "100%";
+                }
+            });
+
+            avatarElement.innerHTML = "";
+            avatarElement.appendChild(avatarImg);
+
+            var modal = document.getElementById("modal");
+            modal.style.display = "none";
+
+
+
+        }
+
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var avatarElement = document.getElementById("avatar");
+            var avatarButton = document.getElementById("avatarButton");
+            var modal = document.getElementById("modal");
+            var modalContent = document.getElementById("modal-content");
+
+            avatarButton.addEventListener("click", function () {
+                modal.style.display = "block";
+            });
+
+            modal.addEventListener("click", function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+
+            function renderCalendar() {
+                var calendarElement = document.getElementById("calendar");
+                var today = new Date();
+
+                var year = today.getFullYear();
+                var month = today.getMonth();
+
+                // 请求数据
+                fetch('Calendar/show')
+                    .then(response => response.json())
+                    .then(data => {
+                        var firstDayOfMonth = new Date(year, month, 1);
+                        var lastDayOfMonth = new Date(year, month + 1, 0);
+                        var firstDayOfWeek = firstDayOfMonth.getDay();
+                        var daysInMonth = lastDayOfMonth.getDate();
+
+                        var days = [];
+                        for (var i = 0; i < firstDayOfWeek; i++) {
+                            days.push("");
+                        }
+
+                        for (var i = 1; i <= daysInMonth; i++) {
+                            days.push(i);
+                        }
+
+                        var html = "";
+                        var monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+                        var monthYearRow = "<tr><th colspan='7'>" + monthNames[month] + " " + year + "</th></tr>";
+                        html += monthYearRow;
+
+                        var row = "<tr>";
+                        for (var i = 0; i < days.length; i++) {
+                            if (i > 0 && i % 7 === 0) {
+                                row += "</tr>";
+                                html += row;
+                                row = "<tr>";
+                            }
+                            if (days[i] === "") {
+                                row += "<td></td>";
+                            } else {
+                                var className = "";
+                                if (
+                                    year === today.getFullYear() &&
+                                    month === today.getMonth() &&
+                                    days[i] === today.getDate()
+                                ) {
+                                    className = "today";
+                                }
+
+                                // 查找是否有对应的数据
+                                var date = new Date(year, month, days[i]).toISOString().split('T')[0]; // convert to YYYY-MM-DD format
+                                var item = data.find(item => item.date === date);
+                                if (item) {
+                                    if (item.medal) {
+                                        // 使用Unicode来代表金银铜牌
+                                        var medals = {
+                                            'gold': '🥇',
+                                            'silver': '🥈',
+                                            'bronze': '🥉'
+                                        };
+                                        row += "<td class='" + className + "'>" + days[i] + " " + medals[item.medal] + "</td>";
+                                    } else if (item.complete) {
+                                        row += "<td class='" + className + "'>" + days[i] + " ✔️</td>";
+                                    } else {
+                                        row += "<td class='" + className + "'>" + days[i] + " ❌</td>";
+                                    }
+                                } else {
+                                    row += "<td class='" + className + "'>" + days[i] + "</td>";
+                                }
+                            }
+                        }
+                        row += "</tr>";
+                        html += row;
+
+                        calendarElement.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+            renderCalendar();
+
+
+        });
+    </script>
+</body>
+
+</html>

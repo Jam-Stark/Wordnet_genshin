@@ -35,14 +35,31 @@ public class TofelServiceImpl implements TofelService {
         return tofelMapper.selectByPrimaryKey(id);
     }
 
-    @Override
-    public List<Tofel> selectMuti(Integer from, Integer to,String uname) {
-        List<Tofel> tofelList=new ArrayList<Tofel>();
-        for(;from<to;from++){
-            tofelList.add(tofelMapper.selectByPrimaryKey(from));}
-        tofelList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
-        return tofelList;
+//    @Override
+//    public List<Tofel> selectMuti(Integer from, Integer to,String uname) {
+//        List<Tofel> tofelList=new ArrayList<Tofel>();
+//        for(;from<to;from++){
+//            tofelList.add(tofelMapper.selectByPrimaryKey(from));}
+//        tofelList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
+//
+//        return tofelList;
+//    }
+@Override
+public List<Tofel> selectMuti(Integer from, Integer to, String uname) {
+    List<Tofel> tofelList = new ArrayList<Tofel>();
+
+    for (; from < to; from++) {
+        tofelList.add(tofelMapper.selectByPrimaryKey(from));
     }
+
+    tofelList.removeIf(item -> familiarService.detectWord(item.getWord(), uname));
+
+    if (tofelList.size() > 15) {
+        return tofelList.subList(0, 15);
+    }
+
+    return tofelList;
+}
 
 
 }

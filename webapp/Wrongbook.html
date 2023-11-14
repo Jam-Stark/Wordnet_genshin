@@ -79,29 +79,28 @@
     <script>
         var startIndex=0;
 
-        if (sessionStorage.getItem("New") !== null) {
-            // 如果 "New" 在 sessionStorage 中存在，将它的值转换为整数
-            startIndex = parseInt(sessionStorage.getItem("New"));
+        if (sessionStorage.getItem("wrong") !== null) {
+            // 如果 "wrong" 在 sessionStorage 中存在，将它的值转换为整数
+            startIndex = parseInt(sessionStorage.getItem("wrong"));
         } else {
-            // 如果 "New" 在 sessionStorage 中不存在，将 startIndex 初始化为0
+            // 如果 "wrong" 在 sessionStorage 中不存在，将 startIndex 初始化为0
             startIndex = 0;
-
         }
 
-        sessionStorage.setItem("New",startIndex);
-        var New = parseInt(sessionStorage.getItem("New")) || 0;
+        sessionStorage.setItem("wrong",startIndex);
+        var wrong = parseInt(sessionStorage.getItem("wrong")) || 0;
         function nextPage() {
             startIndex += 10;  // 点击"下一页"时，起始索引增加10
-            sessionStorage.setItem("New",startIndex);
-            New = parseInt(sessionStorage.getItem("New")) || 0;
+            sessionStorage.setItem("wrong",startIndex);
+            wrong = parseInt(sessionStorage.getItem("wrong")) || 0;
             updateTable();
         }
 
         function prevPage() {
             if (startIndex > 0) {
                 startIndex -= 10;  // 点击"上一页"时，如果起始索引大于0，则减少10
-                sessionStorage.setItem("New",startIndex);
-                New = parseInt(sessionStorage.getItem("New")) || 0;
+                sessionStorage.setItem("wrong",startIndex);
+                wrong = parseInt(sessionStorage.getItem("wrong")) || 0;
                 updateTable();
             }
         }
@@ -114,80 +113,47 @@
                 table.deleteRow(i);
             }
 
-            fetch('newbook/show')
+            fetch('wrongbook/show')
                 .then(response => response.json())
                 .then(datazone => {
                     var datalist = datazone.dataZone.datalist;
                     var lastDate = null;  // 用于存储上一行的日期
 
                     for (var i = 0; i < 10; i++) {
-                        if (New + i >= datalist.length) {
+                        if (wrong + i >= datalist.length) {
                             break;
                         }
-                        if (datalist[New + i] !== null) {
+                        if (datalist[wrong + i] !== null) {
                             var row = table.insertRow(-1);
                             var cell1 = row.insertCell(0);
                             var cell2 = row.insertCell(1);
                             var cell3 = row.insertCell(2);
-                            var cell4 = row.insertCell(3);
 
                             cell1.innerHTML = i+1;
-                            cell2.innerHTML = datalist[New + i].newword
+                            cell2.innerHTML = datalist[wrong + i].word
 
                             // 如果这一行的日期与上一行不同，则显示日期
-                            if (datalist[New + i].newdata !== lastDate) {
-                                cell3.innerHTML = datalist[New + i].newdata;
-                                lastDate = datalist[New + i].newdata;
+                            if (datalist[wrong + i].wrongdata !== lastDate) {
+                                cell3.innerHTML = datalist[wrong + i].wrongdata;
+                                lastDate = datalist[wrong + i].wrongdata;
                             } else {
                                 cell3.innerHTML = '';  // 否则，不显示日期
                             }
-
-                            cell4.innerHTML = '<button data-row-index="' + i + '" onclick="removeWord(\'' + datalist[New + i].newword + '\', this)">移除</button>';
                         }
                     }
                     document.getElementById("prevPage").disabled = (startIndex == 0);
                     document.getElementById("nextPage").disabled = (startIndex + 10 >= datalist.length);
                 });
         }
-
-        function removeWord(word, button) {
-            fetch('newbook/delete?word=' + word, {
-                method: 'GET',  // 或者其他适合你的后端的HTTP方法
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                // 如果你的后端需要请求体，你可以在这里添加
-                // body: JSON.stringify({ word: word })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            button.parentElement.parentElement.style.display = 'none';
-        }
     </script>
 </head>
 <body onload="updateTable();">
-<h1 style="position: absolute; top: 10%; font-size: 32px;">生词本</h1>
+<h1 style="position: absolute; top: 10%; font-size: 32px;">错词本</h1>
 <table id="myTable" border="1">
     <tr>
         <th>序号</th>
         <th>单词</th>
-        <th>加入日期</th>
+        <th>错误日期</th>
     </tr>
 </table>
 <div class="buttonPage">

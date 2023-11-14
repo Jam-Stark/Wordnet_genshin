@@ -19,14 +19,14 @@ public class ServiceUnitTest {
     //代码调试的时候其中有一个办法是日志输出，1  System.out.println   ，   2 日志logger
     //
 
-    @Autowired
-    private EmployeeService employeeService;
-
-    @Test
-    public void testServiceRegNewEmployee(){
-        Employee zs = new Employee("zhangxiaosan", "999");//模拟的一个用户
-        boolean b = employeeService.regNewEmployee(zs);
-        System.out.println(b);
-    }
+//    @Autowired
+//    private EmployeeService employeeService;
+//
+//    @Test
+//    public void testServiceRegNewEmployee(){
+//        Employee zs = new Employee("zhangxiaosan", "999");//模拟的一个用户
+//        boolean b = employeeService.regNewEmployee(zs);
+//        System.out.println(b);
+//    }
 
 }

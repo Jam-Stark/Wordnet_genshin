@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import wordnet.genshin.domain.Urank;
 import wordnet.genshin.service.UrankService;
 import wordnet.genshin.utils.MessageAndData;
+import wordnet.genshin.utils.MyPair;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -19,15 +21,26 @@ public class RankServiceController {
     @Autowired
     UrankService urankService;
 
+//    @ResponseBody
+//    @RequestMapping("awardMedal")
+//    public MessageAndData award(){
+//        LocalDate currentDate = LocalDate.now();
+//        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 日期格式
+//        String date = currentDate.format(dateFormatter);
+//
+//        return MessageAndData.success().setMessage(date);
+//    }
 
-    @ResponseBody
-    @RequestMapping("awardMedal")
-    public MessageAndData award(){
+    @RequestMapping("addRecord")
+    public MessageAndData add(HttpSession httpSession) {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 日期格式
         String date = currentDate.format(dateFormatter);
 
-        return MessageAndData.success().setMessage(date);
+        String uname=(String) httpSession.getAttribute("UserName");
+        urankService.addRank(date,uname);
+
+        return MessageAndData.success().setMessage("");
     }
 
     @ResponseBody
@@ -36,8 +49,9 @@ public class RankServiceController {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 日期格式
         String date = currentDate.format(dateFormatter);
+        System.out.println(date);
 
-       List<Urank> dataList= urankService.selectAllbyDay(date);
+       List<MyPair> dataList=         urankService.awardMedal(date);;
        return MessageAndData.success().add("datalist",dataList);
     }
 

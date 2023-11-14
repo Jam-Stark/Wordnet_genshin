@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var currentWordIndex = 0;
+      var wordsList;
+      var score = 0;
+      var correctCount = 0;
+
+      // 页面加载时获取要测的单词列表
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "testResult/tonow", true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          wordsList = JSON.parse(xhr.responseText);
+          showWordQuiz(currentWordIndex);
+          updateScoreDisplay();
+        } else if (xhr.readyState === 4 && xhr.status !== 200) {
+          console.log("Error: " + xhr.statusText);
+        }
+      };
+      xhr.send();
+
+      // 显示当前单词
+      function showWordQuiz(index) {
+        var currentWord = wordsList[index];
+        document.getElementById("quiz").textContent = currentWord.translation;
+      }
+
+      // 更新得分显示
+      function updateScoreDisplay() {
+        var scoreDisplay = correctCount + "/" + wordsList.length;
+        document.getElementById("score").textContent = scoreDisplay;
+      }
+
+      // 提交答案
+      document.getElementById("submitBtn").addEventListener("click", function () {
+        var spelling = document.getElementById("spellingInput").value;
+
+        // 发送答案并获取结果
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "testResult/single?i=" + currentWordIndex + "&spelling=" + spelling + "&List=" + encodeURIComponent(JSON.stringify(wordsList)), true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            if (data) {
+              document.getElementById("spellingInput").style.color = "green";
+              document.getElementById("resultMessage").textContent = "答案正确！";
+              score++; // 答案正确，增加得分
+              correctCount++; // 答案正确，增加正确答案数量
+            } else {
+              document.getElementById("spellingInput").style.color = "red";
+              document.getElementById("resultMessage").textContent = "答案错误！";
+              // 答案错误，将单词插入错题本
+              var wrongBookXhr = new XMLHttpRequest();
+              wrongBookXhr.open("GET", "wrongbook/insert?word=" + encodeURIComponent(wordsList[currentWordIndex].spelling), true);
+              wrongBookXhr.onreadystatechange = function () {
+                if (wrongBookXhr.readyState === 4 && wrongBookXhr.status === 200) {
+                  console.log("单词已插入错题本");
+                } else if (wrongBookXhr.readyState === 4 && wrongBookXhr.status !== 200) {
+                  console.log("Error: " + wrongBookXhr.statusText);
+                }
+              };
+              wrongBookXhr.send();
+            }
+            currentWordIndex++;
+
+            // 如果还有单词，则显示下一个单词
+            if (currentWordIndex < wordsList.length) {
+              showWordQuiz(currentWordIndex);
+            } else {
+              document.getElementById("quizContainer").style.display = "none";
+              document.getElementById("endMessage").style.display = "block";
+            }
+
+            updateScoreDisplay(); // 更新得分显示
+          } else if (xhr.readyState === 4 && xhr.status !== 200) {
+            console.log("Error: " + xhr.statusText);
+          }
+        };
+        xhr.send();
+      });
+    });
+  </script>
+
+  <style>
+    .correct {
+      color: green;
+    }
+
+    .incorrect {
+      color: red;
+    }
+
+    #endMessage {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<h1>单词测验</h1>
+<div id="quizContainer">
+  <div id="quiz"></div>
+  <input type="text" id="spellingInput" />
+  <button id="submitBtn">提交</button>
+  <p id="resultMessage"></p>
+  <p id="score"></p>
+</div>
+<div id="endMessage">
+  <p>测验结束！</p>
+  <button id="returnBtn">返回</button>
+</div>
+<script>
+  // 返回Home页面
+  document.getElementById("returnBtn").addEventListener("click", function () {
+    window.location.href = "Home.html";
+  });
+</script>
+</body>
+</html>

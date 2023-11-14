@@ -1,39 +1,152 @@
-﻿<!DOCTYPE html>
+
+<!DOCTYPE html>
 <html>
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <meta charset="utf-8" />
-    <link rel="stylesheet" type=text/css href="css/StyleSheet1.css">
+    <link rel="stylesheet" type=text/css href="StyleSheet1.css">
     <link rel="stylesheet" type=text/css href="css/try.css">
     <title>WORD IMPACT</title>
+    <style>
+        p1 {
+            text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+            transform: perspective(1000px) ;
+            font-weight: bold;
+            color: white;
+            text-align: center; /* 文字水平居中 */
+            font-size: 36px; /* 调整标题文字大小 */
+            position: absolute;
+            margin-top: 200px;
+            margin-left: 40%;
+        }
+    </style>
+    <style>
+        .searchcontainer {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .custom-search-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #ccc;
+            color: rgba(16, 13, 13, 0.84);
+            text-decoration: none;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .custom-input {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            width: 200px;
+            box-sizing: border-box;
+        }
+    </style>
+    <style>
+        .button-container {
+            position: relative; /* 使用弹性盒子布局 */
+        }
+        .round-button {
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50%;
+            width: 68px;
+            height: 68px;
+            background-color: rgb(43, 43, 44);
+            color: white;
+            border: none;
+            position: fixed;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+
+        }
+        .round-button:nth-child(1) {
+            top: 300px; /* 调整第一个按钮的上偏移量 */
+            left: 41%; /* 调整第一个按钮的左偏移量 */
+        }
+
+        .round-button:nth-child(2) {
+            top: 300px; /* 调整第二个按钮的上偏移量 */
+            left: 47%; /* 调整第二个按钮的右偏移量 */
+        }
+
+        .round-button:nth-child(3) {
+            top: 300px; /* 调整第三个按钮的下偏移量 */
+            left: 53%; /* 将第三个按钮水平居中 */
+            /* 水平居中偏移量的修正 */
+        }
+        .round-button:hover {
+            background-color: #090707;
+        }
+        .round-button span {
+            line-height: 50px;
+        }
+
+        #dropdown-menu {
+            display: none; /* 初始状态下隐藏下拉菜单 */
+            position: absolute;
+            width: 35%;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            background-color: #2d2d2d;
+        }
+        #dropdown-menu div {
+            padding: 5px;
+            cursor: pointer;
+        }
+        #dropdown-menu div:hover {
+            background-color: black;
+        }
+
+    </style>
+
 </head>
 <body>
-<p>WORD IMPACT</p>
-<p>原神, 启动!</p>
-<nav>
-    <a href="Personal.html">个人</a>
-</nav>
+<p1>WORD IMPACT</p1>
 <br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br>
-<a href="Wordnetlist.html">词库</a> &nbsp;
-<a href="Login.html">单词测验</a> &nbsp;
-<a href="Favorites.html">收藏夹</a> &nbsp;
+<div class="button-container" style="text-align: center;">
+    <a href="Wordnetlist.html" class="round-button">
+        <span>词库</span>
+    </a> &nbsp;
+    <a href="Login.html" class="round-button">
+        <span>单词测验</span>
+    </a> &nbsp;
 
+    <a href="Rank.html" class="round-button">
+        <span>排行榜</span>
+    </a>
+</div>
 <div id="mySidebar" class="sidebar">
 </div>
 
 <div id="main">
-    <button id="btn1" class="openbtn" onclick="openNav('User')">用户</button>
+    <button id="btn1" class="openbtn" onclick="openNav('Personal')">用户</button>
     <button id="btn2" class="openbtn" onclick="openNav('Newwordbook')">生词本</button>
     <button id="btn3" class="openbtn" onclick="openNav('Knowbook')">熟词本</button>
     <button id="btn4" class="openbtn" onclick="openNav('Wrongbook')">错词本</button>
     <button id="btn6" class="openbtn" onclick="window.location.href = 'Home.html'">主页</button>
 </div>
 
+<div class="searchcontainer">
+    <form>
+        <input type="text" id="search" placeholder="输入单词" oninput="searchaaa()" />
+            <button onclick="searchWord(event)">搜索</button>
+        <div id="dropdown-menu"></div>
+    </form>
+</div>
 <script>
     var current_page = null;
     if(sessionStorage.getItem("current_page")!==null){
         current_page=sessionStorage.getItem("current_page");
-    openNav(current_page);}
+        openNav(current_page);}
 
     if(sessionStorage.getItem("current_page")==-1) {
         console.log("Home closed!");
@@ -58,7 +171,48 @@
     function openMain(page) {
         document.getElementById("main").innerHTML = '<iframe id="mainframe" src="' + page + '.html"></iframe>';
     }
-</script>
 
+    function searchaaa() {
+        console.log('search() 函数被调用');
+        var keyword = document.getElementById('search').value;
+        var dropdownMenu = document.getElementById('dropdown-menu');
+        dropdownMenu.innerHTML = ''; // 清空下拉菜单
+
+        if (keyword !== '') {
+            fetch('selectResult/searchMatch?prefix=' + keyword)
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('请求失败');
+                    }
+                })
+                .then(function(data) {
+                    if (data != null && data.wordLike.length > 0) {
+                        for (var i = 0; i < data.wordLike.length; i++) {
+                            var option = document.createElement('div');
+                            option.textContent = data.wordLike[i];
+                            dropdownMenu.appendChild(option);
+                        }
+                        dropdownMenu.style.display = 'block';
+                    } else {
+                        dropdownMenu.style.display = 'none';
+                    }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        } else {
+            dropdownMenu.style.display = 'none';
+        }
+    }
+
+    function searchWord(e) {
+        e.preventDefault();
+        var word = document.getElementById('search').value;
+        window.location.href = 'Words.html?word_spelling=' + encodeURIComponent(word);
+    }
+
+</script>
 </body>
 </html>

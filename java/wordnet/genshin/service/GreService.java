@@ -1,16 +1,16 @@
 package wordnet.genshin.service;
 
-import wordnet.genshin.domain.Gre;
+import wordnet.genshin.domain.GRE;
 import wordnet.genshin.domain.Tofel;
 
 import java.util.List;
 
 public interface GreService {
 
-    public List<Gre> selectOne(String word);
+    public List<GRE> selectOne(String word);
 
-    public Gre selectOne(int id);
+    public GRE selectOne(int id);
 
-    public List<Gre> selectMuti(Integer from, Integer to);
+    public List<GRE> selectMuti(Integer from, Integer to);
 
 }

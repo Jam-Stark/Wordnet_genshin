@@ -6,19 +6,23 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.ModelAndView;
 import wordnet.genshin.service.FamiliarService;
+import wordnet.genshin.service.ImageService;
 import wordnet.genshin.utils.MessageAndData;
 
 import wordnet.genshin.service.GuserService;
 import wordnet.genshin.service.TofelService;
 
-import wordnet.genshin.service.SelectService;
-import wordnet.genshin.utils.TableWord;
+import wordnet.genshin.domain.Images;
+import wordnet.genshin.utils.PlanInfo;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Iterator;
+import wordnet.genshin.utils.Image;
+import wordnet.genshin.utils.UserInfo;
+
+import java.util.Base64;
 
 @Controller
 
@@ -31,7 +35,7 @@ public class GuserController {
     private TofelService tofelService;
 
     @Autowired
-    private FamiliarService familiarService;
+    private ImageService imageService;
 
 
     @ResponseBody
@@ -86,7 +90,7 @@ public class GuserController {
 //
 //        return modelAndView;
 //    }
-    @ResponseBody
+
 @RequestMapping(value = "/login",method = RequestMethod.POST)
 public ModelAndView login(
         @RequestParam("name") String name,
@@ -194,34 +198,10 @@ public ModelAndView login(
             modelAndView.setViewName("redirect:/"+bookUrl+".html"); //跳转到对应单词本的地址
         }
         else
-            modelAndView.setViewName("redirect:../Login.html");
+            modelAndView.setViewName("redirect:../Wordlist.html");
 
         return modelAndView;
     }
-
-    @RequestMapping("/progress")
-    public MessageAndData progress(HttpSession httpSession){
-        String uname=(String) httpSession.getAttribute("UserName");
-
-
-        return MessageAndData.success().add("",1);
-    }
-
-//    @RequestMapping(value="browse")//未登记单词本用户浏览单词本
-//    @ResponseBody
-//    public MessageAndData browse(
-//            @RequestParam(value="from",defaultValue="1")Integer from,
-//            HttpSession httpSession
-//    ){
-//        String uname=(String) httpSession.getAttribute("UserName");
-//        from=guserService.getUfinalword(uname).intValue();
-//        httpSession.setAttribute("Current",from);
-//        Integer to=guserService.getUdaily(uname)+from;
-//        List<Tofel> tofelList = tofelService.selectMuti(from, to);
-//        PageHelper.startPage(from, to);  //左闭右开 [from,to)
-//        PageInfo pageInfo = new PageInfo(tofelList, 0);
-//        return MessageAndData.success().add("pageInfo",pageInfo);
-//    }
 
     @RequestMapping(value="tablet")  //已选择单词本情况下,每次刷新页面调用一次
     @ResponseBody
@@ -335,4 +315,43 @@ public ModelAndView login(
         return MessageAndData.success().setMessage("下一页");
     }
 
+    @RequestMapping(value = "plan")
+    public PlanInfo showPlan(HttpSession httpSession){
+        String uname=(String) httpSession.getAttribute("UserName");
+        PlanInfo info=new PlanInfo();
+        String bname=guserService.getWordnet(uname);
+        info.setBookName(bname);
+        info.setGoal(guserService.getUdaily(uname));
+        info.setLearned(guserService.getUfinalword(uname).intValue());
+
+        Image pic=new Image();
+        pic.setFileName(bname);
+        // 将图像数据转换为Base64编码
+        String base64ImageData = Base64.getEncoder().encodeToString(imageService.getBookImage(bname + ".jpg").getData());
+        pic.setBase64ImageData(base64ImageData);
+        info.setImage(pic);
+
+        if(bname=="tofel" || bname=="tofel_l")
+            info.setSum(6974);
+        if(bname=="zk" || bname=="zk_l")
+            info.setSum(1603);
+        if(bname=="gk" ||bname=="gk_l")
+            info.setSum(3677);
+        if(bname=="cet4" || bname=="cet4_l")
+            info.setSum(3849);
+        if(bname=="cet6" || bname=="cet6_l")
+            info.setSum(5407);
+        if(bname=="ielts" || bname=="ielts_l")
+            info.setSum(5040);
+        if(bname=="gre" || bname=="gre_l")
+            info.setSum(7504);
+        System.out.println("PlanInfo sent successfully: " + info);
+        return info;
+    }
+
+    @RequestMapping(value = "information")
+    public UserInfo showUserInfo(HttpSession httpSession){
+
+        return null;
+    }
 }
